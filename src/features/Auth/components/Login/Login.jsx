@@ -47,7 +47,6 @@ function Login(props) {
     try {
       const action = login(formData);
       const resultAction = await dispatch(action);
-      console.log(resultAction)
       if(resultAction.payload[0]){
         handleClick(resultAction.payload[0], 'error');
       }else{

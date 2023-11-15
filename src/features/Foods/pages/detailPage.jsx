@@ -8,19 +8,44 @@ import FoodThumbnail from '../components/FoodThumbnail';
 import QuantityField from '../../../Components/form-control/QuantityField/QuantityField';
 import AddToCartForm from '../components/AddToCard';
 import { addToCart } from '../../Cart/CartSlide';
+import foodAip from '../../../Api/foodApi';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 DetailPage.propTypes = {
     
 };
 
 function DetailPage(props) {
-  const dispatch = useDispatch();
-  const { params: { foodId }, url } = useRouteMatch();
-  const { food, loading } = useFoodDetail(foodId);
+   const dispath = useDispatch();
+   const {
+        params:{foodId},
+        url
+    } = useRouteMatch();
 
-  const handleAddToCartSubmit = (formValues) => {
-      dispatch(addToCart(food.id, formValues.Quantity));
-  };
+    const {food, loading} = useFoodDetail(foodId);
+
+
+    // const handleAddToCartSubmit = async (formValues) =>{
+    //     console.log('Form submit', formValues);
+    //     const action = addToCart({
+    //         id: food.id,
+    //         food,
+    //         quantity: formValues.Quantity,
+    //     });
+
+    //     console.log(action)
+    //     dispath(action);
+    // }
+    const handleAddToCartSubmit = createAsyncThunk(
+      async (formValues) => {
+        try {
+          const response = await foodAip.addToCartAPI(food.id, formValues.quantity);
+          console.log(response);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    )
     return (
     <Container>
         <Box marginTop={8}>
