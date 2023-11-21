@@ -18,7 +18,7 @@ function FoodSort({ activeIndex, onchange }) {
   };
 
   return (
-    <Box sx={{ width: '100%' }} paddingLeft={1} paddingTop={1} >
+    <Box sx={{ width: '100%', marginLeft:"16px" }}>
       <Tabs value={activeIndex} onChange={handleChange} aria-label="date sort">
         <Tab padding={0} value="ASC" label="Hạn Còn Dài Nhất" wrapped />
         <Tab value="DESC" label="Hạn Còn Ít Nhất" wrapped />

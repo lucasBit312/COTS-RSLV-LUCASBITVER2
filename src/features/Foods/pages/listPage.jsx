@@ -7,14 +7,13 @@ import  queryString from 'query-string';
 import FoodSkeletonList from '../components/FoodSkeletonList';
 import FoodList from '../components/FoodList';
 import FoodSort from '../components/FilterSort';
-import FilterByCategory from '../components/Filter/FilterByCategory';
+import Pagination from '@mui/material/Pagination';
 import FoodFilter from '../components/FoodFilter';
+import FilterViewer from '../components/Filter/FilterView';
+import Button from '@mui/material/Button';
 
-const Pagination = styled('div')({
-    display: 'flex',
-    flexFlow: 'row nowrap',
-    justifyContent: 'center',
-    marginTop: '40px',
+const Paginationcustom = styled('div')({
+   
 });
 const RootBox = styled(Box)({
     backgroundColor: 'rgb(247, 247, 247)',
@@ -28,6 +27,7 @@ function ListPage(props) {
     const [totalPage, setTotalPage] = useState(0);
     const history = useHistory();
     const location = useLocation();
+
     const queryParams = useMemo(() => {
       const params =  queryString.parse(location.search);
       return {
@@ -36,20 +36,41 @@ function ListPage(props) {
         _sort_date: params._sort_date || 'ASC',
       };
     },[location.search])
-    const handleFiltersChange = (newFilters) => {
+    const handlePageChange = (event, newPage) => {
       const filters ={
         ...queryParams,
-        ...newFilters,
+        _page: newPage,
       };
       history.push({
         pathname: history.location.pathname,
         search: queryString.stringify(filters)
       });
     };
+    function removeEmptyStrings(obj) {
+      const newObj = { ...obj };
+      for (const key in newObj) {
+        if (newObj[key] === '') {
+          delete newObj[key];
+        }
+      }
+      return newObj;
+    }
+    const handleFiltersChange = (newFilters) => {
+      const filters = removeEmptyStrings({
+        ...queryParams,
+        ...newFilters,
+      });
+      history.push({
+        pathname: history.location.pathname,
+        search: queryString.stringify(filters)
+      });
+    };
+    
     const setNewFilters = (newFilters) => {
+    const filters = removeEmptyStrings(newFilters);
     history.push({
         pathname: history.location.pathname,
-        search: queryString.stringify(newFilters)
+        search: queryString.stringify(filters)
     });
     }
     useEffect(() => {
@@ -71,13 +92,31 @@ function ListPage(props) {
           }
         })();
       }, [queryParams]);
+
+      console.log(totalPage)
     return (
-        <RootBox marginTop={8}>
+        <RootBox marginTop={8} style={{minWidth:"400px"}}>
             <Container>
               <Grid item>
                   <Paper elevation={0}>
-                  <FoodFilter filters={queryParams} onChange={handleFiltersChange}/>
-                  {foods ? loading ? <FoodSkeletonList /> : <FoodList data={foods} /> : <Typography style={{ padding: '10px' }} variant='h3'>Không tìm thấy sản phẩm</Typography> }
+                    <FoodFilter filters={queryParams} onChange={handleFiltersChange}/>
+                    <Grid item>
+                      <FilterViewer filters={queryParams} onChange={setNewFilters}/>
+                    </Grid>
+                    {foods ? loading ? <FoodSkeletonList /> : <FoodList data={foods} /> : <Typography style={{ padding: '10px' }} variant='h3'>Không tìm thấy sản phẩm</Typography> }
+                    <div style={{ display: 'flex',
+                      flexFlow: 'row nowrap',
+                      justifyContent: 'center',
+                      marginTop: '30px',
+                      padding: '10px'}}>
+                      <Pagination
+                        container justify="center"
+                        color="warning"
+                        count={totalPage}
+                        page={queryParams._page}
+                        onChange={handlePageChange}
+                      />
+                    </div>
                   </Paper>
               </Grid>
             </Container>

@@ -15,6 +15,7 @@ import * as Yup from 'yup';
 import { object, string } from 'yup';
 import InputField from '../../../../Components/form-control/InputField/InputField';
 import { CircularProgress } from '@mui/material';
+import PasswordField from '../../../../Components/form-control/passwordField/PasswordField';
 const defaultTheme = createTheme();
 
 export default function LoginForm({ onSubmit }) {
@@ -63,11 +64,10 @@ export default function LoginForm({ onSubmit }) {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <InputField
+                    <PasswordField
                         name="password"
                         label="Nhập password"
                         control={control}
-                        type="password" 
                         error={errors.password?.message}
                     />
                 </Grid>

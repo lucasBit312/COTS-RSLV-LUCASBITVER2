@@ -2,9 +2,9 @@ import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Button } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import QuantityField from '../../../Components/form-control/QuantityField/QuantityField';
-
+import RedeemIcon from '@mui/icons-material/Redeem';
 function AddToCartForm({ onSubmit = null }) {
   const schema = yup.object().shape({
     Quantity: yup
@@ -36,11 +36,11 @@ function AddToCartForm({ onSubmit = null }) {
       <Button
         type="submit"
         variant="contained"
-        color="primary"
-        style={{ minWidth: '240px' }}
+        color="warning"
         size="large"
+        style={{margin:"16px"}}
       >
-        Add To Cart
+        <span style={{ marginRight: "8px" }}><RedeemIcon /></span>Nhận Thực Phẩm
       </Button>
     </form>
   );

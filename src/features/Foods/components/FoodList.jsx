@@ -19,20 +19,6 @@ function FoodList({ data }) {
           </Grid>
         ))}
       </Grid>
-      <Grid marginTop={1} container>
-        {data.map((food) => (
-          <Grid item key={food.id} xs={12} sm={6} lg={3}>
-            <Food food={food} />
-          </Grid>
-        ))}
-      </Grid>
-      <Grid marginTop={1} container>
-        {data.map((food) => (
-          <Grid item key={food.id} xs={12} sm={6} lg={3}>
-            <Food food={food} />
-          </Grid>
-        ))}
-      </Grid>
     </Box>
     
   );

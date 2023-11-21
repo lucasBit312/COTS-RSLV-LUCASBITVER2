@@ -1,37 +1,33 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import cartApi from "../../Api/cartApi";
+export const addToCart = createAsyncThunk(
+    '/addtoCart',
+    async (payload) => {
+        try {
+            console.log(payload)
+            const response = await cartApi.addToCartAPI(payload);
+            console.log(response);
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+);
 export const cartSlice = createSlice({
     name: 'cart',
     initialState: {
-        showMiniCart: false,
         cartItems: [],
     },
     reducers: {
-        showMiniCart(state){
-            state.showMiniCart = true;
-        },
-        hideMiniCart(state){
-            state.showMiniCart = false;
-        },
-        // addToCart(state, action) {
-        //     const newItem = action.payload;
-        //     const index = state.cartItems.findIndex(x=>x.id === newItem.id);
-            
-            
-        // },
-        setQuantity(state, action) {
-            const {id, quantity} = action.payload;
-            const index = state.cartItems.findIndex((x) => x.id === id);
-            if(index>=0){
-                state.cartItems[index].qantity = quantity;
-            }
-        },
-        removeFromCart(state, action){
-            const idRemove = action.payload;
-            state.cartItems = state.cartItems.filter(x => x.id !== idRemove);
-        },
+       
+    },
+    extraReducers: (builder) => {
+        builder.addCase(addToCart.fulfilled, (state, action) => {
+            console.log(action)
+            state.cartItems = action.payload.total;
+        });
     },
 });
 const {actions, reducer} = cartSlice;
-export const {showMiniCart, hideMiniCart, addToCart, setQuantity, removeFromCart} = actions;
+export const {setQuantity, removeFromCart} = actions;
 export default reducer;
- 

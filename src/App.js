@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+
 import './App.css';
 import {
   BrowserRouter,
@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import Header from './Components/Header/Header';
 import Foods from './features/Foods/foods';
-import Cart from './features/Cart/Cart';
+import foodReceived from './features/FoodReceived/foodReceived';
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
       <Header />
       <Switch>
         <Route path="/foods" component ={Foods} />
-        <Route path="/cart" component ={Cart} />
+        <Route path="/foodReceived" component ={foodReceived} />
       </Switch>
     </BrowserRouter>
   );

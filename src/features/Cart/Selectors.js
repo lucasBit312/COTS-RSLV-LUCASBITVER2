@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit";
 
 const cartItemsSelector = (state) => state.cart.cartItems;
-
+console.log("cartItemsSelector", cartItemsSelector)
 export const cartItemsCountSelector = createSelector(
     cartItemsSelector, (cartItems) =>
     cartItems.reduce((count, item) => count + item.quantity,0)

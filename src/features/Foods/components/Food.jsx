@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { Box, Typography } from '@mui/material';
 import { baseURL } from '../../../constants/env';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
-
+import PlaceIcon from '@mui/icons-material/Place';
+import dayjs from 'dayjs';
 const FoodContainer = styled(Box)({
   position: 'relative',
   cursor: 'pointer',
@@ -12,8 +13,8 @@ const FoodContainer = styled(Box)({
   borderRadius: '0.5em',
   transition: 'transform 0.3s ease',
   '&:hover': {
-    transform: 'scale(0.9)', 
-    boxShadow: '1px 1px 1px #ed6c02', 
+    transform: 'scale(1.05)', 
+    boxShadow: '1px 1px 4px #ed6c02', 
     borderRadius: "0.5em",
   },
 });
@@ -28,8 +29,8 @@ function Food({ food }) {
   const handleClick = () => {
     history.push(`/foods/${food.id}`);
   };
-
   return (
+    
     <FoodContainer margin={1.5} onClick={handleClick}>
       <Box padding={1}>
         <img
@@ -40,8 +41,27 @@ function Food({ food }) {
           height="222"
         />
       </Box>
-      <Typography padding={1} variant="body2">{food.title}</Typography>
-      <Typography padding={1} variant="body1">{food.user_id}</Typography>
+      <Typography padding={1} variant="body3">
+        {dayjs(food.created_at).format('DD/MM/YYYY HH:mm')}
+      </Typography>
+      <Typography
+        padding={1}
+        variant="body2"
+        sx={{
+          overflow: 'hidden',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          textOverflow: 'ellipsis',
+          WebkitLineClamp: 2,
+          minHeight: '4em', 
+        }}
+      >
+        {food.title}
+      </Typography>
+      <Typography 
+       padding={1} 
+       className="text-success" 
+       variant="body1"><PlaceIcon/>{food.location}, {food.ward_name}, {food.district_name}, {food.province_name}</Typography>
     </FoodContainer>
   );
 }

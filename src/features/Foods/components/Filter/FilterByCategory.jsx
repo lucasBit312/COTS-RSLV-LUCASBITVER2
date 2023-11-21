@@ -5,7 +5,7 @@ import categoriesApi from '../../../../Api/categoriesApi';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import Select from '@mui/material/Select'; 
 
 FilterByCategory.propTypes = {
   onChange: PropTypes.func,
@@ -31,7 +31,7 @@ function FilterByCategory({ onChange }) {
     }
   };
   return (
-    <FormControl sx={{ m: 1, minWidth: 220, marginTop:3, marginLeft:2}} size="small">
+    <FormControl sx={{ minWidth: 220, marginLeft:2}} size="small">
       <InputLabel id="category-select-label">Danh Mục</InputLabel>
       <Select
         labelId="category-select-label"
@@ -40,8 +40,8 @@ function FilterByCategory({ onChange }) {
         label="Category"
         onChange={handleCategoryChange}
       >
-        <MenuItem value="all">
-          <em>Tất Cả</em>
+        <MenuItem value="">
+          Tất Cả
         </MenuItem>
         {categoryList.map((category) => (
           <MenuItem key={category.id} value={category.id}>

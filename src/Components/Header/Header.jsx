@@ -12,7 +12,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { alpha, styled } from '@mui/material/styles';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Register from '../../features/Auth/components/Register/Register';
 import { AccountCircleOutlined, CardGiftcardOutlined, Close } from '@mui/icons-material';
 import Login from '../../features/Auth/components/Login/Login';
@@ -21,10 +21,13 @@ import { Avatar, Badge, Menu } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import { logout } from '../../features/Auth/userSlide';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { cartItemsCountSelector } from '../../features/Cart/Selectors';
+import FastfoodIcon from '@mui/icons-material/Fastfood';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
-
-
+import cartApi from '../../Api/cartApi';
+import Container from '@mui/material/Container';
+import AdbIcon from '@mui/icons-material/Adb';
+import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -73,12 +76,32 @@ function Header(props) {
 
   const [open, setOpen] = React.useState(false);
   const loggedInuser = useSelector(state =>state.user.current);
+  const totalCart = useSelector(state =>state.cart.cartItems);
+  const [cartTotal, setCartTotal] = React.useState(0); 
   const history = useHistory();
   const isLoggedIn = !!loggedInuser.id;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const dispatch = useDispatch();
   const openMenu = Boolean(anchorEl);
-  const cartItemsCount = useSelector(cartItemsCountSelector);
+  const location = useLocation();
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
   const handleClickMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -99,30 +122,146 @@ function Header(props) {
     dispatch(action);
   }
   const handleCartClick = () =>{
-    history.push('/cart');
+    history.push('/foodReceived');
+  }
+  const handleFoodsClick = () =>{
+    history.push('/foods');
+  }
+  const handleDonateFoodsClick = () =>{
+    history.push('/donate-foods');
+  }
+  const handleLocationFoodsClick = () =>{
+    history.push('/location-foods');
   }
   const [mode, setMode] = useState(MODE.LOGIN);
+  useEffect(() => {
+      (async () => {
+        try {
+          const dataRes = await cartApi.getTotalCart();
+          const data = dataRes.total;
+          console.log(data);
+          setCartTotal(data);
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+  }, [totalCart]);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed" color="warning">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
+        <Toolbar disableGutters>
+          <FastfoodIcon sx={{ marginLeft: "10px" ,display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+            component="a"
+            href="#app-bar-with-responsive-menu"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
           >
             FoodShare
           </Typography>
+
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: 'block', md: 'none' },
+              }}
+            >
+              <MenuItem  onClick={handleFoodsClick}>
+                <Typography textAlign="center">Thực Phẩm</Typography>
+              </MenuItem>
+              <MenuItem  onClick={handleFoodsClick}>
+                <Typography textAlign="center">Tặng Thực Phẩm</Typography>
+              </MenuItem>
+              <MenuItem  onClick={handleLocationFoodsClick}>
+                <Typography textAlign="center">Điểm Phát Thực Phẩm</Typography>
+              </MenuItem>
+            </Menu>
+          </Box>
+          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href="#app-bar-with-responsive-menu"
+            sx={{
+              mr: 2,
+              display: { xs: 'flex', md: 'none' },
+              flexGrow: 1,
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            FoodShare
+          </Typography>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+              <Button
+                onClick={handleFoodsClick}
+                sx={{
+                  my: 2,
+                  color: location.pathname === '/foods' ? '#5BE49B' : 'white', 
+                  display: 'block',
+                }}
+              >
+                <Typography textAlign="center">Thực Phẩm</Typography>
+              </Button>
+              <Button
+                onClick={handleDonateFoodsClick}
+                sx={{
+                  my: 2,
+                  color: location.pathname === '/donate-foods' ? '#5BE49B' : 'white', 
+                  display: 'block',
+                }}
+              >
+                <Typography textAlign="center">Tặng Thực Phẩm</Typography>
+              </Button>
+              <Button
+                onClick={handleLocationFoodsClick}
+                sx={{
+                  my: 2,
+                  color:
+                    location.pathname === '/location-foods' ? '#5BE49B' : 'white', 
+                  display: 'block',
+                }}
+              >
+                <Typography textAlign="center">Điểm Phát Thực Phẩm</Typography>
+              </Button>
+          </Box>
           <Search style={{marginRight:"15px"}}>
             <SearchIconWrapper>
               <SearchIcon />
@@ -132,11 +271,6 @@ function Header(props) {
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
-          <IconButton onClick={handleCartClick} size="large" aria-label="show total cart" color="inherit">
-              <Badge badgeContent={cartItemsCount} color="error">
-                <AddShoppingCartIcon />
-              </Badge>
-            </IconButton>
           {!isLoggedIn && (
             <Tooltip title="Log in">
               <Button onClick={handleClickOpen} color="inherit">Đăng nhập</Button>
@@ -144,6 +278,13 @@ function Header(props) {
           )}
            {isLoggedIn && (
             <>
+              <Tooltip title="Thực Phẩm Đã Nhận">
+                <IconButton onClick={handleCartClick} size="large" aria-label="show total cart" color="inherit">
+                  <Badge badgeContent={cartTotal} color="error">
+                    <CardGiftcardIcon />
+                  </Badge>
+                </IconButton>
+              </Tooltip>
               <IconButton
                 alt="User"
                 onClick={handleClickMenu}

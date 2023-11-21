@@ -53,9 +53,6 @@ const userSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        // builder.addCase(register.fulfilled, (state, action) => {
-        //     state.current = action.payload;
-        // });
         builder.addCase(login.fulfilled, (state, action) => {
             state.current = action.payload;
         });
