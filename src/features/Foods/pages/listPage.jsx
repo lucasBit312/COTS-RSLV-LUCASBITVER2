@@ -17,7 +17,8 @@ const Paginationcustom = styled('div')({
 });
 const RootBox = styled(Box)({
     backgroundColor: 'rgb(247, 247, 247)',
-    paddingTop: '32px'
+    paddingTop: '32px',
+    minHeight: '700px'
 });
 
 

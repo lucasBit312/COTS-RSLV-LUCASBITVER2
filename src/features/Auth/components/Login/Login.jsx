@@ -60,7 +60,7 @@ function Login(props) {
       console.error("Failed to register:", errors);
     }
   };
-  return (
+  return ( 
     <div>
       <LoginForm onSubmit={handleLogin} />
       <Snackbar 

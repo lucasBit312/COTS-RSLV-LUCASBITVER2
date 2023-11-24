@@ -13,7 +13,7 @@ function QuantityField({ name, control, label, error }) {
   } = useController({
     name,
     control,
-    defaultValue: '',
+    defaultValue: 1,
   });
   const handleIncrement = () => {
     onChange(Number(value) + 1);
@@ -33,7 +33,7 @@ function QuantityField({ name, control, label, error }) {
                 size="small"
                 error={!!error}
                 helperText={error || ''}
-                value={value || 1}
+                value={value}
                 onChange={(e) => onChange(e.target.value)}
                 style={{ minWidth:"60px", maxWidth:"70px",  padding: 0, textAlign: 'center', marginLeft:0}}
                 className='p-0'

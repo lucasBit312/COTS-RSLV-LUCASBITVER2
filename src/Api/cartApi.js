@@ -16,10 +16,14 @@ const cartApi = {
         const url = `/api/getTotalCart/${user.id}`;
         return axiosClient.get(url);
     },
-    getReceivedList(){
+    getReceivedList(params) {
         const url = `/api/getReceivedList`;
+        return axiosClient.get(url, { params });
+    },
+    cancelReceived(received_id) {
+        const url = `/api/cancelReceived`;
         const user = JSON.parse(localStorage.getItem('user'));
-        return axiosClient.post(url, user);
+        return axiosClient.post(url, received_id, user);
     }
 }
 export default cartApi;

@@ -24,8 +24,8 @@ function DetailPage(props) {
   }
   return (
     <Container>
-      <Box marginTop={9}>
-        <Grid container spacing={2} alignItems="center">
+      <Box marginTop={9} style={{minHeight: '700px'}}>
+        <Grid container marginBottom={4} spacing={2} alignItems="center">
           <Grid item xs={12} md={6}>
             <FoodThumbnail food={food} />
           </Grid>

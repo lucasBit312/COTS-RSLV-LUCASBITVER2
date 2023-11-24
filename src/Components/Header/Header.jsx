@@ -1,33 +1,30 @@
+import { AccountCircleOutlined, Close } from '@mui/icons-material';
+import AdbIcon from '@mui/icons-material/Adb';
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
+import FastfoodIcon from '@mui/icons-material/Fastfood';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
+import { Badge, Menu } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
+import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { alpha, styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
-import Register from '../../features/Auth/components/Register/Register';
-import { AccountCircleOutlined, CardGiftcardOutlined, Close } from '@mui/icons-material';
-import Login from '../../features/Auth/components/Login/Login';
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Badge, Menu } from '@mui/material';
-import MenuItem from '@mui/material/MenuItem';
-import { logout } from '../../features/Auth/userSlide';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import FastfoodIcon from '@mui/icons-material/Fastfood';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
-import cartApi from '../../Api/cartApi';
-import Container from '@mui/material/Container';
-import AdbIcon from '@mui/icons-material/Adb';
 import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
-import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
+import cartApi from '../../Api/cartApi';
+import Login from '../../features/Auth/components/Login/Login';
+import Register from '../../features/Auth/components/Register/Register';
+import { logout } from '../../features/Auth/userSlide';
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -210,7 +207,7 @@ function Header(props) {
               </MenuItem>
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <FastfoodIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap

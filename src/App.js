@@ -1,4 +1,3 @@
-
 import './App.css';
 import {
   BrowserRouter,
@@ -6,17 +5,19 @@ import {
   Route,
 } from "react-router-dom";
 import Header from './Components/Header/Header';
+import Footer from './Components/Footer/footer';
 import Foods from './features/Foods/foods';
-import foodReceived from './features/FoodReceived/foodReceived';
+import FoodReceived from './features/FoodReceived/FoodReceived';
 
 function App() {
   return (
     <BrowserRouter>
       <Header />
       <Switch>
-        <Route path="/foods" component ={Foods} />
-        <Route path="/foodReceived" component ={foodReceived} />
+        <Route path="/foods" component={Foods} />
+        <Route path="/foodReceived" component={FoodReceived} />
       </Switch>
+      <Footer />
     </BrowserRouter>
   );
 }
