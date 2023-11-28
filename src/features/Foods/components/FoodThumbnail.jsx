@@ -84,7 +84,7 @@ function FoodThumbnail(food) {
     );
   };
   return (
-    <Grid container spacing={2} marginTop={2}>
+    <Grid container spacing={2} marginTop={1}>
       <Grid item xs={12}>
         <Item>
           {showArrows && (

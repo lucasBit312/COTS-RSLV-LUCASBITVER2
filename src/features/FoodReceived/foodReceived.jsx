@@ -37,6 +37,7 @@ import {
 import dayjs from "dayjs";
 import queryString from "query-string";
 import RatingForm from "./RatingForm/RatingForm";
+import TableSkeleton from "../../Components/Skeleton/TableSkeleton";
 const FoodReceived = (props) => {
   const [list, setList] = useState([]);
   const [anchorEl2, setAnchorEl2] = React.useState(null);
@@ -118,7 +119,7 @@ const FoodReceived = (props) => {
         if (data.length > 0) {
           setList(data);
           setTotalPage(dataRes.received_list.last_page);
-          console.log(list);
+          console.log(data[3].ratings)
         } else {
           setList(null);
         }
@@ -150,6 +151,9 @@ const FoodReceived = (props) => {
     setAnchorEl2(null);
   };
 
+  const setLoadDataRating = () => {
+    setLoadData(true);
+  }
   const handleCloseRating = () => {
     setOpenDialogRates(false);
     setAnchorEl2(null);
@@ -165,8 +169,8 @@ const FoodReceived = (props) => {
 
   if (loading) {
     return (
-      <Box marginTop={9} sx={{ width: "100%" }}>
-        <LinearProgress />
+      <Box marginTop={9} sx={{ width: "80%", marginX: "auto", textAlign: 'center' }} >
+        <TableSkeleton/>
       </Box>
     );
   }
@@ -178,7 +182,7 @@ const FoodReceived = (props) => {
       style={{ display: "flex", justifyContent: "center" }}
     >
       <TableContainer component={Paper} style={{ width: "80%" }}>
-        <Typography className="p-3 fw-bolder">
+        <Typography variant="h4" className="p-3">
           Danh Sách Thực Phẩm Đã Nhận
         </Typography>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -188,6 +192,7 @@ const FoodReceived = (props) => {
               <TableCell align="left">Tên Thực Phẩm</TableCell>
               <TableCell align="left">Tên Người Tặng</TableCell>
               <TableCell align="left">Số Lượng</TableCell>
+              <TableCell align="left">Đánh Giá</TableCell>
               <TableCell align="left">Trạng Thái</TableCell>
               <TableCell align="left">Thời Gian Nhận</TableCell>
               <TableCell align="left">Thao Tác</TableCell>
@@ -205,12 +210,29 @@ const FoodReceived = (props) => {
                 <TableCell align="left">{item.food.title}</TableCell>
                 <TableCell align="left">{item.food.user.full_name}</TableCell>
                 <TableCell align="left">{item.quantity_received}</TableCell>
+                {/* "ratings": [
+                    {
+                        "id": 426,
+                        "food_transaction_id": 221,
+                        "rating": 4,
+                        "review": null,
+                        "created_at": "2023-11-24T07:51:19.000000Z",
+                        "updated_at": "2023-11-24T07:51:19.000000Z"
+                    }
+                ] */}
+                <TableCell align="left">
+                    {item.ratings.length > 0 ? (
+                        <div>
+                            <Rating name="read-only" value={item.ratings[0].rating} readOnly />
+                        </div>
+                    ) : null}
+                </TableCell>
                 <TableCell align="left">
                   {item.status === 0 && item.donor_status === 1 ? (
                     <Alert severity="warning">Người Tặng Đã Xác Nhận</Alert>
                   ) : item.status === 0 ? (
                     <Alert severity="warning">Đang Đợi Xác Nhận</Alert>
-                  ) : item.status === 1 ? (
+                  ) : item.status === 1 ? ( 
                     <Alert severity="success">Đã Lấy</Alert>
                   ) : item.status === 2 && item.donor_status === 2 ? (
                     <Alert severity="error">Người Tặng Từ Chối</Alert>
@@ -235,7 +257,7 @@ const FoodReceived = (props) => {
                       handleClick(
                         e,
                         item.id,
-                        item.id,
+                        item.food.id,
                         item.status,
                         item.donor_status,
                         item.receiver_status
@@ -315,44 +337,8 @@ const FoodReceived = (props) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <RatingForm closeDialogRating={handleCloseRating} />
+        <RatingForm setLoadDataRating={setLoadDataRating} received_id={selectedItemId} closeDialogRating={handleCloseRating} />
       </Dialog>
-      {/* <form onSubmit={handleSubmit}>
-      <Dialog
-        open={openDialogRates}
-        onClose={handleCloseDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">Đánh giá</DialogTitle>
-        <DialogContent>
-          <Typography component="legend">Số điểm đánh giá</Typography>
-          <Rating
-            name="simple-controlled"
-            value={point}
-            onChange={(event, newValue) => {
-              setPoint(newValue);
-            }}
-          />
-          <DialogContentText id="alert-dialog-description">
-            <textarea
-              className="form-control"
-              id="contentRating"
-              name="contentRating"
-              aria-label="With textarea"
-              value={contentRating}
-              onChange={(event) => setContentRating(event.target.value)}
-            ></textarea>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button type="submit">Đồng Ý</Button>
-          <Button onClick={handleCloseDialog} autoFocus>
-            Hủy
-          </Button>
-        </DialogActions>
-      </Dialog> */}
-      {/* </form> */}
     </Box>
   );
 };

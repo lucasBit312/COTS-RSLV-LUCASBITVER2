@@ -8,6 +8,7 @@ import Header from './Components/Header/Header';
 import Footer from './Components/Footer/footer';
 import Foods from './features/Foods/foods';
 import FoodReceived from './features/FoodReceived/FoodReceived';
+import DonateFood from './features/DonateFood/DonateFood';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Switch>
         <Route path="/foods" component={Foods} />
         <Route path="/foodReceived" component={FoodReceived} />
+        <Route path="/donate-foods" component={DonateFood} />
       </Switch>
       <Footer />
     </BrowserRouter>

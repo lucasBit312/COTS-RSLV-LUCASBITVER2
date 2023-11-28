@@ -1,10 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Grid } from '@mui/material';
-import { Box, Container } from '@mui/system';
-import Food from './Food';
+import React from "react";
+import PropTypes from "prop-types";
+import { Grid } from "@mui/material";
+import { Box, Container } from "@mui/system";
+import Food from "./Food";
 FoodList.propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.object,
 };
 FoodList.defaultProps = {
   data: [],
@@ -20,10 +20,7 @@ function FoodList({ data }) {
         ))}
       </Grid>
     </Box>
-    
   );
 }
-
-
 
 export default FoodList;

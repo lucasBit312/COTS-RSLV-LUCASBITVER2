@@ -117,6 +117,7 @@ function Header(props) {
   const handleLogoutClick = () =>{
     const action = logout();
     dispatch(action);
+    history.push('/foods');
   }
   const handleCartClick = () =>{
     history.push('/foodReceived');
