@@ -1,11 +1,11 @@
-import { Box } from '@mui/system';
-import PropTypes from 'prop-types';
-import React from 'react';
-import FilterByCategory from './Filter/FilterByCategory';
-import FoodSort from './FilterSort';
-import { Grid } from '@mui/material';
-import FilterByType from './Filter/FilterByType';
-import MultipleFilter from './Filter/MultipleFilter';
+import { Box } from "@mui/system";
+import PropTypes from "prop-types";
+import React from "react";
+import FilterByCategory from "./Filter/FilterByCategory";
+import FoodSort from "./FilterSort";
+import { Grid } from "@mui/material";
+import FilterByType from "./Filter/FilterByType";
+import MultipleFilter from "./Filter/MultipleFilter";
 
 FoodFilter.propTypes = {
   filters: PropTypes.object.isRequired,
@@ -44,19 +44,19 @@ function FoodFilter({ filters, onChange }) {
   };
   const handleMultipleFilterChange = (values) => {
     if (!onChange) return;
-    if(values.province_id){
+    if (values.province_id) {
       const newFilters = { ...filters, ...values };
-      newFilters.district_id = '';
-      newFilters.ward_id = '';
-      newFilters.district_name = '';
-      newFilters.ward_name = '';
-      onChange(newFilters) 
-    } else if(values.district_id){
-      const newFilters = { ...filters, ...values };
-      newFilters.ward_id = '';
-      newFilters.ward_name = '';
+      newFilters.district_id = "";
+      newFilters.ward_id = "";
+      newFilters.district_name = "";
+      newFilters.ward_name = "";
       onChange(newFilters);
-    }else{
+    } else if (values.district_id) {
+      const newFilters = { ...filters, ...values };
+      newFilters.ward_id = "";
+      newFilters.ward_name = "";
+      onChange(newFilters);
+    } else {
       const newFilters = { ...filters, ...values };
       onChange(newFilters);
     }
@@ -71,12 +71,18 @@ function FoodFilter({ filters, onChange }) {
           <FilterByType onChange={handleTypeChange} />
         </Grid>
         <Grid item xs={12} md={4}>
-          <FoodSort activeIndex={filters._sort_date} onchange={handleSortChange} />
+          <FoodSort
+            activeIndex={filters._sort_date}
+            onchange={handleSortChange}
+          />
         </Grid>
         <Grid item xs={12} md={2}>
-          <MultipleFilter filters={filters} onChange={handleMultipleFilterChange}/>
+          <MultipleFilter
+            filters={filters}
+            onChange={handleMultipleFilterChange}
+          />
         </Grid>
-      </Grid> 
+      </Grid>
     </Box>
   );
 }

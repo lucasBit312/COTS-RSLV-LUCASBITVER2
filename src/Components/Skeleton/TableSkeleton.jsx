@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Skeleton, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Box, Skeleton, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
 TableSkeleton.propTypes = {
     
@@ -9,8 +9,8 @@ TableSkeleton.propTypes = {
 function TableSkeleton(props) {
     const skeletonData = Array.from({ length: 10 });
     return (
-        <div style={{marginTop:"100px", marginBottom:"50px"}}> 
-            <Skeleton variant="text" width={100} style={{marginLeft:'18px'}}/>
+        <Box style={{marginTop:"100px", marginBottom:"50px"}}> 
+            <Skeleton variant="text" width={400} style={{marginLeft:'18px'}}/>
             <Table sx={{ minWidth: 650 }} aria-label="skeleton table">
             <TableHead>
               <TableRow>
@@ -49,7 +49,7 @@ function TableSkeleton(props) {
               ))}
             </TableBody>
           </Table>
-        </div>
+        </Box>
     );
 }
 export default TableSkeleton;

@@ -109,8 +109,8 @@ function ListPage(props) {
                 <FoodList data={foods} />
               )
             ) : (
-              <Typography style={{ padding: "10px" }} variant="h3">
-                Không tìm thấy sản phẩm
+              <Typography style={{ padding: "10px", color:"#ED6C02" }} variant="h3">
+                Không tìm thấy thực phẩm
               </Typography>
             )}
             <div

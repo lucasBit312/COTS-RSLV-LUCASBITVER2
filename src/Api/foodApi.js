@@ -16,6 +16,15 @@ const foodAip = {
             "Content-Type": "multipart/form-data"
         };
         return axiosClient.post(url, data, { headers });
+    },
+    getDonateList(params) {
+        const url = '/api/showDonateList';
+        return axiosClient.get(url, { params });
+    },
+    cancelDonate(food_id) {
+        const url = `/api/cancelDonateFood`;
+        return axiosClient.post(url, food_id);
     }
+
 }
 export default foodAip;

@@ -1,25 +1,25 @@
-import { Box } from '@mui/system';
-import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
-import categoriesApi from '../../../../Api/categoriesApi';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select'; 
+import { Box } from "@mui/system";
+import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
+import categoriesApi from "../../../../Api/categoriesApi";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 FilterByCategory.propTypes = {
   onChange: PropTypes.func,
 };
 function FilterByCategory({ onChange }) {
   const [categoryList, setCategoryList] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState("");
   useEffect(() => {
     (async () => {
       try {
         const response = await categoriesApi.getCategories();
         setCategoryList(response);
       } catch (error) {
-        console.log('Failed to fetch category list', error);
+        console.log("Failed to fetch category list", error);
       }
     })();
   }, []);
@@ -31,8 +31,10 @@ function FilterByCategory({ onChange }) {
     }
   };
   return (
-    <FormControl sx={{ minWidth: 220, marginLeft:2}} size="small">
-      <InputLabel id="category-select-label">Danh Mục</InputLabel>
+    <FormControl sx={{ minWidth: 220, marginLeft: 2 }} size="small">
+      <InputLabel style={{ color: "#ED6C02" }} id="category-select-label">
+        Danh Mục
+      </InputLabel>
       <Select
         labelId="category-select-label"
         id="category-select"
@@ -40,11 +42,15 @@ function FilterByCategory({ onChange }) {
         label="Category"
         onChange={handleCategoryChange}
       >
-        <MenuItem value="">
+        <MenuItem style={{ color: "#ED6C02" }} value="">
           Tất Cả
         </MenuItem>
         {categoryList.map((category) => (
-          <MenuItem key={category.id} value={category.id}>
+          <MenuItem
+            style={{ color: "#ED6C02" }}
+            key={category.id}
+            value={category.id}
+          >
             {category.name}
           </MenuItem>
         ))}

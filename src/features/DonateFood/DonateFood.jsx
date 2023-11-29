@@ -50,7 +50,9 @@ function DonateFood(props) {
   const [districtList, setDistrictList] = useState([]);
   const [wardList, setWardList] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
-
+  const [currentDateTime, setCurrentDateTime] = useState(
+    new Date().toISOString().slice(0, -8)
+  );
   const handleChangeTimeConfirm = (event) => {
     setTimeConfirm(event.target.value);
   };
@@ -104,10 +106,16 @@ function DonateFood(props) {
       .number("Vui lòng chọn Huyện/Quận")
       .typeError("Vui lòng chọn Huyện/Quận")
       .required("Vui lòng chọn Huyện/Quận"),
-    ward_id: yup
-      .number("Vui lòng chọn Xã/Phường")
-      .typeError("Vui lòng chọn Xã/Phường")
-      .required("Vui lòng chọn Xã/Phường"),
+    // ward_id: yup
+    //   .number("Vui lòng chọn Xã/Phường")
+    //   .typeError("Vui lòng chọn Xã/Phường")
+    //   .required("Vui lòng chọn Xã/Phường"),
+      ward_id: ward
+    ? yup
+        .number("Vui lòng chọn Xã/Phường")
+        .typeError("Vui lòng chọn Xã/Phường")
+        .required("Vui lòng chọn Xã/Phường")
+    : yup.mixed(),
     location: yup
       .string()
       .required("Vui lòng nhập Địa điểm cụ thể")
@@ -127,6 +135,7 @@ function DonateFood(props) {
     register: donate,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -137,8 +146,17 @@ function DonateFood(props) {
       console.log(result);
       if (result.message) {
         enqueueSnackbar(result.message, { variant: "success" });
+        reset();
+        setCategory("");
+        setTimeConfirm("");
+        setProvince("");
+        setDistrict("");
+        setWard("");
+        setSelectedImages([]);
       } else if (result.error) {
         enqueueSnackbar(result.error, { variant: "error" });
+      } else if (result.errors) {
+        enqueueSnackbar(result.errors[0], { variant: "error" });
       }
     } catch (error) {
       console.error("Error:", error);
@@ -300,6 +318,7 @@ function DonateFood(props) {
                 type="datetime-local"
                 defaultValue=""
                 {...donate("expiry_date")}
+                min={currentDateTime}
               />
               {errors.expiry_date && (
                 <div className="invalid-feedback">
@@ -364,7 +383,7 @@ function DonateFood(props) {
             {errors.province_id?.message ? (
               <p className="text-danger">{errors.province_id?.message}</p>
             ) : (
-              "" 
+              ""
             )}
           </FormControl>
           {province ? (

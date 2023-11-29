@@ -51,6 +51,7 @@ const FoodReceived = (props) => {
   const [selectedItemFoodReceiverStatus, setSelectedItemFoodReceiverStatus] =
     useState(null);
   const [loading, setLoading] = useState(true);
+  
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openDialogRates, setOpenDialogRates] = React.useState(false);
   const [loadData, setLoadData] = useState(false);
@@ -119,8 +120,8 @@ const FoodReceived = (props) => {
         if (data.length > 0) {
           setList(data);
           setTotalPage(dataRes.received_list.last_page);
-          console.log(data[3].ratings)
-        } else {
+          console.log(data[3].ratings);
+        } else { 
           setList(null);
         }
       } catch (error) {
@@ -153,24 +154,21 @@ const FoodReceived = (props) => {
 
   const setLoadDataRating = () => {
     setLoadData(true);
-  }
+  };
   const handleCloseRating = () => {
     setOpenDialogRates(false);
     setAnchorEl2(null);
   };
 
-  const handleSubmit = (event) => {
-    // event.preventDefault();
-    // console.log('Rating:', point);
-    // console.log('Content:', contentRating);
-    // handleCloseDialog();
-    console.log("submit");
-  };
+
 
   if (loading) {
     return (
-      <Box marginTop={9} sx={{ width: "80%", marginX: "auto", textAlign: 'center' }} >
-        <TableSkeleton/>
+      <Box
+        marginTop={9}
+        sx={{ width: "80%", marginX: "auto", textAlign: "center" }}
+      >
+        <TableSkeleton />
       </Box>
     );
   }
@@ -210,29 +208,23 @@ const FoodReceived = (props) => {
                 <TableCell align="left">{item.food.title}</TableCell>
                 <TableCell align="left">{item.food.user.full_name}</TableCell>
                 <TableCell align="left">{item.quantity_received}</TableCell>
-                {/* "ratings": [
-                    {
-                        "id": 426,
-                        "food_transaction_id": 221,
-                        "rating": 4,
-                        "review": null,
-                        "created_at": "2023-11-24T07:51:19.000000Z",
-                        "updated_at": "2023-11-24T07:51:19.000000Z"
-                    }
-                ] */}
                 <TableCell align="left">
-                    {item.ratings.length > 0 ? (
-                        <div>
-                            <Rating name="read-only" value={item.ratings[0].rating} readOnly />
-                        </div>
-                    ) : null}
+                  {item.ratings.length > 0 ? (
+                    <div>
+                      <Rating
+                        name="read-only"
+                        value={item.ratings[0].rating}
+                        readOnly
+                      />
+                    </div>
+                  ) : null}
                 </TableCell>
                 <TableCell align="left">
                   {item.status === 0 && item.donor_status === 1 ? (
                     <Alert severity="warning">Người Tặng Đã Xác Nhận</Alert>
                   ) : item.status === 0 ? (
                     <Alert severity="warning">Đang Đợi Xác Nhận</Alert>
-                  ) : item.status === 1 ? ( 
+                  ) : item.status === 1 ? (
                     <Alert severity="success">Đã Lấy</Alert>
                   ) : item.status === 2 && item.donor_status === 2 ? (
                     <Alert severity="error">Người Tặng Từ Chối</Alert>
@@ -337,7 +329,11 @@ const FoodReceived = (props) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <RatingForm setLoadDataRating={setLoadDataRating} received_id={selectedItemId} closeDialogRating={handleCloseRating} />
+        <RatingForm
+          setLoadDataRating={setLoadDataRating}
+          received_id={selectedItemId}
+          closeDialogRating={handleCloseRating}
+        />
       </Dialog>
     </Box>
   );

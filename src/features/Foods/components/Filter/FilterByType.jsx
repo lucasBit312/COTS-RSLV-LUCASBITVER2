@@ -21,8 +21,8 @@ export default function FilterByType({ onChange }) {  // Destructure props here
   };
 
   return (
-    <FormControl sx={{ minWidth: 220, marginLeft: 2 }} size="small">
-      <InputLabel id="category-select-label">Trạng Thái</InputLabel>
+    <FormControl  sx={{ minWidth: 220, marginLeft: 2 }} size="small">
+      <InputLabel  style={{color:"#ED6C02"}} id="category-select-label">Trạng Thái</InputLabel>
       <Select
         labelId="food_type"
         id="food_type"
@@ -30,11 +30,11 @@ export default function FilterByType({ onChange }) {  // Destructure props here
         label="Trạng Thái"
         onChange={handleTypeChange}
       >
-        <MenuItem value="">
+        <MenuItem  style={{color:"#ED6C02"}} value="">
           <em>None</em>
         </MenuItem>
-        <MenuItem value={1}>Đã Chế Biến</MenuItem>
-        <MenuItem value={2}>Chưa Chế Biến</MenuItem>
+        <MenuItem  style={{color:"#ED6C02"}} value={1}>Đã Chế Biến</MenuItem>
+        <MenuItem  style={{color:"#ED6C02"}} value={2}>Chưa Chế Biến</MenuItem>
       </Select>
     </FormControl>
   );
