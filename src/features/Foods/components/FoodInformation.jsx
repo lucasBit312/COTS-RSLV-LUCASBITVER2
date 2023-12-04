@@ -17,6 +17,7 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Stack from "@mui/material/Stack";
+import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 FoodInformation.propTypes = {
   food: PropTypes.object,
 };
@@ -120,21 +121,18 @@ function FoodInformation(food) {
         </Grid>
         <Grid padding={1}>
           <Typography>
-            Mô tả: {food?.food?.food?.description}, Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Nihil atque facere eveniet corporis
-            nulla, at repudiandae aliquam vel praesentium, labore natus
-            aspernatur! Praesentium molestiae quod amet suscipit nam, possimus
-            fuga.
+            Mô tả: {food?.food?.food?.description}
           </Typography>
         </Grid>
         <Grid padding={1}>
-          <Typography marginBottom="0">
-            Thời gian hết hạn:{" "}
+          <AccessAlarmIcon />
+          <Typography marginBottom="0" className="text-muted">
+            Thời gian hết hạn thực phẩm:{" "}
             {dayjs(food?.food?.food?.expiry_date).format("DD/MM/YYYY HH:mm")}{" "}
           </Typography>
         </Grid>
         <Grid padding={1}>
-          <Typography marginBottom="0">
+          <Typography marginBottom="0" className="text-muted">
             Thời gian cho phép lấy thực phẩm sau khi xác nhận: {timeAccept}{" "}
           </Typography>
         </Grid>

@@ -51,7 +51,7 @@ const FoodReceived = (props) => {
   const [selectedItemFoodReceiverStatus, setSelectedItemFoodReceiverStatus] =
     useState(null);
   const [loading, setLoading] = useState(true);
-  
+
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openDialogRates, setOpenDialogRates] = React.useState(false);
   const [loadData, setLoadData] = useState(false);
@@ -121,7 +121,7 @@ const FoodReceived = (props) => {
           setList(data);
           setTotalPage(dataRes.received_list.last_page);
           console.log(data[3].ratings);
-        } else { 
+        } else {
           setList(null);
         }
       } catch (error) {
@@ -159,8 +159,6 @@ const FoodReceived = (props) => {
     setOpenDialogRates(false);
     setAnchorEl2(null);
   };
-
-
 
   if (loading) {
     return (
@@ -225,7 +223,9 @@ const FoodReceived = (props) => {
                   ) : item.status === 0 ? (
                     <Alert severity="warning">Đang Đợi Xác Nhận</Alert>
                   ) : item.status === 1 ? (
-                    <Alert severity="success">Đã Lấy</Alert>
+                    <Alert style={{ minWidth: "110px" }} severity="success">
+                      Đã Lấy
+                    </Alert>
                   ) : item.status === 2 && item.donor_status === 2 ? (
                     <Alert severity="error">Người Tặng Từ Chối</Alert>
                   ) : item.status === 2 ? (

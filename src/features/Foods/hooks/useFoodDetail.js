@@ -1,21 +1,25 @@
-import { useEffect } from "react";
-import { useState } from "react";
-import foodAip from "../../../Api/foodApi";
+import { useEffect, useState } from "react";
+import foodApi from "../../../Api/foodApi";
 
-export default function useFoodDetail(foodID){
-    const [food, setfood] = useState({});
-    const [loading, setLoading] = useState(true);
-    useEffect(() => {
-        (async () =>{
-            try{
-                setLoading(true);
-                const result = await foodAip.getDetail(foodID);
-                setfood(result);
-            }catch(error){
-                console.log('failed to fetch product', error)
-            }
-            setLoading(false)
-        })()
-    }, [foodID])
-    return {food, loading};
+export default function useFoodDetail(foodID) {
+  const [food, setFood] = useState({});
+  const [loading, setLoading] = useState(true);
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const result = await foodApi.getDetail(foodID);
+      setFood(result);
+    } catch (error) {
+      console.log('Failed to fetch product', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, [foodID]);
+  const refreshData = () => {
+    fetchData();
+  };
+  return { food, loading, refreshData };
 }

@@ -1,5 +1,5 @@
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
-import { styled } from "@mui/system";
+import { styled, alpha } from "@mui/material/styles";
 import React, { useEffect, useMemo, useState } from "react";
 import {
   useHistory,
@@ -14,14 +14,56 @@ import Pagination from "@mui/material/Pagination";
 import FoodFilter from "../components/FoodFilter";
 import FilterViewer from "../components/Filter/FilterView";
 import Button from "@mui/material/Button";
+import SearchIcon from "@mui/icons-material/Search";
+import InputBase from "@mui/material/InputBase";
 
 const Paginationcustom = styled("div")({});
+
 const RootBox = styled(Box)({
   backgroundColor: "rgb(247, 247, 247)",
   paddingTop: "32px",
   minHeight: "700px",
 });
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha("#ED6C02", 0.15),
+  "&:hover": {
+    backgroundColor: alpha("#ED6C02", 0.25),
+  },
+  marginLeft: 0,
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(1),
+    width: "auto",
+  },
+}));
 
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      width: "30ch",
+      "&:focus": {
+        width: "38ch",
+      },
+    },
+  },
+}));
 function ListPage(props) {
   const [foods, setFoods] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,6 +79,7 @@ function ListPage(props) {
       _sort_date: params._sort_date || "ASC",
     };
   }, [location.search]);
+
   const handlePageChange = (event, newPage) => {
     const filters = {
       ...queryParams,
@@ -47,6 +90,19 @@ function ListPage(props) {
       search: queryString.stringify(filters),
     });
   };
+
+  const handleSearchChange = (event) => {
+    const content = event.target.value;
+    const filters = {
+      ...queryParams,
+      searchContent: content,
+    };
+    history.push({
+      pathname: history.location.pathname,
+      search: queryString.stringify(filters),
+    });
+  };
+
   function removeEmptyStrings(obj) {
     const newObj = { ...obj };
     for (const key in newObj) {
@@ -74,6 +130,7 @@ function ListPage(props) {
       search: queryString.stringify(filters),
     });
   };
+
   useEffect(() => {
     (async () => {
       try {
@@ -93,12 +150,58 @@ function ListPage(props) {
       }
     })();
   }, [queryParams]);
+
   return (
     <RootBox marginTop={8} style={{ minWidth: "400px" }}>
       <Container>
         <Grid item>
           <Paper elevation={0}>
-            <FoodFilter filters={queryParams} onChange={handleFiltersChange} />
+            <div
+              className="row"
+              style={{
+                paddingTop: "15px",
+                paddingBottom: "15px",
+                paddingLeft: "4px",
+                paddingRight: "4px",
+              }}
+            >
+              <div className="col-lg-12 col-md-6 col-12 ">
+                <Typography
+                  variant="h4"
+                  style={{ paddingLeft: "12px", color: "#ED6C02" }}
+                >
+                  Trang Thực Phẩm
+                </Typography>
+              </div>
+            </div>
+            <div
+              className="w-100 row space-between"
+              style={{
+                paddingTop: "15px",
+                paddingBottom: "15px",
+                paddingLeft: "4px",
+                paddingRight: "4px",
+              }}
+            >
+              <div className="col-lg-5 col-md-8 col-8 ">
+                <Search>
+                  <SearchIconWrapper>
+                    <SearchIcon />
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    placeholder="Tìm kiếm..."
+                    inputProps={{ "aria-label": "search" }}
+                    onChange={handleSearchChange}
+                  />
+                </Search>
+              </div>
+              <div className="col-lg-7 col-md-4 col-4 ">
+                <FoodFilter
+                  filters={queryParams}
+                  onChange={handleFiltersChange}
+                />
+              </div>
+            </div>
             <Grid item>
               <FilterViewer filters={queryParams} onChange={setNewFilters} />
             </Grid>
@@ -109,7 +212,10 @@ function ListPage(props) {
                 <FoodList data={foods} />
               )
             ) : (
-              <Typography style={{ padding: "10px", color:"#ED6C02" }} variant="h3">
+              <Typography
+                style={{ padding: "10px", color: "#ED6C02" }}
+                variant="h3"
+              >
                 Không tìm thấy thực phẩm
               </Typography>
             )}

@@ -28,10 +28,10 @@ function FilterByCategory({ onChange }) {
     setSelectedCategory(categoryId);
     if (onChange) {
       onChange(categoryId);
-    }
+    } 
   };
   return (
-    <FormControl sx={{ minWidth: 220, marginLeft: 2 }} size="small">
+    <FormControl className="w-100" size="small">
       <InputLabel style={{ color: "#ED6C02" }} id="category-select-label">
         Danh Mục
       </InputLabel>

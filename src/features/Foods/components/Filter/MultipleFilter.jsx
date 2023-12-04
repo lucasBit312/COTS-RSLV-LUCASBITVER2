@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import locationApi from "../../../../Api/location";
+import categoriesApi from "../../../../Api/categoriesApi";
 
 const MultipleFilter = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -123,16 +124,52 @@ const MultipleFilter = (props) => {
     setProvince("");
     setDistrict("");
     setWard("");
+    setSelectedCategory("");
+    setFood_Type("");
+    if (props.onRemove) {
+      props.onRemove({});
+    }
   };
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
+  const [categoryList, setCategoryList] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await categoriesApi.getCategories();
+        setCategoryList(response);
+      } catch (error) {
+        console.log("Failed to fetch category list", error);
+      }
+    })();
+  }, []);
+
+  const handleCategoryChange = (event) => {
+    const categoryId = event.target.value;
+    setSelectedCategory(categoryId);
+    if (props.onChange) {
+      props.onChange({ category_id: categoryId });
+    }
+  };
+
+  const [food_type, setFood_Type] = React.useState("");
+
+  const handleTypeChange = (event) => {
+    const food_type = event.target.value;
+    setFood_Type(food_type);
+    if (props.onChange) {
+      props.onChange({ food_type: food_type });
+    }
+  };
+
   return (
     <div>
       <Button
-        style={{ marginLeft: "16px" }}
         variant="outlined"
+        style={{ minWidth: "110px" }}
         color="warning"
         onClick={handleClickOpen}
       >
@@ -190,8 +227,67 @@ const MultipleFilter = (props) => {
                 label="Đến Nơi Lấy"
               />
             </RadioGroup>
+            <div className="pt-2 pb-2">
+              <FormControl className="w-100" size="small">
+                <InputLabel
+                  style={{ color: "#ED6C02" }}
+                  id="category-select-label"
+                >
+                  Danh Mục
+                </InputLabel>
+                <Select
+                  labelId="category-select-label"
+                  id="category-select"
+                  value={selectedCategory}
+                  label="Category"
+                  onChange={handleCategoryChange}
+                >
+                  <MenuItem style={{ color: "#ED6C02" }} value="">
+                    Tất Cả
+                  </MenuItem>
+                  {categoryList.map((category) => (
+                    <MenuItem
+                      style={{ color: "#ED6C02" }}
+                      key={category.id}
+                      value={category.id}
+                    >
+                      {category.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
+
+            <div className="pt-2 pb-2">
+              <FormControl className="w-100" size="small">
+                <InputLabel
+                  style={{ color: "#ED6C02" }}
+                  id="category-select-label"
+                >
+                  Trạng Thái
+                </InputLabel>
+                <Select
+                  labelId="food_type"
+                  id="food_type"
+                  value={food_type}
+                  label="Trạng Thái"
+                  onChange={handleTypeChange}
+                >
+                  <MenuItem style={{ color: "#ED6C02" }} value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem style={{ color: "#ED6C02" }} value={1}>
+                    Đã Chế Biến
+                  </MenuItem>
+                  <MenuItem style={{ color: "#ED6C02" }} value={2}>
+                    Chưa Chế Biến
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+
             <Typography>Lọc Theo Địa Điểm</Typography>
-            <FormControl fullWidth style={{ marginTop: "10px" }}>
+            <FormControl fullWidth style={{ marginTop: "10px" }} size="small">
               <InputLabel id="label-province">Tỉnh</InputLabel>
               <Select
                 labelId="label-province"
@@ -208,7 +304,7 @@ const MultipleFilter = (props) => {
               </Select>
             </FormControl>
             {province ? (
-              <FormControl fullWidth style={{ marginTop: "10px" }}>
+              <FormControl fullWidth style={{ marginTop: "10px" }} size="small">
                 <InputLabel id="label-district">Huyện</InputLabel>
                 <Select
                   labelId="label-district"
@@ -228,7 +324,7 @@ const MultipleFilter = (props) => {
               ""
             )}
             {district ? (
-              <FormControl fullWidth style={{ marginTop: "10px" }}>
+              <FormControl fullWidth style={{ marginTop: "10px" }} size="small">
                 <InputLabel id="label-ward">Xã</InputLabel>
                 <Select
                   labelId="label-ward"

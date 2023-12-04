@@ -187,7 +187,7 @@ function ManageFoodDonated(props) {
       style={{ display: "flex", justifyContent: "center" }}
     >
       <TableContainer component={Paper} style={{ width: "80%" }}>
-        <Typography variant="h4" className="p-3">
+        <Typography variant="h4" className="p-3" style={{color:"#ED6C02"}}>
           Danh Sách Thực Phẩm Đã Tặng
         </Typography>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">

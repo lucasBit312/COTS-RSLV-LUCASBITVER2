@@ -8,8 +8,8 @@ footer.propTypes = {
 
 function footer(props) {
     return (
-        <Box paddingTop={3} style={{backgroundColor:"#ED6C02"}}>
-            <Typography style={{ minHeight:"100px"}}>Đây là footer</Typography>
+        <Box paddingTop={3}  className="d-flex justify-content-center" style={{backgroundColor:"#ED6C02"}}>
+            <Typography style={{ minHeight:"100px"}}>Demo Footer</Typography>
         </Box>
     );
 }

@@ -1,4 +1,10 @@
-import { Box, Container, Grid, LinearProgress, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  Grid,
+  LinearProgress,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import { useRouteMatch } from "react-router-dom/cjs/react-router-dom";
 import FoodInformation from "../components/FoodInformation";
@@ -17,15 +23,16 @@ function DetailPage(props) {
   const { food, loading } = useFoodDetail(foodId);
   if (loading) {
     return (
-      <Box  marginTop={9} sx={{ width: '100%' }}>
+      <Box marginTop={9} sx={{ width: "100%" }}>
         <LinearProgress />
+        <div style={{ minHeight: "700px" }}></div>
       </Box>
     );
   }
   return (
     <Container>
-      <Box marginTop={12} style={{minHeight: '700px'}}>
-        <Typography variant="h3"> Chi tiết Thực Phẩm</Typography>
+      <Box marginTop={12} style={{ minHeight: "700px" }}>
+        <Typography variant="h4"> Chi tiết Thực Phẩm</Typography>
         <Grid container marginBottom={2} spacing={2}>
           <Grid item xs={12} md={6}>
             <FoodThumbnail food={food} />
@@ -36,7 +43,7 @@ function DetailPage(props) {
         </Grid>
         <Grid container marginBottom={4} spacing={2} alignItems="center">
           <Grid item xs={12} md={6}>
-            <DetailPageRating ratings ={food.ratings}/>
+            <DetailPageRating ratings={food.ratings} />
           </Grid>
         </Grid>
       </Box>

@@ -4,7 +4,7 @@ import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import { Badge, Menu } from "@mui/material";
+import { Avatar, Badge, Grid, Menu } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -25,6 +25,10 @@ import cartApi from "../../Api/cartApi";
 import Login from "../../features/Auth/components/Login/Login";
 import Register from "../../features/Auth/components/Register/Register";
 import { logout } from "../../features/Auth/userSlide";
+import { baseURL } from "../../constants/env";
+import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
+import CakeIcon from "@mui/icons-material/Cake";
+import userApi from "../../Api/userApi";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -82,7 +86,19 @@ function Header(props) {
   const location = useLocation();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await userApi.getProfice();
+        setUser(response.user);
+      } catch (error) {
+        console.log("Failed to fetch user", error);
+      }
+    })();
+  }, []);
+  console.log(user);
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -123,16 +139,28 @@ function Header(props) {
   };
   const handleFoodsClick = () => {
     history.push("/foods");
+    setAnchorElNav(null);
   };
   const handleManageFoodsClick = () => {
     history.push("/manager-food-donated");
+    setAnchorEl(null);
   };
-
+  const handleManageFoodsDonate = () => {
+    history.push("/manager-history-food-donated");
+    setAnchorEl(null);
+  };
   const handleDonateFoodsClick = () => {
     history.push("/donate-foods");
+    setAnchorElNav(null);
   };
   const handleLocationFoodsClick = () => {
     history.push("/location-foods");
+    setAnchorElNav(null);
+  };
+
+  const handleClickProfice = () => {
+    history.push("/profice");
+    setAnchorEl(null);
   };
   const [mode, setMode] = useState(MODE.LOGIN);
   useEffect(() => {
@@ -163,7 +191,7 @@ function Header(props) {
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/foods"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -211,13 +239,8 @@ function Header(props) {
               </MenuItem>
               {isLoggedIn && (
                 <>
-                  <MenuItem onClick={handleFoodsClick}>
+                  <MenuItem onClick={handleDonateFoodsClick}>
                     <Typography textAlign="center">Tặng Thực Phẩm</Typography>
-                  </MenuItem>
-                  <MenuItem onClick={handleManageFoodsClick}>
-                    <Typography textAlign="center">
-                      Quản lí Danh Sách Tặng
-                    </Typography>
                   </MenuItem>
                 </>
               )}
@@ -231,7 +254,7 @@ function Header(props) {
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/foods"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -254,7 +277,14 @@ function Header(props) {
                 display: "block",
               }}
             >
-              <Typography textAlign="center">Thực Phẩm</Typography>
+              <Grid container alignItems="center" justifyContent="flex-start">
+                <Grid marginRight={1}>
+                  <CakeIcon style={{ paddingBottom: "3px" }} />
+                </Grid>
+                <Grid>
+                  <Typography textAlign="center">Thực Phẩm</Typography>
+                </Grid>
+              </Grid>
             </Button>
             {isLoggedIn && (
               <>
@@ -269,22 +299,18 @@ function Header(props) {
                     display: "block",
                   }}
                 >
-                  <Typography textAlign="center">Tặng Thực Phẩm</Typography>
-                </Button>
-                <Button
-                  onClick={handleManageFoodsClick}
-                  sx={{
-                    my: 2,
-                    color:
-                      location.pathname.startsWith("/manager-food-donated")
-                        ? "#5BE49B"
-                        : "white",
-                    display: "block",
-                  }}
-                >
-                  <Typography textAlign="center">
-                    Quản Lí Tặng Thực Phẩm
-                  </Typography>
+                  <Grid
+                    container
+                    alignItems="center"
+                    justifyContent="flex-start"
+                  >
+                    <Grid marginRight={1}>
+                      <VolunteerActivismIcon />
+                    </Grid>
+                    <Grid>
+                      <Typography textAlign="center">Tặng Thực Phẩm</Typography>
+                    </Grid>
+                  </Grid>
                 </Button>
               </>
             )}
@@ -300,15 +326,6 @@ function Header(props) {
               <Typography textAlign="center">Điểm Phát Thực Phẩm</Typography>
             </Button>
           </Box>
-          <Search style={{ marginRight: "15px" }}>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
           {!isLoggedIn && (
             <Tooltip title="Log in">
               <Button onClick={handleClickOpen} color="inherit">
@@ -338,7 +355,7 @@ function Header(props) {
                 color="inherit"
                 aria-expanded={openMenu ? "true" : undefined}
               >
-                <AccountCircleOutlined />
+                <Avatar alt="user" src={`${baseURL}${user?.image}`} />
               </IconButton>
               <Menu
                 id="basic-menu"
@@ -349,9 +366,14 @@ function Header(props) {
                   "aria-labelledby": "basic-button",
                 }}
               >
-                <MenuItem>Profile</MenuItem>
-                <MenuItem>My account</MenuItem>
-                <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
+                <MenuItem onClick={handleClickProfice}>Trang Cá Nhân</MenuItem>
+                <MenuItem onClick={handleManageFoodsClick}>
+                  Quản lí danh sách tặng
+                </MenuItem>
+                <MenuItem onClick={handleManageFoodsDonate}>
+                  Quản lí lịch sử Tặng
+                </MenuItem>
+                <MenuItem onClick={handleLogoutClick}>Đăng Xuất</MenuItem>
               </Menu>
             </>
           )}

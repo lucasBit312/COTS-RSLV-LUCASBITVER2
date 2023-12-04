@@ -24,7 +24,14 @@ const foodAip = {
     cancelDonate(food_id) {
         const url = `/api/cancelDonateFood`;
         return axiosClient.post(url, food_id);
-    }
+    },
+    editFoodApi(data) {
+        const url = '/api/edit-donate-food';
+        const headers = {
+            "Content-Type": "multipart/form-data"
+        };
+        return axiosClient.post(url, data, { headers });
+    },
 
 }
 export default foodAip;

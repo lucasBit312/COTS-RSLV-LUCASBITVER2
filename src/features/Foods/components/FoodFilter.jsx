@@ -61,28 +61,45 @@ function FoodFilter({ filters, onChange }) {
       onChange(newFilters);
     }
   };
+  const onRemove = (values) => {
+    console.log("doanifnweig n");
+    const newFilters = { ...filters };
+    newFilters.province_id = "";
+    newFilters.district_id = "";
+    newFilters.ward_id = "";
+    newFilters.province_name = "";
+    newFilters.district_name = "";
+    newFilters.ward_name = "";
+    newFilters._sort_date = "";
+    newFilters.category_id = "";
+    newFilters.food_type = "";
+    onChange(newFilters);
+  };
+
   return (
     <Box>
-      <Grid container spacing={2} alignItems="center">
-        <Grid item xs={12} md={3}>
+      <div
+        className="d-flex justify-content-end"
+        style={{ paddingLeft: "14px" }}
+      >
+        {/* <div className="col-lg-3 col-md-6 col-5 pt-2">
           <FilterByCategory onChange={handleCategoryChange} />
-        </Grid>
-        <Grid item xs={12} md={3}>
+        </div> */}
+        {/* <div className="col-lg-3 col-md-6 col-5 pt-2">
           <FilterByType onChange={handleTypeChange} />
-        </Grid>
-        <Grid item xs={12} md={4}>
+        </div>
+        <div className="col-lg-4 col-md-6 col-12 pt-2">
           <FoodSort
             activeIndex={filters._sort_date}
             onchange={handleSortChange}
           />
-        </Grid>
-        <Grid item xs={12} md={2}>
+        </div> */}
           <MultipleFilter
             filters={filters}
             onChange={handleMultipleFilterChange}
+            onRemove={onRemove}
           />
-        </Grid>
-      </Grid>
+      </div>
     </Box>
   );
 }
