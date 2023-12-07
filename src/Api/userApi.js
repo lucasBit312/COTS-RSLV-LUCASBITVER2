@@ -27,6 +27,10 @@ const userApi = {
     newPassword(data) {
         const url = '/api/new-password';
         return axiosClient.post(url, data);
+    },
+    getCountNotication() {
+        const url = '/api/get-count-notication';
+        return axiosClient.get(url);
     }
 }
 export default userApi;

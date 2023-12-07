@@ -227,9 +227,10 @@ function DonateFood(props) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box
-        marginTop={12}
-        marginBottom={4}
-        style={{ display: "flex", justifyContent: "center" }}
+        marginTop={9}
+        paddingTop={3}
+        paddingBottom={3}
+        style={{ display: "flex", justifyContent: "center", backgroundColor: '#F7F7F7', }}
       >
         <Paper
           className="col-lg-8 col-md-10 col-12"
@@ -238,9 +239,13 @@ function DonateFood(props) {
             flexDirection: "column",
             alignItems: "center",
           }}
-          elevation={3}
+          elevation={0}
         >
-          <Typography variant="h4" className="p-2 mb-5 mt-2" style={{color:"#ED6C02"}}>
+          <Typography
+            variant="h4"
+            className="p-2 mb-5 mt-2"
+            style={{ color: "#ED6C02" }}
+          >
             Trang tặng Thực Phẩm
           </Typography>
           {/* titlel */}
@@ -255,7 +260,10 @@ function DonateFood(props) {
             {...donate("title")}
           />
           {/* category_id */}
-          <FormControl className="col-lg-10 col-md-10 col-10" style={{marginTop: "24px" }}>
+          <FormControl
+            className="col-lg-10 col-md-10 col-10"
+            style={{ marginTop: "24px" }}
+          >
             <InputLabel id="category">Chọn danh mục thực phẩm</InputLabel>
             <Select
               id="category_id"
@@ -281,7 +289,7 @@ function DonateFood(props) {
           <TextField
             id="description"
             className="col-lg-10 col-md-10 col-10"
-            style={{marginTop: "24px" }}
+            style={{ marginTop: "24px" }}
             label="Mô tả"
             multiline
             rows={4}
@@ -294,7 +302,7 @@ function DonateFood(props) {
           <TextField
             error={Boolean(errors.quantity)}
             className="col-lg-10 col-md-10 col-10"
-            style={{marginTop: "24px" }}
+            style={{ marginTop: "24px" }}
             id="quantity"
             size="small"
             label="Nhập số lượng"
@@ -303,7 +311,10 @@ function DonateFood(props) {
             {...donate("quantity")}
           />
           {/* expiry_date */}
-          <div className="col-lg-10 col-md-10 col-10" style={{marginTop: "24px" }} >
+          <div
+            className="col-lg-10 col-md-10 col-10"
+            style={{ marginTop: "24px" }}
+          >
             <label htmlFor="expiry_date" className="col-form-label">
               Thời Gian Hết Hạn
             </label>
@@ -328,19 +339,12 @@ function DonateFood(props) {
               )}
             </div>
           </div>
-          <div
+          <FormControl
             className="col-lg-10 col-md-10 col-10"
             style={{ marginTop: "24px" }}
-            id="defaultFormControlHelp"
-            class="form-text mb-2"
           >
-            ex: 30 phút sau khi bạn nhận xác nhận nếu người nhận không đến lấy
-            sẽ tự động hủy giao dịch.
-          </div>
-          {/* confirm_time */}
-          <FormControl className="col-lg-10 col-md-10 col-10">
             <InputLabel id="demo-simple-select-label">
-              Thời gian hủy bỏ giao dịch
+              Thời gian tự động hủy bỏ giao dịch
             </InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -348,7 +352,7 @@ function DonateFood(props) {
               value={timeConfirm}
               {...donate("confirm_time")}
               error={Boolean(errors.confirm_time)}
-              label="Thời gian hủy bỏ giao dịch"
+              label="Thời gian tự động hủy bỏ giao dịch"
               onChange={handleChangeTimeConfirm}
             >
               <MenuItem value={30}>30 phút</MenuItem>
@@ -365,7 +369,10 @@ function DonateFood(props) {
             )}
           </FormControl>
 
-          <FormControl className="col-lg-10 col-md-10 col-10" style={{marginTop: "24px" }}>
+          <FormControl
+            className="col-lg-10 col-md-10 col-10"
+            style={{ marginTop: "24px" }}
+          >
             <InputLabel id="label-province">Tỉnh</InputLabel>
             <Select
               labelId="label-province"
@@ -389,7 +396,10 @@ function DonateFood(props) {
             )}
           </FormControl>
           {province ? (
-            <FormControl className="col-lg-10 col-md-10 col-10" style={{marginTop: "24px" }}>
+            <FormControl
+              className="col-lg-10 col-md-10 col-10"
+              style={{ marginTop: "24px" }}
+            >
               <InputLabel id="label-district">Huyện</InputLabel>
               <Select
                 labelId="label-district"
@@ -415,7 +425,10 @@ function DonateFood(props) {
             ""
           )}
           {district ? (
-            <FormControl className="col-lg-10 col-md-10 col-10" style={{marginTop: "24px" }}>
+            <FormControl
+              className="col-lg-10 col-md-10 col-10"
+              style={{ marginTop: "24px" }}
+            >
               <InputLabel id="label-ward">Phường/Xã</InputLabel>
               <Select
                 labelId="label-ward"
@@ -443,7 +456,7 @@ function DonateFood(props) {
           <TextField
             error={Boolean(errors.location)}
             className="col-lg-10 col-md-10 col-10"
-            style={{marginTop: "24px" }}
+            style={{ marginTop: "24px" }}
             id="location"
             size="small"
             label="Nhập địa chỉ cụ thể (số nhà, số đường)"
@@ -454,7 +467,7 @@ function DonateFood(props) {
           <TextField
             className="col-lg-10 col-md-10 col-10"
             error={Boolean(errors.contact_information)}
-            style={{marginTop: "24px" }}
+            style={{ marginTop: "24px" }}
             id="contact_information"
             size="small"
             label="Thông tin liên hệ (SDT hoặc Link Mạng xã hội)"
@@ -466,8 +479,8 @@ function DonateFood(props) {
             component="label"
             color="warning"
             variant="outlined"
-            className="col-lg-10 col-md-10 col-10"
-            style={{marginTop: "24px" }}
+            className="col-lg-4 col-md-8 col-8"
+            style={{ marginTop: "24px" }}
             startIcon={<CloudUploadIcon />}
           >
             Thêm Hình Ảnh

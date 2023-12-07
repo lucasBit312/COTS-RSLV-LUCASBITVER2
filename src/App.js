@@ -9,9 +9,11 @@ import DonateFood from './features/DonateFood/DonateFood';
 import ManageFoodDonated from './features/ManageFoodDonated/ManageFoodDonated';
 import EditFood from './features/ManageFoodDonated/EditFood/EditFood';
 import Profice from './features/Profice/Profice';
+import DetailReceived from './features/FoodReceived/DetailReceived';
+import ManageHistoryDonate from './features/ManageHistoryDonated/ManageHistoryDonate';
+import Notice from './features/Notice/Notice';
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const currentUser = useSelector((state) => state.user.current);
-
   return (
     <Route
       {...rest}
@@ -32,9 +34,12 @@ function App() {
       <Header />
       <Switch>
         <Route path="/foods" component={Foods} />
+        <PrivateRoute path={`/food-received/:foodId`} component={DetailReceived} />
         <PrivateRoute path="/foodReceived" component={FoodReceived} />
         <PrivateRoute path="/donate-foods" component={DonateFood} />
+        <PrivateRoute path="/notification" component={Notice} />
         <PrivateRoute path="/manager-food-donated/edit/:id" component={EditFood} />
+        <PrivateRoute path="/manager-history-food-donated" component={ManageHistoryDonate} />
         <PrivateRoute path="/manager-food-donated" component={ManageFoodDonated} />
         <PrivateRoute path="/profice" component={Profice} />
       </Switch>

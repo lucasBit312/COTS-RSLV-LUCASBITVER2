@@ -90,7 +90,7 @@ const FoodReceived = (props) => {
   };
 
   const handleViewDetail = () => {
-    history.push(`/foods/${selectedItemFood}`);
+    history.push(`/food-received/${selectedItemId}`);
   };
 
   const queryParams = useMemo(() => {
@@ -185,13 +185,13 @@ const FoodReceived = (props) => {
           <TableHead>
             <TableRow>
               <TableCell>Id</TableCell>
-              <TableCell align="left">Tên Thực Phẩm</TableCell>
-              <TableCell align="left">Tên Người Tặng</TableCell>
-              <TableCell align="left">Số Lượng</TableCell>
-              <TableCell align="left">Đánh Giá</TableCell>
-              <TableCell align="left">Trạng Thái</TableCell>
-              <TableCell align="left">Thời Gian Nhận</TableCell>
-              <TableCell align="left">Thao Tác</TableCell>
+              <TableCell className="text-nowrap" align="left">Tên Thực Phẩm</TableCell>
+              <TableCell className="text-nowrap" align="left">Tên Người Tặng</TableCell>
+              <TableCell className="text-nowrap" align="left">Số Lượng</TableCell>
+              <TableCell className="text-nowrap" align="left">Đánh Giá</TableCell>
+              <TableCell className="text-nowrap" align="left">Trạng Thái</TableCell>
+              <TableCell className="text-nowrap" align="left">Thời Gian Nhận</TableCell>
+              <TableCell className="text-nowrap" align="left">Thao Tác</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

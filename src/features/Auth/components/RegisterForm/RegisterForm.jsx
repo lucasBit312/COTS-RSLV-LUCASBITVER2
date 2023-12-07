@@ -15,6 +15,7 @@ import * as Yup from 'yup';
 import { object, string } from 'yup';
 import InputField from '../../../../Components/form-control/InputField/InputField';
 import { CircularProgress } from '@mui/material';
+import PasswordField from '../../../../Components/form-control/passwordField/PasswordField';
 const defaultTheme = createTheme();
 
 export default function RegisterForm({ onSubmit }) {
@@ -35,7 +36,6 @@ export default function RegisterForm({ onSubmit }) {
             /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/,
             'Mật khẩu phải chứa ít nhất một kí tự đặc biệt, một chữ cái và một chữ số'
           ),
-      
         rePassword: string()
           .required('Vui lòng nhập')
           .oneOf([Yup.ref('password'), null], 'Mật khẩu không khớp'),
@@ -87,7 +87,7 @@ export default function RegisterForm({ onSubmit }) {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <InputField
+                    <PasswordField
                         name="password"
                         label="Nhập password"
                         control={control}
@@ -96,7 +96,7 @@ export default function RegisterForm({ onSubmit }) {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <InputField
+                    <PasswordField
                         name="rePassword"
                         label="Nhập lại password"
                         control={control}

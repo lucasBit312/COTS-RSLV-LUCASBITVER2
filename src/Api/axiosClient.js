@@ -9,7 +9,7 @@ const axiosClient = axios.create({
         "content-type": "application/json",
         "Accept": "application/json"
     },
-}); 
+});
 
 axiosClient.interceptors.request.use(
     function (config) {
@@ -38,12 +38,7 @@ axiosClient.interceptors.response.use(
             console.log("ERROR RESPONSE: ", responseData);
             if (responseData.error == 'Authorization error') {
                 enqueueSnackbar("Vui Lòng Đăng Nhập", { variant: 'error' });
-            } else if (responseData.error == 'Token has expired') {
-                const dispatch = useDispatch();
-                const action = logout();
-                dispatch(action);
-                enqueueSnackbar("Vui Lòng Đăng Nhập", { variant: 'error' });
-            }
+            } 
             errorData = responseData;
         } else {
             console.log("Network Error:", error.message);

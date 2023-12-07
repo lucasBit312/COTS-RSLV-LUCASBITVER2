@@ -66,11 +66,6 @@ function Profice(props) {
       .required("Vui lòng nhập họ và tên")
       .max(100, "Vui lòng nhập ít hơn 100 kí tự")
       .min(5, "Vui lòng nhập dài hơn 5 kí tự"),
-    email: yup
-      .string()
-      .email("Vui lòng nhập địa chỉ email hợp lệ")
-      .required("Vui lòng nhập địa chỉ email"),
-
     birthdate: yup
       .date("Vui lòng nhập ngày sinh")
       .typeError("Vui lòng nhập ngày sinh hợp lệ")
@@ -139,7 +134,7 @@ function Profice(props) {
         </Tabs>
 
         <TabPanel value={activeIndex} index={0}>
-          <NewImageProfice data = {user}/>
+          <NewImageProfice data={user} />
           <Typography className="fw-semibold">Thông tin chi tiết</Typography>
           <hr style={{ marginTop: "3px" }} />
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -185,9 +180,7 @@ function Profice(props) {
               size="small"
               label="Email"
               defaultValue={user ? user.email : ""}
-              error={Boolean(errors.email)}
-              helperText={errors.email?.message}
-              {...Profice("email")}
+              disabled
             />
             <TextField
               style={{ width: "100%", marginTop: "35px" }}
@@ -210,10 +203,10 @@ function Profice(props) {
           </form>
         </TabPanel>
         <TabPanel value={activeIndex} index={1}>
-          <Address user={user} ></Address>
+          <Address user={user}></Address>
         </TabPanel>
         <TabPanel value={activeIndex} index={2}>
-          <Password user={user} ></Password>
+          <Password user={user}></Password>
         </TabPanel>
       </Paper>
     </Box>

@@ -11,7 +11,7 @@ export const addToCart = createAsyncThunk(
         } catch (error) {
             throw error;
         }
-    }
+    } 
 );
 export const cartSlice = createSlice({
     name: 'cart',

@@ -25,6 +25,7 @@ const VisuallyHiddenInput = styled("input")({
 
 function NewImageProfice(userdata) {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -50,10 +51,10 @@ function NewImageProfice(userdata) {
       formData.append("image", data.image[0]);
   
       const result = await userApi.newImage(formData);
-      console.log(result);
   
       if (result.message) {
         enqueueSnackbar(result.message, { variant: "success" });
+        setSuccess(true);
       } else if (result.error) {
         enqueueSnackbar(result.error, { variant: "error" });
       } else if (result.errors) {
@@ -110,7 +111,7 @@ function NewImageProfice(userdata) {
             </Button>
           </div>
           <div className="pt-2">
-            {selectedImage && (
+            {success!==true && selectedImage && (
               <Button
                 variant="contained"
                 color="warning"

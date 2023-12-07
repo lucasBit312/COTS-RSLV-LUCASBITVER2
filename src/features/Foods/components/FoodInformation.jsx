@@ -17,7 +17,7 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Stack from "@mui/material/Stack";
-import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
+import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
 FoodInformation.propTypes = {
   food: PropTypes.object,
 };
@@ -51,6 +51,9 @@ function FoodInformation(food) {
   console.log(averageRating);
 
   const dispath = useDispatch();
+
+
+
   const handleAddToCartSubmit = async (formData) => {
     try {
       const value = {
@@ -60,15 +63,23 @@ function FoodInformation(food) {
       const action = addToCart(value);
       const resultAction = await dispath(action);
       const result = unwrapResult(resultAction);
-      if (result.success) {
-        enqueueSnackbar(result.success, { variant: "success" });
+      if (result.message) {
+        enqueueSnackbar(result.message, { variant: "success" });
+      } else if (result.error) {
+        enqueueSnackbar(result.error, { variant: "error" });
+      }
+      if (result.errors) {
+        enqueueSnackbar(result.errors[0], { variant: "error" });
       }
     } catch (errors) {
       console.error("Error:", errors);
     }
   };
+
+
+  
   return (
-    <Box style={{marginTop:"24px"}}>
+    <Box style={{ marginTop: "24px" }}>
       <Paper elevation={3}>
         <Grid
           container
@@ -79,7 +90,6 @@ function FoodInformation(food) {
           <Grid marginRight={2}>
             <Avatar
               sx={{ width: 56, height: 56 }}
-              
               alt="Avatar"
               src={`${baseURL}${food?.food?.food?.user?.image}`}
             />
@@ -120,12 +130,9 @@ function FoodInformation(food) {
           <Typography variant="h4">{food?.food?.food?.title}</Typography>
         </Grid>
         <Grid padding={1}>
-          <Typography>
-            Mô tả: {food?.food?.food?.description}
-          </Typography>
+          <Typography>Mô tả: {food?.food?.food?.description}</Typography>
         </Grid>
         <Grid padding={1}>
-          <AccessAlarmIcon />
           <Typography marginBottom="0" className="text-muted">
             Thời gian hết hạn thực phẩm:{" "}
             {dayjs(food?.food?.food?.expiry_date).format("DD/MM/YYYY HH:mm")}{" "}

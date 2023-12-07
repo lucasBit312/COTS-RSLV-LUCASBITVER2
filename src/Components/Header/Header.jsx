@@ -29,6 +29,7 @@ import { baseURL } from "../../constants/env";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import CakeIcon from "@mui/icons-material/Cake";
 import userApi from "../../Api/userApi";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -77,7 +78,12 @@ function Header(props) {
   const [open, setOpen] = React.useState(false);
   const loggedInuser = useSelector((state) => state.user.current);
   const totalCart = useSelector((state) => state.cart.cartItems);
+  const totalNotice = useSelector((state) => state.notice.noticeItems);
+  console.log("totalNotice", totalNotice);
+
   const [cartTotal, setCartTotal] = React.useState(0);
+  const [noticeTotal, setNoticeTotal] = React.useState(0);
+
   const history = useHistory();
   const isLoggedIn = !!loggedInuser.id;
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -89,15 +95,18 @@ function Header(props) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const response = await userApi.getProfice();
-        setUser(response.user);
-      } catch (error) {
-        console.log("Failed to fetch user", error);
-      }
-    })();
-  }, []);
+    if (isLoggedIn) {
+      (async () => {
+        try {
+          const response = await userApi.getProfice();
+          setUser(response.user);
+        } catch (error) {
+          console.log("Failed to fetch user", error);
+        }
+      })();
+    }
+  }, [isLoggedIn]);
+
   console.log(user);
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -162,19 +171,35 @@ function Header(props) {
     history.push("/profice");
     setAnchorEl(null);
   };
+  const handleNotice = () => {
+    history.push("/notification");
+  };
   const [mode, setMode] = useState(MODE.LOGIN);
+
   useEffect(() => {
     (async () => {
       try {
         const dataRes = await cartApi.getTotalCart();
         const data = dataRes.total;
-        console.log(data);
         setCartTotal(data);
       } catch (error) {
         console.log(error);
       }
     })();
-  }, [totalCart]);
+  }, [totalCart, isLoggedIn]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const dataRes = await userApi.getCountNotication();
+        const data = dataRes.notificationCount;
+        console.log("data", data);
+        setNoticeTotal(data);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, [isLoggedIn, totalNotice]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -344,6 +369,18 @@ function Header(props) {
                 >
                   <Badge badgeContent={cartTotal} color="error">
                     <CardGiftcardIcon />
+                  </Badge>
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Thông báo">
+                <IconButton
+                  onClick={handleNotice}
+                  size="large"
+                  aria-label="show total notice"
+                  color="inherit"
+                >
+                  <Badge badgeContent={noticeTotal} color="error">
+                    <NotificationsActiveIcon />
                   </Badge>
                 </IconButton>
               </Tooltip>
