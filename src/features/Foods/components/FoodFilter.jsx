@@ -82,18 +82,6 @@ function FoodFilter({ filters, onChange }) {
         className="d-flex justify-content-end"
         style={{ paddingLeft: "14px" }}
       >
-        {/* <div className="col-lg-3 col-md-6 col-5 pt-2">
-          <FilterByCategory onChange={handleCategoryChange} />
-        </div> */}
-        {/* <div className="col-lg-3 col-md-6 col-5 pt-2">
-          <FilterByType onChange={handleTypeChange} />
-        </div>
-        <div className="col-lg-4 col-md-6 col-12 pt-2">
-          <FoodSort
-            activeIndex={filters._sort_date}
-            onchange={handleSortChange}
-          />
-        </div> */}
           <MultipleFilter
             filters={filters}
             onChange={handleMultipleFilterChange}

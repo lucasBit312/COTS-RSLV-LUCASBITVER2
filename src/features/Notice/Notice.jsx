@@ -1,21 +1,28 @@
-import React from "react";
+import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import {
   Alert,
   Avatar,
   Box,
   Button,
+  FormControl,
   Grid,
+  InputBase,
+  InputLabel,
+  MenuItem,
+  Pagination,
   Paper,
+  Select,
   Typography,
+  alpha,
 } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
 import userApi from "../../Api/userApi";
 import { baseURL } from "../../constants/env";
 import dayjs from "dayjs";
-import { styled } from "@mui/styles";
 import Dialog from "@mui/material/Dialog";
+import { styled } from "@mui/material/styles";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -25,6 +32,13 @@ import { enqueueSnackbar } from "notistack";
 import { useDispatch } from "react-redux";
 import { viewedNotice } from "./NoticeSlide";
 import { unwrapResult } from "@reduxjs/toolkit";
+import queryString from "query-string";
+import SearchIcon from "@mui/icons-material/Search";
+
+import {
+  useHistory,
+  useLocation,
+} from "react-router-dom/cjs/react-router-dom.min";
 Notice.propTypes = {};
 const HoverPaper = styled(Paper)({
   "&:hover": {
@@ -32,11 +46,56 @@ const HoverPaper = styled(Paper)({
     cursor: "pointer",
   },
 });
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha("#ED6C02", 0.15),
+  "&:hover": {
+    backgroundColor: alpha("#ED6C02", 0.25),
+  },
+  marginLeft: 0,
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(1),
+    width: "auto",
+  },
+}));
+
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      width: "30ch",
+      "&:focus": {
+        width: "38ch",
+      },
+    },
+  },
+}));
+
 function Notice(props) {
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [loadData, setLoadData] = useState(false);
+  const [totalPage, setTotalPage] = useState(0);
+  const [selectedType, setSelectedType] = useState("");
+  const history = useHistory();
+  const location = useLocation();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -45,7 +104,14 @@ function Notice(props) {
   };
 
   const dispath = useDispatch();
-
+  const queryParams = useMemo(() => {
+    const params = queryString.parse(location.search);
+    return {
+      ...params,
+      _page: Number.parseInt(params._page) || 1,
+      _sort_date: params._sort_date || "ASC",
+    };
+  }, [location.search]);
   const handleNotificationClick = async (notification) => {
     try {
       setSelectedNotification(notification);
@@ -59,19 +125,20 @@ function Notice(props) {
       console.log(error);
     }
   };
-
+  console.log(totalPage, "totalpage");
   useEffect(() => {
     (async () => {
       try {
-        const dataRes = await userApi.getCountNotication();
-        const data = dataRes.notifications;
+        const dataRes = await userApi.getCountNotication(queryParams);
+        const data = dataRes.notifications.data;
         setNotifications(data);
+        setTotalPage(dataRes?.notifications?.last_page);
         setLoadData(false);
       } catch (error) {
         console.log(error);
       }
     })();
-  }, [loadData]);
+  }, [queryParams, loadData]);
 
   const handleConfirm = async () => {
     try {
@@ -101,17 +168,105 @@ function Notice(props) {
       console.error("Error:", error);
     }
   };
+
+  const handlePageChange = (event, newPage) => {
+    const filters = {
+      ...queryParams,
+      _page: newPage,
+    };
+    history.push({
+      pathname: history.location.pathname,
+      search: queryString.stringify(filters),
+    });
+  };
+  const handleSearchChange = (event) => {
+    const content = event.target.value;
+    const filters = {
+      ...queryParams,
+      searchContent: content,
+    };
+    history.push({
+      pathname: history.location.pathname,
+      search: queryString.stringify(filters),
+    });
+  };
+  const handleTypeChange = (event) => {
+    const type = event.target.value;
+    setSelectedType(type);
+    const filters = {
+      ...queryParams,
+      type: type,
+    };
+    history.push({
+      pathname: history.location.pathname,
+      search: queryString.stringify(filters),
+    });
+  };
+
   return (
     <Box
-    marginTop={9}
-    paddingTop={3}
-    paddingBottom={3}
-    style={{ display: "flex", justifyContent: "center", minHeight: "700px", backgroundColor: '#F7F7F7', }}
+      marginTop={9}
+      paddingTop={3}
+      paddingBottom={3}
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        minHeight: "700px",
+        backgroundColor: "#F7F7F7",
+      }}
     >
       <Paper className="col-lg-6 col-md-8 col-12" elevation={0}>
         <Typography className="p-3 fs-2" style={{ color: "#ED6C02" }}>
           Thông Báo
         </Typography>
+        <div
+          className="w-100 row space-between"
+          style={{
+            paddingTop: "5px",
+            paddingBottom: "10px",
+            marginLeft: "2px",
+          }}
+        >
+          <div className="col-lg-7 col-md-7 col-7">
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Tìm kiếm..."
+                inputProps={{ "aria-label": "search" }}
+                onChange={handleSearchChange}
+              />
+            </Search>
+          </div>
+          <div
+            className="col-lg-4 col-md-4 col-4"
+            style={{ marginLeft: "1px" }}
+          >
+            <FormControl className="w-100" size="small">
+              <InputLabel
+                style={{ color: "#ED6C02" }}
+                id="category-select-label"
+              >
+                Trạng thái
+              </InputLabel>
+              <Select
+                labelId="category-select-label"
+                id="category-select"
+                size="small"
+                value={selectedType}
+                label="Trạng thái"
+                onChange={handleTypeChange}
+              >
+                <MenuItem style={{ color: "#ED6C02" }} value="">
+                  Tất Cả
+                </MenuItem>
+                <MenuItem value={0}>Chưa đọc</MenuItem>
+                <MenuItem value={1}>Đã đọc</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+        </div>
         {notifications.map((notification, index) => (
           <HoverPaper
             className="row pt-2"
@@ -144,6 +299,24 @@ function Notice(props) {
             </div>
           </HoverPaper>
         ))}
+        <div
+          style={{
+            display: "flex",
+            flexFlow: "row nowrap",
+            justifyContent: "center",
+            marginTop: "30px",
+            padding: "10px",
+          }}
+        >
+          <Pagination
+            container
+            justify="center"
+            color="warning"
+            count={totalPage}
+            page={queryParams._page}
+            onChange={handlePageChange}
+          />
+        </div>
       </Paper>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Thông báo</DialogTitle>
@@ -170,7 +343,9 @@ function Notice(props) {
                     src={`${baseURL}${selectedNotification?.user_image}`}
                   />
                 </div>
-                <div className="col-lg-11 col-md-10 col-10">{selectedNotification?.message}</div>
+                <div className="col-lg-11 col-md-10 col-10">
+                  {selectedNotification?.message}
+                </div>
               </div>
             </Typography>
             <Typography className="fst-italic pt-3">

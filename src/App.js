@@ -12,6 +12,8 @@ import Profice from './features/Profice/Profice';
 import DetailReceived from './features/FoodReceived/DetailReceived';
 import ManageHistoryDonate from './features/ManageHistoryDonated/ManageHistoryDonate';
 import Notice from './features/Notice/Notice';
+import FoodLocations from './features/FoodLocations/FoodLocations';
+import DetailFoodLocation from './features/FoodLocations/DetailFoodLocation';
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const currentUser = useSelector((state) => state.user.current);
   return (
@@ -34,6 +36,8 @@ function App() {
       <Header />
       <Switch>
         <Route path="/foods" component={Foods} />
+        <Route path="/food-donation-locations/:locationId" component={DetailFoodLocation} />
+        <Route path="/food-donation-locations" component={FoodLocations} />
         <PrivateRoute path={`/food-received/:foodId`} component={DetailReceived} />
         <PrivateRoute path="/foodReceived" component={FoodReceived} />
         <PrivateRoute path="/donate-foods" component={DonateFood} />

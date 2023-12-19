@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
-import PropTypes from "prop-types";
+import EditNoteIcon from "@mui/icons-material/EditNote";
 import {
   Alert,
   Box,
@@ -9,35 +8,75 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
-  LinearProgress,
+  InputBase,
   Pagination,
   Rating,
   Typography,
+  alpha,
 } from "@mui/material";
-import cartApi from "../../Api/cartApi";
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import EditNoteIcon from "@mui/icons-material/EditNote";
-import Modal from "@mui/material/Modal";
+import dayjs from "dayjs";
 import { enqueueSnackbar } from "notistack";
-import { useDispatch } from "react-redux";
-import { unwrapResult } from "@reduxjs/toolkit";
+import SearchIcon from "@mui/icons-material/Search";
+import queryString from "query-string";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   useHistory,
   useLocation,
 } from "react-router-dom/cjs/react-router-dom.min";
-import dayjs from "dayjs";
-import queryString from "query-string";
-import RatingForm from "./RatingForm/RatingForm";
+import cartApi from "../../Api/cartApi";
 import TableSkeleton from "../../Components/Skeleton/TableSkeleton";
+import { styled } from "@mui/material/styles";
+import RatingForm from "./RatingForm/RatingForm";
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha("#ED6C02", 0.15),
+  "&:hover": {
+    backgroundColor: alpha("#ED6C02", 0.25),
+  },
+  marginLeft: 0,
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(1),
+    width: "auto",
+  },
+}));
+
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      width: "30ch",
+      "&:focus": {
+        width: "38ch",
+      },
+    },
+  },
+}));
 const FoodReceived = (props) => {
   const [list, setList] = useState([]);
   const [anchorEl2, setAnchorEl2] = React.useState(null);
@@ -51,13 +90,11 @@ const FoodReceived = (props) => {
   const [selectedItemFoodReceiverStatus, setSelectedItemFoodReceiverStatus] =
     useState(null);
   const [loading, setLoading] = useState(true);
-
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openDialogRates, setOpenDialogRates] = React.useState(false);
   const [loadData, setLoadData] = useState(false);
   const location = useLocation();
   const [totalPage, setTotalPage] = useState(0);
-  const [contentRating, setContentRating] = useState("");
 
   const handleClickOpenDialog = () => {
     setOpenDialog(true);
@@ -175,7 +212,7 @@ const FoodReceived = (props) => {
     <Box
       marginTop={12}
       marginBottom={4}
-      style={{ display: "flex", justifyContent: "center" }}
+      style={{ display: "flex", justifyContent: "center", minHeight: "700px" }}
     >
       <TableContainer component={Paper} style={{ width: "80%" }}>
         <Typography variant="h4" className="p-3">
@@ -185,17 +222,31 @@ const FoodReceived = (props) => {
           <TableHead>
             <TableRow>
               <TableCell>Id</TableCell>
-              <TableCell className="text-nowrap" align="left">Tên Thực Phẩm</TableCell>
-              <TableCell className="text-nowrap" align="left">Tên Người Tặng</TableCell>
-              <TableCell className="text-nowrap" align="left">Số Lượng</TableCell>
-              <TableCell className="text-nowrap" align="left">Đánh Giá</TableCell>
-              <TableCell className="text-nowrap" align="left">Trạng Thái</TableCell>
-              <TableCell className="text-nowrap" align="left">Thời Gian Nhận</TableCell>
-              <TableCell className="text-nowrap" align="left">Thao Tác</TableCell>
+              <TableCell className="text-nowrap" align="left">
+                Tên Thực Phẩm
+              </TableCell>
+              <TableCell className="text-nowrap" align="left">
+                Tên Người Tặng
+              </TableCell>
+              <TableCell className="text-nowrap" align="left">
+                Số Lượng
+              </TableCell>
+              <TableCell className="text-nowrap" align="left">
+                Đánh Giá
+              </TableCell>
+              <TableCell className="text-nowrap" align="left">
+                Trạng Thái
+              </TableCell>
+              <TableCell className="text-nowrap" align="left">
+                Thời Gian Nhận
+              </TableCell>
+              <TableCell className="text-nowrap" align="left">
+                Thao Tác
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {list.map((item) => (
+            {list?.map((item) => (
               <TableRow
                 key={item.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

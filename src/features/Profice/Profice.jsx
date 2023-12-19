@@ -73,7 +73,7 @@ function Profice(props) {
 
     phone_number: yup
       .string()
-      .matches(/^[0-9]+$/, "Vui lòng chỉ nhập số")
+      .matches(/^[0-9]+$/, "Vui lòng nhập số điện thoại")
       .min(10, "Số điện thoại phải có ít nhất 10 số")
       .required("Vui lòng nhập số điện thoại"),
   });

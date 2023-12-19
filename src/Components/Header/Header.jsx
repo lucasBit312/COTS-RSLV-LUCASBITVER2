@@ -30,60 +30,19 @@ import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import CakeIcon from "@mui/icons-material/Cake";
 import userApi from "../../Api/userApi";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(1),
-    width: "auto",
-  },
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "12ch",
-      "&:focus": {
-        width: "20ch",
-      },
-    },
-  },
-}));
+import ForgotPassword from "../../features/Auth/components/ForgotPassword/ForgotPassword";
 const MODE = {
   LOGIN: "login",
   REGISTER: "register",
+  FORGOT_PASSWORD: "forgot_password",
 };
 function Header(props) {
   const [open, setOpen] = React.useState(false);
   const loggedInuser = useSelector((state) => state.user.current);
   const totalCart = useSelector((state) => state.cart.cartItems);
   const totalNotice = useSelector((state) => state.notice.noticeItems);
-  console.log("totalNotice", totalNotice);
-
   const [cartTotal, setCartTotal] = React.useState(0);
   const [noticeTotal, setNoticeTotal] = React.useState(0);
-
   const history = useHistory();
   const isLoggedIn = !!loggedInuser.id;
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -163,7 +122,7 @@ function Header(props) {
     setAnchorElNav(null);
   };
   const handleLocationFoodsClick = () => {
-    history.push("/location-foods");
+    history.push("/food-donation-locations");
     setAnchorElNav(null);
   };
 
@@ -190,13 +149,15 @@ function Header(props) {
 
   useEffect(() => {
     (async () => {
-      try {
-        const dataRes = await userApi.getCountNotication();
-        const data = dataRes.notificationCount;
-        console.log("data", data);
-        setNoticeTotal(data);
-      } catch (error) {
-        console.log(error);
+      if (isLoggedIn) {
+        try {
+          const dataRes = await userApi.getCountNotication();
+          const data = dataRes.notificationCount;
+          console.log("data", data);
+          setNoticeTotal(data);
+        } catch (error) {
+          console.log(error);
+        }
       }
     })();
   }, [isLoggedIn, totalNotice]);
@@ -344,7 +305,9 @@ function Header(props) {
               sx={{
                 my: 2,
                 color:
-                  location.pathname === "/location-foods" ? "#5BE49B" : "white",
+                  location.pathname === "/food-donation-locations"
+                    ? "#5BE49B"
+                    : "white",
                 display: "block",
               }}
             >
@@ -442,10 +405,19 @@ function Header(props) {
           {mode === MODE.LOGIN && (
             <>
               <Login closeDialog={handleClose} />
-              <Box textAlign="center">
-                <Button onClick={() => setMode(MODE.REGISTER)}>
-                  Bạn chưa đã có tài khoản? Đăng kí tại đây
+              <Box style={{ display: "flex", flexDirection: "row",justifyContent: 'center' }}>
+                <Button onClick={() => setMode(MODE.FORGOT_PASSWORD)}>
+                  Quên mật khẩu
                 </Button>
+                <Button onClick={() => setMode(MODE.REGISTER)}>Đăng ký</Button>
+              </Box>
+            </>
+          )}
+          {mode === MODE.FORGOT_PASSWORD && (
+            <>
+              <ForgotPassword closeDialog={handleClose} />
+              <Box style={{ display: "flex", flexDirection: "row",justifyContent: 'center' }}>
+                <Button onClick={() => setMode(MODE.REGISTER)}>Đăng ký</Button>
               </Box>
             </>
           )}

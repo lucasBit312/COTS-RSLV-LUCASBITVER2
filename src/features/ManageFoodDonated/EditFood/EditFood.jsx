@@ -261,7 +261,7 @@ function EditFood(props) {
         >
           <Typography variant="h4" className="p-2 mb-5 mt-2">
             <CardGiftcardIcon sx={{ fontSize: 30, marginRight: "10px" }} />
-            Trang tặng Thực Phẩm
+            Trang chỉnh sửa Thực Phẩm
           </Typography>
           {/* titlel */}
           <input hidden value={food?.food?.id} {...donate("id")} />

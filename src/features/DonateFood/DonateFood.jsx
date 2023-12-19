@@ -43,6 +43,7 @@ function DonateFood(props) {
   const [categoryList, setCategoryList] = useState([]);
   const [category, setCategory] = useState("");
   const [timeConfirm, setTimeConfirm] = React.useState("");
+  const [food_type, setFood_type] = React.useState("");
   const [province, setProvince] = useState("");
   const [district, setDistrict] = useState("");
   const [ward, setWard] = useState("");
@@ -55,6 +56,9 @@ function DonateFood(props) {
   );
   const handleChangeTimeConfirm = (event) => {
     setTimeConfirm(event.target.value);
+  };
+  const handleChangefood_type = (event) => {
+    setFood_type(event.target.value);
   };
   const handleChange = (event) => {
     setCategory(event.target.value);
@@ -130,6 +134,11 @@ function DonateFood(props) {
     // .array()
     // .min(1, "Vui lòng chọn ít nhất một ảnh")
     // .required("Vui lòng chọn ảnh"),
+    food_type: yup
+      .number("Vui lòng chọn trạng thái thực phẩm")
+      .integer("Vui lòng chọn trạng thái thực phẩm")
+      .typeError("Vui lòng chọn trạng thái thực phẩm")
+      .required("Vui lòng chọn trạng thái thực phẩm"),
   });
   const {
     register: donate,
@@ -230,7 +239,11 @@ function DonateFood(props) {
         marginTop={9}
         paddingTop={3}
         paddingBottom={3}
-        style={{ display: "flex", justifyContent: "center", backgroundColor: '#F7F7F7', }}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          backgroundColor: "#F7F7F7",
+        }}
       >
         <Paper
           className="col-lg-8 col-md-10 col-12"
@@ -281,6 +294,31 @@ function DonateFood(props) {
             </Select>
             {errors.category_id?.message ? (
               <p className="text-danger">{errors.category_id?.message}</p>
+            ) : (
+              ""
+            )}
+          </FormControl>
+          <FormControl
+            className="col-lg-10 col-md-10 col-10"
+            style={{ marginTop: "24px" }}
+          >
+            <InputLabel id="demo-simple-select-label">
+              Trạng Thái Thực Phẩm
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="food_type"
+              value={food_type}
+              {...donate("food_type")}
+              error={Boolean(errors.food_type)}
+              label="Trạng Thái Thực Phẩm"
+              onChange={handleChangefood_type}
+            >
+              <MenuItem value={1}>Đã Chế Biến</MenuItem>
+              <MenuItem value={2}>Chưa Chế Biến</MenuItem>
+            </Select>
+            {errors.food_type?.message ? (
+              <p className="text-danger">{errors.food_type?.message}</p>
             ) : (
               ""
             )}

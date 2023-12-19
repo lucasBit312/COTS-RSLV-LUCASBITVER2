@@ -10,6 +10,8 @@ import {
   Radio,
   RadioGroup,
   Select,
+  Tab,
+  Tabs,
   Typography,
 } from "@mui/material";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -164,6 +166,13 @@ const MultipleFilter = (props) => {
       props.onChange({ food_type: food_type });
     }
   };
+  const [_sort_date, setSort_Date] = React.useState("DESC");
+  const handleChangeSort = (event, newValue) => {
+    setSort_Date(newValue);
+    if (props.onChange) {
+      props.onChange({ _sort_date: _sort_date });
+    }
+  };
 
   return (
     <div>
@@ -192,15 +201,15 @@ const MultipleFilter = (props) => {
         slotProps={{
           paper: {
             style: {
-              minHeight: "300px",
-              minWidth: "200px",
+              minHeight: "280px",
+              minWidth: "230px",
             },
           },
         }}
       >
         <div style={{ padding: "16px" }}>
           <FormControl>
-            <Typography>Lọc Theo Phương Thức Nhận</Typography>
+            {/* <Typography>Lọc Theo Phương Thức Nhận</Typography>
             <RadioGroup
               aria-labelledby="radio-collect-type"
               value={collectType}
@@ -226,11 +235,30 @@ const MultipleFilter = (props) => {
                 control={<Radio />}
                 label="Đến Nơi Lấy"
               />
-            </RadioGroup>
+            </RadioGroup> */}
+            <Tabs
+              value={_sort_date}
+              onChange={handleChangeSort}
+              aria-label="date sort"
+            >
+              <Tab
+                style={{ color: "#ED6C02" }}
+                padding={0}
+                value="ASC"
+                label="Hạn Còn Dài Nhất"
+                wrapped
+              />
+              <Tab
+                style={{ color: "#ED6C02" }}
+                value="DESC"
+                label="Hạn Còn Ít Nhất"
+                wrapped
+              />
+            </Tabs>
             <div className="pt-2 pb-2">
               <FormControl className="w-100" size="small">
                 <InputLabel
-                  style={{ color: "#ED6C02" }}
+                  style={{ color: "#ED6C02", minWidth: "260px" }}
                   id="category-select-label"
                 >
                   Danh Mục
@@ -240,6 +268,7 @@ const MultipleFilter = (props) => {
                   id="category-select"
                   value={selectedCategory}
                   label="Category"
+                  style={{ minWidth: "260px" }}
                   onChange={handleCategoryChange}
                 >
                   <MenuItem style={{ color: "#ED6C02" }} value="">
@@ -274,7 +303,7 @@ const MultipleFilter = (props) => {
                   onChange={handleTypeChange}
                 >
                   <MenuItem style={{ color: "#ED6C02" }} value="">
-                    <em>None</em>
+                    <em>Tất cả</em>
                   </MenuItem>
                   <MenuItem style={{ color: "#ED6C02" }} value={1}>
                     Đã Chế Biến

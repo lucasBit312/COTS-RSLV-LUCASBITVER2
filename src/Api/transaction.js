@@ -2,9 +2,9 @@ import axios from "axios";
 import axiosClient from "./axiosClient";
 
 const transactionsApi = {
-  history_transactions() {
+  history_transactions(params) {
     const url = `/api/history-transactions`;
-    return axiosClient.get(url);
+    return axiosClient.get(url, { params });
   },
   confirmReceived(transaction_id) {
     const url = `/api/confirm-received`;

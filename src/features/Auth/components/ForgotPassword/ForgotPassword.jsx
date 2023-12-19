@@ -1,19 +1,24 @@
 import MuiAlert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
-import { unwrapResult } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "notistack";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { login, verification } from "../../userSlide";
-import LoginForm from "../LoginForm/loginForm";
+import {
+  NewPasswordForgotApi,
+  forgotPassword,
+  verificationForgot,
+} from "../../userSlide";
+import ForgotPasswordForm from "../ForgotPasswordForm/ForgotPasswordForm";
+import NewPasswordForgot from "../NewPasswordForgot/NewPasswordForgot";
 import VerificationForm from "../VerificationForm.jsx/VerificationForm";
 
-function Login(props) {
-  Login.propTypes = {
+function ForgotPassword(props) {
+  ForgotPassword.propTypes = {
     closeDialog: PropTypes.func,
   };
   const [verificationForm, setVerificationForm] = useState(false);
+  const [newPasswordForm, setNewPasswordForm] = useState(false);
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
@@ -40,39 +45,49 @@ function Login(props) {
     });
   };
   const dispatch = useDispatch();
-  const handleLogin = async (formData) => {
+  const handleForgot = async (formData) => {
     try {
-      const action = login(formData);
+      const action = forgotPassword(formData);
       const resultAction = await dispatch(action);
-      if (
-        resultAction.payload[0] == "Vui lòng xác thực tài khoản để tiếp tục"
-      ) {
+      console.log(resultAction);
+      if (resultAction.payload.message == "Vui lòng xác thực") {
         setVerificationForm(true);
         localStorage.setItem("registeredEmail", formData.email);
-        enqueueSnackbar(resultAction.payload[0], {
+        enqueueSnackbar(resultAction.payload.message, {
           variant: "success",
         });
-      } else if (resultAction.payload[0]) {
-        handleClick(resultAction.payload[0], "error");
-      } else {
-        const user = unwrapResult(resultAction);
-        const { closeDialog } = props;
-        if (closeDialog) {
-          closeDialog();
-        }
+      } else if (resultAction.payload) {
+        handleClick(resultAction.payload, "error");
       }
     } catch (errors) {
-      console.error("Failed to login:", errors);
+      console.error("Failed to Forgot:", errors);
     }
   };
   const handleVerification = async (formData) => {
     try {
-      const action = verification(formData);
+      const action = verificationForgot(formData);
       const resultAction = await dispatch(action);
       if (resultAction.payload[0]) {
         enqueueSnackbar(resultAction.payload, { variant: "error" });
       } else {
-        enqueueSnackbar("Xác thực thành công, vui lòng đăng nhập!", {
+        enqueueSnackbar("Xác thực thành công, vui lòng thay mật khẩu!", {
+          variant: "success",
+        });
+        setNewPasswordForm(true);
+        setVerificationForm(false);
+      }
+    } catch (errors) {
+      console.error("Failed to register:", errors);
+    }
+  };
+  const handleNewPasswordForgot = async (formData) => {
+    try {
+      const action = NewPasswordForgotApi(formData);
+      const resultAction = await dispatch(action);
+      if (resultAction.payload[0]) {
+        enqueueSnackbar(resultAction.payload, { variant: "error" });
+      } else {
+        enqueueSnackbar("Thay đổi mật khẩu thành công, vui lòng đăng nhập!", {
           variant: "success",
         });
         const { closeDialog } = props;
@@ -81,15 +96,17 @@ function Login(props) {
         }
       }
     } catch (errors) {
-      console.error("Failed to register:", errors);
+      console.error("Failed to new password:", errors);
     }
   };
   return (
     <div>
       {verificationForm ? (
         <VerificationForm onSubmit={handleVerification} />
+      ) : newPasswordForm ? (
+        <NewPasswordForgot onSubmit={handleNewPasswordForgot} />
       ) : (
-        <LoginForm onSubmit={handleLogin} />
+        <ForgotPasswordForm onSubmit={handleForgot} />
       )}
       <Snackbar
         open={snackbar.open}
@@ -108,4 +125,4 @@ function Login(props) {
   );
 }
 
-export default Login;
+export default ForgotPassword;

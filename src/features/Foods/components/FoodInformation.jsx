@@ -80,7 +80,7 @@ function FoodInformation(food) {
   
   return (
     <Box style={{ marginTop: "24px" }}>
-      <Paper elevation={3}>
+      <Paper elevation={2}>
         <Grid
           container
           alignItems="center"

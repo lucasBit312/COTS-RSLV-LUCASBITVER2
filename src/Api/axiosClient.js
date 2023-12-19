@@ -1,7 +1,5 @@
 import axios from "axios";
 import { enqueueSnackbar } from "notistack";
-import { logout } from "../features/Auth/userSlide";
-import { useDispatch } from "react-redux";
 
 const axiosClient = axios.create({
     baseURL: 'http://127.0.0.1:8000/',
@@ -38,7 +36,7 @@ axiosClient.interceptors.response.use(
             console.log("ERROR RESPONSE: ", responseData);
             if (responseData.error == 'Authorization error') {
                 enqueueSnackbar("Vui Lòng Đăng Nhập", { variant: 'error' });
-            } 
+            }
             errorData = responseData;
         } else {
             console.log("Network Error:", error.message);

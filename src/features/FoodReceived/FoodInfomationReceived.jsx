@@ -1,10 +1,181 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-
-FoodInfomationReceived.propTypes = {};
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Unstable_Grid2";
+import { Avatar, Rating, Typography } from "@mui/material";
+import dayjs from "dayjs";
+import { useDispatch } from "react-redux";
+import AddLocationIcon from "@mui/icons-material/AddLocation";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { enqueueSnackbar } from "notistack";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import Stack from "@mui/material/Stack";
+import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
+import { baseURL } from "../../constants/env";
+FoodInfomationReceived.propTypes = {
+  food: PropTypes.object,
+  ratings: PropTypes.object,
+};
+function formatTimeRemaining(timeRemaining) {
+  const hours = Math.floor(timeRemaining / 3600);
+  const minutes = Math.floor((timeRemaining % 3600) / 60);
+  const seconds = timeRemaining % 60;
+  return `${String(hours).padStart(1, "0")}:${String(minutes).padStart(
+    1,
+    "0"
+  )}:${String(seconds).padStart(1, "0")}`;
+}
 
 function FoodInfomationReceived(props) {
-  return <div></div>;
+  const food = props.food;
+  const ratings = props.ratings;
+  const transaction = props.transaction;
+  const remaining_time_to_accept = food?.remaining_time_to_accept;
+  const donor_confirm_time = transaction?.donor_confirm_time;
+  const [dateEnd, setdateEnd] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining());
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newTimeRemaining = calculateTimeRemaining();
+      setTimeRemaining(newTimeRemaining);
+
+      if (newTimeRemaining <= 0) {
+        clearInterval(interval);
+        setdateEnd(true);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [donor_confirm_time, remaining_time_to_accept, dateEnd]);
+
+  function calculateTimeRemaining() {
+    const donorConfirmTime = dayjs(donor_confirm_time);
+    const expirationTime = donorConfirmTime.add(
+      remaining_time_to_accept,
+      "minute"
+    );
+    const currentTime = dayjs();
+    const timeRemaining = expirationTime.diff(currentTime, "second");
+    return Math.max(0, timeRemaining);
+  }
+
+  const ratingValues = Object.values(ratings || {});
+  const { totalRating, count } = ratingValues.reduce(
+    (accumulator, rating) => {
+      if (rating && rating.rating && typeof rating.rating.rating === "number") {
+        accumulator.totalRating += rating.rating.rating;
+        accumulator.count += 1;
+      }
+      return accumulator;
+    },
+    { totalRating: 0, count: 0 }
+  );
+  const averageRating = count > 0 ? totalRating / count : 0;
+
+  return (
+    <Box style={{ marginTop: "24px" }}>
+      <Paper elevation={3}>
+        <Grid
+          container
+          alignItems="center"
+          justifyContent="flex-start"
+          padding={2}
+        >
+          <Grid marginRight={2}>
+            <Avatar
+              sx={{ width: 56, height: 56 }}
+              alt="Avatar"
+              src={`${baseURL}${food?.user?.image}`}
+            />
+          </Grid>
+          <Grid>
+            <Typography color="warning" className="fw-bolder">
+              Tên người Tặng: {food?.user?.full_name}
+            </Typography>
+            <Typography color="warning" className="text-muted">
+              Thời Gian: {dayjs(food?.created_at).format("DD/MM/YYYY HH:mm")}
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          alignItems="center"
+          justifyContent="flex-start"
+          padding={1}
+        >
+          <Grid marginRight={2}>
+            <Rating
+              name="half-rating-read"
+              defaultValue={averageRating ?? 0}
+              precision={0.1}
+              readOnly
+            />
+            <Typography className="text-muted" style={{ paddingLeft: "32px" }}>
+              {`(${averageRating.toFixed(1)}/5)`}
+            </Typography>
+          </Grid>
+          <Grid>
+            <Typography className="text-muted">({count} đánh giá)</Typography>
+          </Grid>
+          <Grid></Grid>
+        </Grid>
+        <Grid padding={1}>
+          <Typography variant="h4">{food?.title}</Typography>
+        </Grid>
+        <Grid padding={1}>
+          <Typography>Mô tả: {food?.description}</Typography>
+        </Grid>
+        <Grid padding={1}>
+          <Typography marginBottom="0" className="text-muted">
+            Thời gian hết hạn thực phẩm:{" "}
+            {dayjs(food?.expiry_date).format("DD/MM/YYYY HH:mm")}{" "}
+          </Typography>
+        </Grid>
+        <Grid padding={1}>
+          <Typography marginBottom="0" className="fw-bolder">
+            Thời gian còn lại để nhận thực phẩm:{" "}
+            {(() => {
+              if (transaction?.status === 2) {
+                return "Giao dịch đã bị hủy bỏ";
+              } else if (transaction?.status === 4) {
+                return "Thực Phẩm Này Đã Bị Khóa";
+              } else if (transaction?.donor_status === 0) {
+                return "Vui lòng đợi người tặng xác nhận";
+              } else if (transaction?.status === 3) {
+                return "Đã hết thời gian nhận thực phẩm";
+              } else if (transaction?.status === 1) {
+                return "Thực Phẩm Đã Được Nhận";
+              } else if (
+                transaction?.status === 2 &&
+                transaction?.donor_status === 2
+              ) {
+                return "Người tặng đã từ chối";
+              } else {
+                return dateEnd
+                  ? "Hết thời gian nhận"
+                  : formatTimeRemaining(timeRemaining);
+              }
+            })()}
+          </Typography>
+        </Grid>
+        <Grid padding={1}>
+          <Typography className="text-success">
+            <AddLocationIcon />
+            {food?.location}, {food?.ward?.name}, {food?.district?.name},{" "}
+            {food?.province?.name}{" "}
+          </Typography>
+        </Grid>
+        <Grid padding={1}>
+          <Typography className="fw-light">
+            Số lượng nhận: {transaction?.quantity_received}{" "}
+          </Typography>
+        </Grid>
+      </Paper>
+    </Box>
+  );
 }
 
 export default FoodInfomationReceived;

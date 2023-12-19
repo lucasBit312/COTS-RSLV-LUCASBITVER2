@@ -1,48 +1,64 @@
-import { unwrapResult } from '@reduxjs/toolkit';
-import React, { useState } from 'react';
-import PropTypes from 'prop-types'; 
-import RegisterForm from '../RegisterForm/RegisterForm';
-import userApi from '../../../../Api/userApi';
-import { register } from '../../userSlide';
-import { useDispatch } from 'react-redux';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
-import { enqueueSnackbar } from 'notistack';
+import { unwrapResult } from "@reduxjs/toolkit";
+import { enqueueSnackbar } from "notistack";
+import PropTypes from "prop-types";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { register, verification } from "../../userSlide";
+import RegisterForm from "../RegisterForm/RegisterForm";
+import VerificationForm from "../VerificationForm.jsx/VerificationForm";
 
 function Register(props) {
   Register.propTypes = {
     closeDialog: PropTypes.func,
-  };  
-
-  
-  const Alert = React.forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-  });
+  };
+  const [verificationForm, setVerificationForm] = useState(false);
   const dispatch = useDispatch();
   const handleRegister = async (formData) => {
     try {
       const action = register(formData);
       const resultAction = await dispatch(action);
-      console.log(resultAction)
-      if(resultAction.payload[0]){
-        enqueueSnackbar(resultAction.payload[0], { variant:'error' });
-      }else{
+      console.log(resultAction);
+      if (resultAction.payload[0]) {
+        enqueueSnackbar(resultAction.payload[0], { variant: "error" });
+      } else {
+        enqueueSnackbar("Vui lòng kiểm tra email để xác thực tài khoản", {
+          variant: "success",
+        });
+        localStorage.setItem("registeredEmail", formData.email);
+        setVerificationForm(true);
+      }
+    } catch (errors) {
+      console.error("Failed to register:", errors);
+    }
+  };
+  const handleVerification = async (formData) => {
+    try {
+      const action = verification(formData);
+      const resultAction = await dispatch(action);
+      if (resultAction.payload[0]) {
+        enqueueSnackbar(resultAction.payload, { variant: "error" });
+        console.log(resultAction);
+      } else {
         const user = unwrapResult(resultAction);
-        enqueueSnackbar('Đăng kí thành công, vui lòng đăng nhập để tiếp tục', { variant:'success' });
+        enqueueSnackbar("Xác thực thành công, vui lòng đăng nhập!", {
+          variant: "success",
+        });
         const { closeDialog } = props;
         if (closeDialog) {
           closeDialog();
         }
       }
     } catch (errors) {
-      console.error("Failed to register:", errors);
+      console.error("Failed to verifica:", errors);
     }
   };
   return (
     <div>
-      <RegisterForm onSubmit={handleRegister} />
+      {verificationForm ? (
+        <VerificationForm onSubmit={handleVerification} />
+      ) : (
+        <RegisterForm onSubmit={handleRegister} />
+      )}
     </div>
   );
 }

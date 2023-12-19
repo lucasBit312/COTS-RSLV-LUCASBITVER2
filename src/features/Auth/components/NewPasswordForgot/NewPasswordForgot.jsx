@@ -18,28 +18,26 @@ import { CircularProgress } from "@mui/material";
 import PasswordField from "../../../../Components/form-control/passwordField/PasswordField";
 const defaultTheme = createTheme();
 
-export default function RegisterForm({ onSubmit }) {
+export default function NewPasswordForgot({ onSubmit }) {
+  const [emailTemp, setEmailTemp] = React.useState("");
+  React.useEffect(() => {
+    const storedEmail = localStorage.getItem("registeredEmail");
+    if (storedEmail) {
+      setEmailTemp(storedEmail);
+    }
+  }, []);
   const schema = object().shape({
-    full_name: string()
-      .required("Vui lòng nhập Họ tên đầy đủ")
-      .min(6, "Tên phải dài hơn 6 kí tự")
-      .max(60, "Tên phải ngắn hơn 60 kí tự"),
-    email: string()
-      .required("Vui lòng nhập")
-      .email("Địa chỉ email không hợp lệ"),
-
     password: string()
-      .required("Vui lòng nhập")
+      .required("Vui lòng nhập mật khẩu")
       .min(6, "Mật khẩu phải dài hơn 6 kí tự")
       .matches(
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/,
         "Mật khẩu phải chứa ít nhất một kí tự đặc biệt, một chữ cái và một chữ số"
       ),
     rePassword: string()
-      .required("Vui lòng nhập")
+      .required("Vui lòng nhập mật khẩu")
       .oneOf([Yup.ref("password"), null], "Mật khẩu không khớp"),
   });
-
   const {
     handleSubmit,
     control,
@@ -48,7 +46,7 @@ export default function RegisterForm({ onSubmit }) {
     resolver: yupResolver(schema),
   });
   const onSubmitHandler = async (data) => {
-    await onSubmit(data);
+    await onSubmit({ ...data, email: emailTemp });
   };
 
   return (
@@ -67,27 +65,14 @@ export default function RegisterForm({ onSubmit }) {
             <SensorOccupiedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Đăng Kí Tài Khoản
+            Thay đổi mật khẩu mới
+          </Typography>
+          <Typography className="font-weight-normal">
+            Vui lòng nhập mật khẩu mới của bạn
           </Typography>
           <form onSubmit={handleSubmit(onSubmitHandler)}>
             <Box component="div" sx={{ mt: 3 }}>
               <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <InputField
-                    name="full_name"
-                    label="Nhập Đầy Đủ Họ Và Tên"
-                    control={control}
-                    error={errors.full_name?.message}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <InputField
-                    name="email"
-                    label="Nhập email"
-                    control={control}
-                    error={errors.email?.message}
-                  />
-                </Grid>
                 <Grid item xs={12}>
                   <PasswordField
                     name="password"
@@ -118,7 +103,7 @@ export default function RegisterForm({ onSubmit }) {
                 {isSubmitting ? (
                   <CircularProgress size={24} color="inherit" />
                 ) : (
-                  "Đăng Kí"
+                  "Thay đổi"
                 )}
               </Button>
             </Box>

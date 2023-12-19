@@ -29,6 +29,16 @@ function DetailPage(props) {
       </Box>
     );
   }
+  if (!food || Object.keys(food).length === 0) {
+    return (
+      <Container>
+        <Box marginTop={12} style={{minHeight:"700px"}}>
+          <Typography variant="h4">Chi tiết Thực Phẩm</Typography>
+          <Typography color="error">Dữ liệu không tồn tại.</Typography>
+        </Box>
+      </Container>
+    );
+  }
   return (
     <Container>
       <Box marginTop={12} style={{ minHeight: "700px" }}>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import {
   Alert,
@@ -13,6 +13,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Pagination,
   Paper,
   Table,
   TableBody,
@@ -28,6 +29,12 @@ import { baseURL } from "../../constants/env";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { enqueueSnackbar } from "notistack";
 import TableSkeleton from "../../Components/Skeleton/TableSkeleton";
+import dayjs from "dayjs";
+import queryString from "query-string";
+import {
+  useHistory,
+  useLocation,
+} from "react-router-dom/cjs/react-router-dom.min";
 ManageHistoryDonate.propTypes = {};
 function ManageHistoryDonate(props) {
   const [list, setList] = useState([]);
@@ -39,7 +46,9 @@ function ManageHistoryDonate(props) {
   const [loadData, setLoadData] = useState(false);
   const [loading, setLoading] = useState(false);
   const open = Boolean(anchorEl2);
-
+  const location = useLocation();
+  const history = useHistory();
+  const [totalPage, setTotalPage] = useState(0);
   const handleClick = (event, itemId, status, donor_status) => {
     setAnchorEl2(event.currentTarget);
     setSelectedItemId(itemId);
@@ -59,6 +68,24 @@ function ManageHistoryDonate(props) {
 
   const handleConfirmReceived = () => {
     setOpenDialog(true);
+  };
+  const queryParams = useMemo(() => {
+    const params = queryString.parse(location.search);
+    return {
+      ...params,
+      _page: Number.parseInt(params._page) || 1,
+    };
+  }, [location.search]);
+
+  const handlePageChange = (event, newPage) => {
+    const filters = {
+      ...queryParams,
+      _page: newPage,
+    };
+    history.push({
+      pathname: history.location.pathname,
+      search: queryString.stringify(filters),
+    });
   };
 
   const handleConfirm = async () => {
@@ -81,26 +108,24 @@ function ManageHistoryDonate(props) {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const dataRes = await transactionsApi.history_transactions();
+        const dataRes = await transactionsApi.history_transactions(queryParams);
         const data = dataRes;
         if (data && data.transactions) {
-          const foodTransactions = data.transactions.filter(
+          const foodTransactions = data.transactions.data.filter(
             (transaction) => transaction.food_transactions.length > 0
           );
           setList(foodTransactions);
-          console.log(list);
+          setTotalPage(dataRes.transactions.last_page);
           setLoading(false);
         } else {
           console.error("Invalid response format");
         }
       } catch (error) {
         console.log(error);
-      } finally {
       }
     };
     fetchData();
-  }, [loadData]);
-
+  }, [loadData, queryParams]);
   if (loading) {
     return (
       <Box
@@ -181,14 +206,24 @@ function ManageHistoryDonate(props) {
                       <TableCell align="left">
                         {foodTransaction.receiver.full_name}
                       </TableCell>
-                      <TableCell align="left">
+                      <TableCell className="text-center" align="left">
                         {foodTransaction.quantity_received}
                       </TableCell>
                       <TableCell align="left">
-                        {foodTransaction.created_at}
+                        {dayjs(foodTransaction.created_at).format(
+                          "DD/MM/YYYY HH:mm"
+                        )}
                       </TableCell>
-                      <TableCell align="left">
-                        {foodTransaction.pickup_time}
+                      <TableCell className="text-nowrap" align="left">
+                        {foodTransaction.pickup_time ? (
+                          dayjs(foodTransaction.pickup_time).format(
+                            "DD/MM/YYYY HH:mm"
+                          )
+                        ) : (
+                          <Typography className="text-warning">
+                            Chưa nhận
+                          </Typography>
+                        )}
                       </TableCell>
                       <TableCell>
                         {foodTransaction.status === 0 ? (
@@ -239,6 +274,24 @@ function ManageHistoryDonate(props) {
             ))}
           </TableBody>
         </Table>
+        <div
+          style={{
+            display: "flex",
+            flexFlow: "row nowrap",
+            justifyContent: "center",
+            marginTop: "30px",
+            padding: "10px",
+          }}
+        >
+          <Pagination
+            container
+            justify="center"
+            color="warning"
+            count={totalPage}
+            page={queryParams._page}
+            onChange={handlePageChange}
+          />
+        </div>
       </TableContainer>
       <Menu
         id="basic-menu"

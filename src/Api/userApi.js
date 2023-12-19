@@ -4,7 +4,22 @@ const userApi = {
         const url = '/api/auth/register';
         return axiosClient.post(url, data);
     },
-
+    verification(data) {
+        const url = '/api/auth/verification';
+        return axiosClient.post(url, data);
+    },
+    forgotPassword(data) {
+        const url = '/api/auth/forgotPassword';
+        return axiosClient.post(url, data);
+    },
+    verificationForgot(data) {
+        const url = '/api/auth/verificationForgot';
+        return axiosClient.post(url, data);
+    },
+    NewPasswordForgotApi(data) {
+        const url = '/api/auth/NewPasswordForgot';
+        return axiosClient.post(url, data);
+    },
     login(data) {
         const url = '/api/auth/login';
         return axiosClient.post(url, data);
@@ -28,9 +43,9 @@ const userApi = {
         const url = '/api/new-password';
         return axiosClient.post(url, data);
     },
-    getCountNotication() {
+    getCountNotication(params) {
         const url = '/api/get-count-notication';
-        return axiosClient.get(url);
+        return axiosClient.get(url, { params });
     }
 }
 export default userApi;

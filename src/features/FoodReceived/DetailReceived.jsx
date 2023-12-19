@@ -21,17 +21,15 @@ function DetailReceived(props) {
   const [transaction, setTransaction] = useState({});
   const [loading, setLoading] = useState(false);
   const [ratings, setRatings] = useState({});
-  const [user, Setuser] = useState({});
   const [food, setFood] = useState({});
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const dataRes = await transactionsApi.detailTransaction(transactionId);
-        // setTransaction(dataRes.transaction);
-        // setFood(dataRes.transaction.food);
-        // setRatings(dataRes.ratings);
-        // Setuser(dataRes.user);
+        setTransaction(dataRes.transaction);
+        setFood(dataRes.food);
+        setRatings(dataRes.ratings);
         setLoading(false);
         console.log(dataRes);
       } catch (error) {
@@ -51,14 +49,14 @@ function DetailReceived(props) {
   }
   return (
     <Container>
-      {/* <Box marginTop={12} style={{ minHeight: "700px" }}>
+      <Box marginTop={12} style={{ minHeight: "700px" }}>
         <Typography variant="h4">Chi tiết Thực Phẩm Nhận</Typography>
         <Grid container marginBottom={2} spacing={2}>
           <Grid item xs={12} md={6}>
             <FoodThumbnailReceived food={food} />
           </Grid>
           <Grid item xs={12} md={6}>
-            <FoodInfomationReceived user={user} transaction={transaction} />
+            <FoodInfomationReceived food={food} ratings={ratings} transaction={transaction} />
           </Grid>
         </Grid>
         <Grid container marginBottom={4} spacing={2} alignItems="center">
@@ -66,7 +64,7 @@ function DetailReceived(props) {
             <DetailPageRating ratings={ratings} />
           </Grid>
         </Grid>
-      </Box> */}
+      </Box>
     </Container>
   );
 }
