@@ -270,21 +270,21 @@ const FoodReceived = (props) => {
                 </TableCell>
                 <TableCell align="left">
                   {item.status === 0 && item.donor_status === 1 ? (
-                    <Alert severity="warning">Người Tặng Đã Xác Nhận</Alert>
+                    <Alert className="text-nowrap" severity="warning">Người Tặng Đã Xác Nhận</Alert>
                   ) : item.status === 0 ? (
-                    <Alert severity="warning">Đang Đợi Xác Nhận</Alert>
+                    <Alert className="text-nowrap" severity="warning">Đang Đợi Xác Nhận</Alert>
                   ) : item.status === 1 ? (
                     <Alert style={{ minWidth: "110px" }} severity="success">
                       Đã Lấy
                     </Alert>
                   ) : item.status === 2 && item.donor_status === 2 ? (
-                    <Alert severity="error">Người Tặng Từ Chối</Alert>
+                    <Alert className="text-nowrap" severity="error">Người Tặng Từ Chối</Alert>
                   ) : item.status === 2 ? (
                     <Alert severity="error">Đã Hủy Nhận</Alert>
                   ) : item.status === 3 ? (
-                    <Alert severity="error">Hết Thời Gian Nhận</Alert>
+                    <Alert className="text-nowrap" severity="error">Hết Thời Gian Nhận</Alert>
                   ) : item.status === 4 ? (
-                    <Alert severity="error">Thực Phẩm Này Đã Bị Khóa</Alert>
+                    <Alert className="text-nowrap" severity="error">Thực Phẩm Này Đã Bị Khóa</Alert>
                   ) : null}
                 </TableCell>
                 <TableCell align="left">

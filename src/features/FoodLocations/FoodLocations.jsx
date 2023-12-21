@@ -24,6 +24,7 @@ import food_locations from "../../../src/Api/food_locations";
 import FoodLocationList from "./FoodLocationList";
 import FoodSkeletonList from "../Foods/components/FoodSkeletonList";
 import locationApi from "../../Api/location";
+import { ClearIcon } from "@mui/x-date-pickers";
 const Paginationcustom = styled("div")({});
 
 const RootBox = styled(Box)({
@@ -33,6 +34,8 @@ const RootBox = styled(Box)({
 });
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
+  display: "flex",
+  alignItems: "center",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha("#ED6C02", 0.15),
   "&:hover": {
@@ -45,26 +48,14 @@ const Search = styled("div")(({ theme }) => ({
     width: "auto",
   },
 }));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("sm")]: {
-      width: "30ch",
+      width: "38ch",
       "&:focus": {
         width: "38ch",
       },
@@ -84,7 +75,7 @@ function FoodLocations(props) {
   const history = useHistory();
   const location = useLocation();
   const [filtersApplied, setFiltersApplied] = useState(false);
-
+  const [searchValue, setSearchValue] = useState("");
   useEffect(() => {
     const fetchProvinceList = async () => {
       try {
@@ -187,11 +178,30 @@ function FoodLocations(props) {
     });
   };
 
-  const handleSearchChange = (event) => {
-    const content = event.target.value;
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSearchClick();
+    }
+  };
+  const handleSearchClick = () => {
+    const inputElement = document.getElementById("search-input");
+    const content = inputElement.value;
+    if (content !== "") {
+      const filters = {
+        ...queryParams,
+        searchContent: content,
+      };
+      history.push({
+        pathname: history.location.pathname,
+        search: queryString.stringify(filters),
+      });
+    }
+  };
+  const handleClearClick = () => {
+    setSearchValue("");
+    const { searchContent, ...restFilters } = queryParams;
     const filters = {
-      ...queryParams,
-      searchContent: content,
+      ...restFilters,
     };
     history.push({
       pathname: history.location.pathname,
@@ -279,16 +289,32 @@ function FoodLocations(props) {
               }}
             >
               <div className="col-lg-5 col-md-6 col-12 pt-2">
-                <Search>
-                  <SearchIconWrapper>
-                    <SearchIcon />
-                  </SearchIconWrapper>
-                  <StyledInputBase
-                    placeholder="Tìm kiếm..."
-                    inputProps={{ "aria-label": "search" }}
-                    onChange={handleSearchChange}
-                  />
-                </Search>
+              <Search>
+                    <Button onClick={handleSearchClick}>
+                      <SearchIcon />
+                    </Button>
+                    <StyledInputBase
+                      id="search-input"
+                      placeholder="Tìm kiếm..."
+                      inputProps={{ "aria-label": "search" }}
+                      value={searchValue}
+                      onKeyDown={handleKeyPress}
+                      onChange={(e) => setSearchValue(e.target.value)}
+                    />
+                    {searchValue && (
+                      <Button
+                        onClick={handleClearClick}
+                        sx={{
+                          position: "absolute",
+                          right: 0,
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                        }}
+                      >
+                        <ClearIcon />
+                      </Button>
+                    )}
+                  </Search>
               </div>
               <div
                 className="row col-lg-7 col-md-6 col-12"

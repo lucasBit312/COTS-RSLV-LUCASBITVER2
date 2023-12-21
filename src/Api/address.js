@@ -10,5 +10,13 @@ const addressApi = {
         const url = '/api/add-new-address';
         return axiosClient.post(url, data);
     },
+    updateAddress(data) {
+        const url = '/api/update-address';
+        return axiosClient.post(url, data);
+    },
+    removeAddress(addressId) {
+        const url = `/api/delete-address`;
+        return axiosClient.post(url, addressId);
+    },
 }
 export default addressApi;

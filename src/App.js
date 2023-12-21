@@ -45,7 +45,7 @@ function App() {
         <PrivateRoute path="/manager-food-donated/edit/:id" component={EditFood} />
         <PrivateRoute path="/manager-history-food-donated" component={ManageHistoryDonate} />
         <PrivateRoute path="/manager-food-donated" component={ManageFoodDonated} />
-        <PrivateRoute path="/profice" component={Profice} />
+        <PrivateRoute path="/profice/:tab" component={Profice} />
       </Switch>
       <Footer />
     </BrowserRouter>

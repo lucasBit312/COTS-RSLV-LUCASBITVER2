@@ -1,31 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
   Box,
   Button,
-  Grid,
   Paper,
   Tab,
   Tabs,
   TextField,
   Typography,
 } from "@mui/material";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { useState } from "react";
-import PersonPinIcon from "@mui/icons-material/PersonPin";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import { baseURL } from "../../constants/env";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import userApi from "../../Api/userApi";
 import { enqueueSnackbar } from "notistack";
-import { useEffect } from "react";
-import { styled } from "@mui/styles";
+import {
+  useHistory,
+  useLocation,
+} from "react-router-dom/cjs/react-router-dom.min";
 import NewImageProfice from "./NewImage";
 import Address from "./Address";
 import Password from "./Password";
 import ProficeSkeleton from "../../Components/Skeleton/ProficeSkeleton";
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -53,13 +50,55 @@ TabPanel.propTypes = {
 };
 
 function Profice(props) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const history = useHistory();
+  const location = useLocation();
+
+  const getTabIndexFromUrl = () => {
+    const matches = location.pathname.match(/\/profice\/(\w+)/);
+    return matches ? getTabIndex(matches[1]) : null;
+  };
+
+  const getTabIndex = (tabName) => {
+    switch (tabName) {
+      case "account":
+        return 0;
+      case "address":
+        return 1;
+      case "password":
+        return 2;
+      default:
+        return null;
+    }
+  };
+
+  const getTabName = (index) => {
+    switch (index) {
+      case 0:
+        return "account";
+      case 1:
+        return "address";
+      case 2:
+        return "password";
+      default:
+        return "";
+    }
+  };
+
+  const [activeIndex, setActiveIndex] = useState(() => {
+    const tabIndexFromUrl = getTabIndexFromUrl();
+    return tabIndexFromUrl !== null ? tabIndexFromUrl : 0;
+  });
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const handleChange = (event, newValue) => {
     setActiveIndex(newValue);
+    const path = `/profice/${getTabName(newValue)}`;
+    if (location.pathname !== path) {
+      history.push(path);
+    }
   };
+
   const schema = yup.object({
     full_name: yup
       .string()
@@ -77,19 +116,18 @@ function Profice(props) {
       .min(10, "Số điện thoại phải có ít nhất 10 số")
       .required("Vui lòng nhập số điện thoại"),
   });
+
   const {
-    register: Profice,
+    register: ProficeForm,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
+
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       const result = await userApi.editProfice(data);
-      console.log(result);
       if (result.message) {
         enqueueSnackbar(result.message, { variant: "success" });
       } else if (result.error) {
@@ -101,8 +139,9 @@ function Profice(props) {
       console.error("Error:", error);
     }
   };
+
   useEffect(() => {
-    (async () => {
+    const fetchUser = async () => {
       try {
         const response = await userApi.getProfice();
         setUser(response.user);
@@ -111,19 +150,22 @@ function Profice(props) {
       } finally {
         setLoading(false);
       }
-    })();
+    };
+
+    fetchUser();
   }, []);
 
   if (loading) {
     return <ProficeSkeleton />;
   }
+
   return (
     <Box
       marginTop={14}
       marginBottom={4}
       style={{ display: "flex", justifyContent: "center" }}
     >
-      <Paper className="col-lg-6 col-md-8 col-12 " elevation={3}>
+      <Paper className="col-lg-8 col-md-8 col-12 " elevation={3}>
         <Typography className="p-3 fs-2" style={{ color: "#ED6C02" }}>
           Thông Tin Cá Nhân
         </Typography>
@@ -146,9 +188,9 @@ function Profice(props) {
               defaultValue={user.full_name}
               error={Boolean(errors.full_name)}
               helperText={errors.full_name?.message}
-              {...Profice("full_name")}
+              {...ProficeForm("full_name")}
             />
-            <div class="mb-3" style={{ width: "100%", marginTop: "20px" }}>
+            <div className="mb-3" style={{ width: "100%", marginTop: "20px" }}>
               <label htmlFor="birthdate" className="col-form-label">
                 Ngày Sinh
               </label>
@@ -165,7 +207,7 @@ function Profice(props) {
                       ? new Date(user.birthdate).toISOString().slice(0, 16)
                       : ""
                   }
-                  {...Profice("birthdate")}
+                  {...ProficeForm("birthdate")}
                 />
                 {errors.birthdate && (
                   <div className="invalid-feedback">
@@ -190,7 +232,7 @@ function Profice(props) {
               defaultValue={user.phone_number}
               error={Boolean(errors.phone_number)}
               helperText={errors.phone_number?.message}
-              {...Profice("phone_number")}
+              {...ProficeForm("phone_number")}
             />
             <Button
               variant="contained"

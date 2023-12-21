@@ -245,13 +245,13 @@ const MultipleFilter = (props) => {
                 style={{ color: "#ED6C02" }}
                 padding={0}
                 value="ASC"
-                label="Hạn Còn Dài Nhất"
+                label="Thực Phẩm Mới Nhất"
                 wrapped
               />
               <Tab
                 style={{ color: "#ED6C02" }}
                 value="DESC"
-                label="Hạn Còn Ít Nhất"
+                label="Thực Phẩm Lâu Nhất"
                 wrapped
               />
             </Tabs>

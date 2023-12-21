@@ -109,17 +109,11 @@ function ManageHistoryDonate(props) {
       try {
         setLoading(true);
         const dataRes = await transactionsApi.history_transactions(queryParams);
-        const data = dataRes;
-        if (data && data.transactions) {
-          const foodTransactions = data.transactions.data.filter(
-            (transaction) => transaction.food_transactions.length > 0
-          );
-          setList(foodTransactions);
-          setTotalPage(dataRes.transactions.last_page);
-          setLoading(false);
-        } else {
-          console.error("Invalid response format");
-        }
+        const data = dataRes.data;
+        console.log(data);
+        setList(data);
+        setTotalPage(dataRes.last_page);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -180,43 +174,40 @@ function ManageHistoryDonate(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {list.map((food) => (
-              <React.Fragment key={food.id}>
-                {food.food_transactions &&
-                  food.food_transactions.length > 0 &&
-                  food.food_transactions.map((foodTransaction) => (
+            {list.map((transaction) => (
+              <React.Fragment key={transaction.id}>
                     <TableRow
-                      key={foodTransaction.id}
+                      key={transaction.id}
                       sx={{
                         "&:last-child td, &:last-child th": { border: 0 },
                       }}
                     >
-                      <TableCell align="left">{foodTransaction.id}</TableCell>
-                      <TableCell align="left">{food.title}</TableCell>
+                      <TableCell align="left">{transaction.id}</TableCell>
+                      <TableCell align="left">{transaction.food.title}</TableCell>
                       <TableCell align="left">
                         <Avatar
-                          alt={food.title}
+                          alt={transaction.food.title}
                           src={
-                            food.image_urls && food.image_urls.length > 0
-                              ? `${baseURL}${food.image_urls[0]}`
+                            transaction?.food?.image_urls && transaction?.food?.image_urls.length > 0
+                              ? `${baseURL}${transaction?.food?.image_urls[0]}`
                               : ""
                           }
                         />
                       </TableCell>
                       <TableCell align="left">
-                        {foodTransaction.receiver.full_name}
+                        {transaction.receiver.full_name}
                       </TableCell>
                       <TableCell className="text-center" align="left">
-                        {foodTransaction.quantity_received}
+                        {transaction.quantity_received}
                       </TableCell>
                       <TableCell align="left">
-                        {dayjs(foodTransaction.created_at).format(
+                        {dayjs(transaction.created_at).format(
                           "DD/MM/YYYY HH:mm"
                         )}
                       </TableCell>
                       <TableCell className="text-nowrap" align="left">
-                        {foodTransaction.pickup_time ? (
-                          dayjs(foodTransaction.pickup_time).format(
+                        {transaction.pickup_time ? (
+                          dayjs(transaction.pickup_time).format(
                             "DD/MM/YYYY HH:mm"
                           )
                         ) : (
@@ -226,25 +217,25 @@ function ManageHistoryDonate(props) {
                         )}
                       </TableCell>
                       <TableCell>
-                        {foodTransaction.status === 0 ? (
+                        {transaction.status === 0 ? (
                           <Alert
                             style={{ minWidth: "140px" }}
                             severity="warning"
                           >
                             Chưa lấy
                           </Alert>
-                        ) : foodTransaction.status === 1 ? (
+                        ) : transaction.status === 1 ? (
                           <Alert
                             style={{ minWidth: "110px" }}
                             severity="success"
                           >
                             Đã Lấy
                           </Alert>
-                        ) : foodTransaction.status === 2 ? (
+                        ) : transaction.status === 2 ? (
                           <Alert style={{ minWidth: "150px" }} severity="error">
                             Đã Hủy Nhận
                           </Alert>
-                        ) : foodTransaction.status === 3 ? (
+                        ) : transaction.status === 3 ? (
                           <Alert severity="error" style={{ minWidth: "250px" }}>
                             Bị Hủy Do Hết Thời Gian Nhận
                           </Alert>
@@ -259,9 +250,9 @@ function ManageHistoryDonate(props) {
                           onClick={(e) =>
                             handleClick(
                               e,
-                              foodTransaction.id,
-                              foodTransaction.status,
-                              foodTransaction.donor_status
+                              transaction.id,
+                              transaction.status,
+                              transaction.donor_status
                             )
                           }
                         >
@@ -269,7 +260,6 @@ function ManageHistoryDonate(props) {
                         </IconButton>
                       </TableCell>
                     </TableRow>
-                  ))}
               </React.Fragment>
             ))}
           </TableBody>

@@ -4,6 +4,11 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import {
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControl,
   InputLabel,
   MenuItem,
@@ -51,6 +56,13 @@ function DonateFood(props) {
   const [districtList, setDistrictList] = useState([]);
   const [wardList, setWardList] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
   const [currentDateTime, setCurrentDateTime] = useState(
     new Date().toISOString().slice(0, -8)
   );
@@ -110,10 +122,6 @@ function DonateFood(props) {
       .number("Vui lòng chọn Huyện/Quận")
       .typeError("Vui lòng chọn Huyện/Quận")
       .required("Vui lòng chọn Huyện/Quận"),
-    // ward_id: yup
-    //   .number("Vui lòng chọn Xã/Phường")
-    //   .typeError("Vui lòng chọn Xã/Phường")
-    //   .required("Vui lòng chọn Xã/Phường"),
     ward_id: ward
       ? yup
           .number("Vui lòng chọn Xã/Phường")
@@ -127,13 +135,10 @@ function DonateFood(props) {
       .max(100, "Vui lòng nhập địa chỉ ngắn hơn 100 kí tự"),
     contact_information: yup
       .string()
-      .required("Vui lòng nhập Thông tin liên hệ")
-      .min(10, "Vui lòng nhập thông tin dài hơn")
-      .max(100, "Vui lòng nhập thông tin ngắn hơn 100 kí tự"),
-    // images_food: yup
-    // .array()
-    // .min(1, "Vui lòng chọn ít nhất một ảnh")
-    // .required("Vui lòng chọn ảnh"),
+      .matches(/^[0-9]+$/, "Số điện thoại không hợp lệ")
+      .min(10, "Số điện thoại phải có ít nhất 10 số")
+      .required("Vui lòng nhập số điện thoại liên hệ")
+      .max(11, "Vui lòng nhập ít hơn 11 kí tự"),
     food_type: yup
       .number("Vui lòng chọn trạng thái thực phẩm")
       .integer("Vui lòng chọn trạng thái thực phẩm")
@@ -182,48 +187,46 @@ function DonateFood(props) {
       }
     })();
   }, []);
-  useEffect(() => {
-    const fetchProvinceList = async () => {
-      try {
-        const response = await locationApi.getProvince();
-        setProvinceList(response);
-      } catch (error) {
-        console.log("Failed to fetch province list", error);
-      }
-    };
-    fetchProvinceList();
-  }, []);
-
-  useEffect(() => {
-    const fetchDistrictList = async () => {
-      try {
-        if (province) {
-          const response = await locationApi.getDistricts(province);
-          setDistrictList(response);
-        }
-      } catch (error) {
-        console.log("Failed to fetch district list", error);
-      }
-    };
-    fetchDistrictList();
-  }, [province]);
-  useEffect(() => {
-    setDistrict("");
-  }, [province]);
-
-  useEffect(() => {
-    const fetchWardList = async () => {
-      try {
-        if (district) {
-          const response = await locationApi.getWards(district);
-          setWardList(response);
-        }
-      } catch (error) {
-        console.log("Failed to fetch ward list", error);
-      }
-    };
-    fetchWardList();
-  }, [district]);
+  // useEffect(() => {
+  //   const fetchProvinceList = async () => {
+  //     try {
+  //       const response = await locationApi.getProvince();
+  //       setProvinceList(response);
+  //     } catch (error) {
+  //       console.log("Failed to fetch province list", error);
+  //     }
+  //   };
+  //   fetchProvinceList();
+  // }, []);
+  // useEffect(() => {
+  //   const fetchDistrictList = async () => {
+  //     try {
+  //       if (province) {
+  //         const response = await locationApi.getDistricts(province);
+  //         setDistrictList(response);
+  //       }
+  //     } catch (error) {
+  //       console.log("Failed to fetch district list", error);
+  //     }
+  //   };
+  //   fetchDistrictList();
+  // }, [province]);
+  // useEffect(() => {
+  //   setDistrict("");
+  // }, [province]);
+  // useEffect(() => {
+  //   const fetchWardList = async () => {
+  //     try {
+  //       if (district) {
+  //         const response = await locationApi.getWards(district);
+  //         setWardList(response);
+  //       }
+  //     } catch (error) {
+  //       console.log("Failed to fetch ward list", error);
+  //     }
+  //   };
+  //   fetchWardList();
+  // }, [district]);
 
   const handleFileChange = (event) => {
     const selectedFiles = event.target.files;
@@ -406,7 +409,32 @@ function DonateFood(props) {
               ""
             )}
           </FormControl>
-
+          <Button variant="outlined" onClick={handleClickOpenDialog}>
+            Open alert dialog
+          </Button>
+          <Dialog
+            open={openDialog}
+            onClose={handleCloseDialog}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Use Google's location service?"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Let Google help apps determine location. This means sending
+                anonymous location data to Google, even when no apps are
+                running.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDialog}>Disagree</Button>
+              <Button onClick={handleCloseDialog} autoFocus>
+                Agree
+              </Button>
+            </DialogActions>
+          </Dialog>
           <FormControl
             className="col-lg-10 col-md-10 col-10"
             style={{ marginTop: "24px" }}
@@ -508,7 +536,7 @@ function DonateFood(props) {
             style={{ marginTop: "24px" }}
             id="contact_information"
             size="small"
-            label="Thông tin liên hệ (SDT hoặc Link Mạng xã hội)"
+            label="Số điện thoại liên hệ"
             defaultValue=""
             helperText={errors.contact_information?.message}
             {...donate("contact_information")}

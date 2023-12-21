@@ -116,7 +116,7 @@ function NewImageProfice(userdata) {
                 variant="contained"
                 color="warning"
                 type="submit"
-                style={{ padding: "5px" }}
+                style={{ padding: "5px", minWidth:"100px"}}
               >
                 Cập Nhật
               </Button>

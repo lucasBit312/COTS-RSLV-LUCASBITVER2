@@ -1,4 +1,11 @@
-import { Box, Container, Grid, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  Grid,
+  IconButton,
+  Paper,
+  Typography,
+} from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import React, { useEffect, useMemo, useState } from "react";
 import {
@@ -16,8 +23,7 @@ import FilterViewer from "../components/Filter/FilterView";
 import Button from "@mui/material/Button";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
-
-const Paginationcustom = styled("div")({});
+import { ClearIcon } from "@mui/x-date-pickers";
 
 const RootBox = styled(Box)({
   backgroundColor: "rgb(247, 247, 247)",
@@ -26,6 +32,8 @@ const RootBox = styled(Box)({
 });
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
+  display: "flex",
+  alignItems: "center",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha("#ED6C02", 0.15),
   "&:hover": {
@@ -38,26 +46,14 @@ const Search = styled("div")(({ theme }) => ({
     width: "auto",
   },
 }));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("sm")]: {
-      width: "30ch",
+      width: "38ch",
       "&:focus": {
         width: "38ch",
       },
@@ -70,7 +66,7 @@ function ListPage(props) {
   const [totalPage, setTotalPage] = useState(0);
   const history = useHistory();
   const location = useLocation();
-
+  const [searchValue, setSearchValue] = useState("");
   const queryParams = useMemo(() => {
     const params = queryString.parse(location.search);
     return {
@@ -90,19 +86,37 @@ function ListPage(props) {
       search: queryString.stringify(filters),
     });
   };
-
-  const handleSearchChange = (event) => {
-    const content = event.target.value;
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSearchClick();
+    }
+  };
+  const handleSearchClick = () => {
+    const inputElement = document.getElementById("search-input");
+    const content = inputElement.value;
+    if (content !== "") {
+      const filters = {
+        ...queryParams,
+        searchContent: content,
+      };
+      history.push({
+        pathname: history.location.pathname,
+        search: queryString.stringify(filters),
+      });
+    }
+  };
+  const handleClearClick = () => {
+    setSearchValue("");
+    const { searchContent, ...restFilters } = queryParams;
     const filters = {
-      ...queryParams,
-      searchContent: content,
+      ...restFilters,
     };
     history.push({
       pathname: history.location.pathname,
       search: queryString.stringify(filters),
     });
   };
-
+  
   function removeEmptyStrings(obj) {
     const newObj = { ...obj };
     for (const key in newObj) {
@@ -151,7 +165,6 @@ function ListPage(props) {
     })();
   }, [queryParams]);
 
-  
   return (
     <RootBox marginTop={8} style={{ minWidth: "400px" }}>
       <Container>
@@ -185,16 +198,34 @@ function ListPage(props) {
               }}
             >
               <div className="col-lg-5 col-md-8 col-8 ">
-                <Search>
-                  <SearchIconWrapper>
-                    <SearchIcon />
-                  </SearchIconWrapper>
-                  <StyledInputBase
-                    placeholder="Tìm kiếm..."
-                    inputProps={{ "aria-label": "search" }}
-                    onChange={handleSearchChange}
-                  />
-                </Search>
+                <div style={{ display: "flex" }}>
+                  <Search>
+                    <Button onClick={handleSearchClick}>
+                      <SearchIcon />
+                    </Button>
+                    <StyledInputBase
+                      id="search-input"
+                      placeholder="Tìm kiếm..."
+                      inputProps={{ "aria-label": "search" }}
+                      value={searchValue}
+                      onKeyDown={handleKeyPress}
+                      onChange={(e) => setSearchValue(e.target.value)}
+                    />
+                    {searchValue && (
+                      <Button
+                        onClick={handleClearClick}
+                        sx={{
+                          position: "absolute",
+                          right: 0,
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                        }}
+                      >
+                        <ClearIcon />
+                      </Button>
+                    )}
+                  </Search>
+                </div>
               </div>
               <div className="col-lg-7 col-md-4 col-4 ">
                 <FoodFilter

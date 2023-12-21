@@ -12,7 +12,7 @@ function ProficeSkeleton(props) {
       style={{ display: "flex", justifyContent: "center" }}
     >
       <Paper
-        className="col-lg-6 col-md-8 col-12 "
+        className="col-lg-8 col-md-8 col-12 "
         elevation={3}
         style={{ minHeight: "700px" }}
       ></Paper>
