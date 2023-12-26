@@ -17,7 +17,6 @@ function Register(props) {
     try {
       const action = register(formData);
       const resultAction = await dispatch(action);
-      console.log(resultAction);
       if (resultAction.payload[0]) {
         enqueueSnackbar(resultAction.payload[0], { variant: "error" });
       } else {
@@ -37,7 +36,6 @@ function Register(props) {
       const resultAction = await dispatch(action);
       if (resultAction.payload[0]) {
         enqueueSnackbar(resultAction.payload, { variant: "error" });
-        console.log(resultAction);
       } else {
         const user = unwrapResult(resultAction);
         enqueueSnackbar("Xác thực thành công, vui lòng đăng nhập!", {

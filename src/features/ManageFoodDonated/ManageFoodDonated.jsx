@@ -95,7 +95,6 @@ function ManageFoodDonated(props) {
     const fetchData = async () => {
       try {
         const dataRes = await foodApi.getDonateList(queryParams);
-        console.log(dataRes.donatedFoods);
         setList(dataRes.donatedFoods.data);
         setTotalPage(dataRes.donatedFoods.last_page);
       } catch (error) {
@@ -129,7 +128,7 @@ function ManageFoodDonated(props) {
     setMenuAction(null);
   };
   const EditFood = () => {
-    history.push(`/manager-food-donated/edit/${selectedFood?.id}`);
+    history.push(`/manager-food-donated/edit/${selectedFood?.slug}`);
   };
   const cancelDonate = async () => {
     try {
@@ -149,7 +148,7 @@ function ManageFoodDonated(props) {
 
   const continuesDonate = () => {};
   const viewDetailFood = () => {
-    history.push(`/foods/${selectedFood?.id}`);
+    history.push(`/foods/${selectedFood?.slug}`);
   };
 
   const menuItems = [];
@@ -183,11 +182,11 @@ function ManageFoodDonated(props) {
       marginBottom={4}
       style={{ display: "flex", justifyContent: "center" }}
     >
-      <TableContainer component={Paper} style={{ width: "80%" }}>
+      <TableContainer component={Paper} style={{ width: "80%", minHeight:700 }}>
         <Typography variant="h4" className="p-3" style={{ color: "#ED6C02" }}>
           Danh Sách Thực Phẩm Đã Tặng
         </Typography>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ minWidth: 650}} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>Id</TableCell>
@@ -245,25 +244,28 @@ function ManageFoodDonated(props) {
             ))}
           </TableBody>
         </Table>
-
-        <div
-          style={{
-            display: "flex",
-            flexFlow: "row nowrap",
-            justifyContent: "center",
-            marginTop: "30px",
-            padding: "10px",
-          }}
-        >
-          <Pagination
-            container
-            justify="center"
-            color="warning"
-            count={totalPage}
-            page={queryParams._page}
-            onChange={handlePageChange}
-          />
-        </div>
+        {totalPage > 1 && list?.length > 0 ? (
+          <div
+            style={{
+              display: "flex",
+              flexFlow: "row nowrap",
+              justifyContent: "center",
+              marginTop: "30px",
+              padding: "10px",
+            }}
+          >
+            <Pagination
+              container
+              justify="center"
+              color="warning"
+              count={totalPage}
+              page={queryParams._page}
+              onChange={handlePageChange}
+            />
+          </div>
+        ) : (
+          ""
+        )}
       </TableContainer>
       <Menu
         id="basic-menu"

@@ -172,9 +172,12 @@ function Profice(props) {
         <Tabs value={activeIndex} onChange={handleChange} aria-label="profice">
           <Tab style={{ color: "#ED6C02" }} label="Tài Khoản" />
           <Tab style={{ color: "#ED6C02" }} label="Địa Chỉ" />
-          <Tab style={{ color: "#ED6C02" }} label="Mật Khẩu" />
+          {user?.type === "google" || user?.type === "facebook" ? (
+            ""
+          ) : (
+            <Tab style={{ color: "#ED6C02" }} label="Mật Khẩu" />
+          )}
         </Tabs>
-
         <TabPanel value={activeIndex} index={0}>
           <NewImageProfice data={user} />
           <Typography className="fw-semibold">Thông tin chi tiết</Typography>
@@ -247,9 +250,13 @@ function Profice(props) {
         <TabPanel value={activeIndex} index={1}>
           <Address user={user}></Address>
         </TabPanel>
-        <TabPanel value={activeIndex} index={2}>
-          <Password user={user}></Password>
-        </TabPanel>
+        {user?.type === "google" || user?.type === "facebook" ? (
+          ""
+        ) : (
+          <TabPanel value={activeIndex} index={2}>
+            <Password user={user}></Password>
+          </TabPanel>
+        )}
       </Paper>
     </Box>
   );

@@ -15,7 +15,6 @@ function DetailFoodLocation(props) {
     params: { locationId },
     url,
   } = useRouteMatch();
-  console.log(locationId);
   const [location, setLocation] = useState({}); // Corrected initialization
   const [loading, setLoading] = useState(false);
   const fetchData = async () => {

@@ -28,7 +28,6 @@ function FoodLocation({ data }) {
   const handleClick = () => {
     history.push(`/food-donation-locations/${data.id}`);
   };
-  console.log(data);
   return (
     <FoodContainer margin={1.5} onClick={handleClick}>
       <Box padding={1}>

@@ -62,7 +62,6 @@ function FoodFilter({ filters, onChange }) {
     }
   };
   const onRemove = (values) => {
-    console.log("doanifnweig n");
     const newFilters = { ...filters };
     newFilters.province_id = "";
     newFilters.district_id = "";

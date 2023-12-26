@@ -16,11 +16,11 @@ DetailPage.propTypes = {};
 
 function DetailPage(props) {
   const {
-    params: { foodId },
+    params: { foodSlug },
     url,
   } = useRouteMatch();
 
-  const { food, loading } = useFoodDetail(foodId);
+  const { food, loading } = useFoodDetail(foodSlug);
   if (loading) {
     return (
       <Box marginTop={9} sx={{ width: "100%" }}>

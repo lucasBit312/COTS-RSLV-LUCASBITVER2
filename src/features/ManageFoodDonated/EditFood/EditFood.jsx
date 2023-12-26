@@ -26,6 +26,7 @@ import { useState } from "react";
 import { baseURL } from "../../../constants/env";
 import { Category } from "@mui/icons-material";
 import EditDonateFood from "../../../Components/Skeleton/EditDonateFood";
+import addressApi from "../../../Api/address";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -53,12 +54,9 @@ function EditFood(props) {
   const [categoryList, setCategoryList] = useState([]);
   const [category, setCategory] = useState("");
   const [timeConfirm, setTimeConfirm] = React.useState("");
-  const [province, setProvince] = useState("");
-  const [district, setDistrict] = useState("");
-  const [ward, setWard] = useState("");
-  const [provinceList, setProvinceList] = useState([]);
-  const [districtList, setDistrictList] = useState([]);
-  const [wardList, setWardList] = useState([]);
+  const [address, setAddress] = useState("");
+  const [foodType, setFoodType] = React.useState("");
+  const [addressList, setAddressList] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
   const [currentDateTime, setCurrentDateTime] = useState(
     new Date().toISOString().slice(0, -8)
@@ -67,29 +65,26 @@ function EditFood(props) {
 
   useEffect(() => {
     if (loading === false && food) {
+      setAddress(food?.food?.address_id || "");
       setCategory(food?.food?.category_id || "");
       setTimeConfirm(food?.food?.remaining_time_to_accept);
-      setProvince(food?.food?.province_id || "");
-      setDistrict(food?.food?.district_id || "");
-      setWard(food?.food?.ward_id || "");
+      setFoodType(food?.food?.food_type || "");
     }
   }, [loading, food]);
-  console.log(category);
-
+  console.log(address)
   const handleChangeTimeConfirm = (event) => {
     setTimeConfirm(event.target.value);
   };
+
+  const handleChangeFoodType = (event) => {
+    setFoodType(event.target.value);
+  };
+
   const handleChange = (event) => {
     setCategory(event.target.value);
   };
-  const handleChangeProvince = (event) => {
-    setProvince(event.target.value);
-  };
-  const handleChangeDistrict = (event) => {
-    setDistrict(event.target.value);
-  };
-  const handleChangeWard = (event) => {
-    setWard(event.target.value);
+  const handleChangeAddress = (event) => {
+    setAddress(event.target.value);
   };
   const schema = yup.object({
     title: yup
@@ -120,36 +115,16 @@ function EditFood(props) {
       .integer("Vui lòng chọn thời gian hủy bỏ")
       .typeError("Vui lòng chọn thời gian hủy bỏ")
       .required("Vui lòng chọn thời gian hủy bỏ"),
-    province_id: yup
-      .number("Vui lòng chọn Tỉnh/Thành phố")
-      .typeError("Vui lòng chọn Tỉnh/Thành phố")
-      .required("Vui lòng chọn Tỉnh/Thành phố"),
-    district_id: yup
-      .number("Vui lòng chọn Huyện/Quận")
-      .typeError("Vui lòng chọn Huyện/Quận")
-      .required("Vui lòng chọn Huyện/Quận"),
-    ward_id: yup
-      .number("Vui lòng chọn Xã/Phường")
-      .typeError("Vui lòng chọn Xã/Phường")
-      .required("Vui lòng chọn Xã/Phường"),
-    // ward_id: ward
-    //   ? yup
-    //       .number("Vui lòng chọn Xã/Phường")
-    //       .typeError("Vui lòng chọn Xã/Phường")
-    //       .required("Vui lòng chọn Xã/Phường")
-    //   : yup.mixed(),
-    location: yup
-      .string()
-      .required("Vui lòng nhập Địa điểm cụ thể")
-      .min(10, "Vui lòng nhập địa chỉ cụ thể dài hơn 10 kí tự")
-      .max(100, "Vui lòng nhập địa chỉ ngắn hơn 100 kí tự"),
-    contact_information: yup
-      .string()
-      .required("Vui lòng nhập Thông tin liên hệ")
-      .min(10, "Vui lòng nhập thông tin dài hơn")
-      .max(100, "Vui lòng nhập thông tin ngắn hơn 100 kí tự"),
+    address_id: yup
+      .number("Vui lòng chọn Địa chỉ")
+      .typeError("Vui lòng chọn Địa chỉ")
+      .required("Vui lòng chọn Địa chỉ"),
+    food_type: yup
+      .number("Vui lòng chọn trạng thái thực phẩm")
+      .integer("Vui lòng chọn trạng thái thực phẩm")
+      .typeError("Vui lòng chọn trạng thái thực phẩm")
+      .required("Vui lòng chọn trạng thái thực phẩm"),
   });
-  console.log(typeof category);
   const {
     register: donate,
     handleSubmit,
@@ -159,10 +134,8 @@ function EditFood(props) {
     resolver: yupResolver(schema),
   });
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       const result = await foodAip.editFoodApi(data);
-      console.log(result);
       if (result.message) {
         enqueueSnackbar(result.message, { variant: "success" });
         refreshData();
@@ -188,49 +161,15 @@ function EditFood(props) {
   }, []);
 
   useEffect(() => {
-    const fetchProvinceList = async () => {
+    (async () => {
       try {
-        const response = await locationApi.getProvince();
-        setProvinceList(response);
+        const response = await addressApi.getAllAddress();
+        setAddressList(response);
       } catch (error) {
-        console.log("Failed to fetch province list", error);
+        console.log("Failed to fetch address list", error);
       }
-    };
-    fetchProvinceList();
+    })();
   }, []);
-
-  useEffect(() => {
-    const fetchDistrictList = async () => {
-      try {
-        if (province) {
-          const response = await locationApi.getDistricts(province);
-          setDistrictList(response);
-        }
-      } catch (error) {
-        console.log("Failed to fetch district list", error);
-      }
-    };
-    fetchDistrictList();
-  }, [province]);
-
-  useEffect(() => {
-    setDistrict("");
-  }, [province]);
-
-  useEffect(() => {
-    const fetchWardList = async () => {
-      try {
-        if (district) {
-          const response = await locationApi.getWards(district);
-          setWardList(response);
-        }
-      } catch (error) {
-        console.log("Failed to fetch ward list", error);
-      }
-    };
-    fetchWardList();
-  }, [district]);
-
   const handleFileChange = (event) => {
     const selectedFiles = event.target.files;
     const imagesArray = Array.from(selectedFiles).map((file) =>
@@ -299,6 +238,28 @@ function EditFood(props) {
               ""
             )}
           </FormControl>
+          <FormControl style={{ marginTop: "24px", width: "80%" }}>
+            <InputLabel id="demo-simple-select-label">
+              Trạng Thái Thực Phẩm
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="food_type"
+              defaultValue={food?.food?.food_type}
+              {...donate("food_type")}
+              error={Boolean(errors.food_type)}
+              label="Trạng Thái Thực Phẩm"
+              onChange={handleChangeFoodType}
+            >
+              <MenuItem value={1}>Đã Chế Biến</MenuItem>
+              <MenuItem value={2}>Chưa Chế Biến</MenuItem>
+            </Select>
+            {errors.food_type?.message ? (
+              <p className="text-danger">{errors.food_type?.message}</p>
+            ) : (
+              ""
+            )}
+          </FormControl>
           {/* description */}
           <TextField
             id="description"
@@ -350,7 +311,7 @@ function EditFood(props) {
             </div>
           </div>
           <div
-            style={{ width: "80%", marginTop: "24px" }}
+            style={{ width: "80%", marginTop: "16px" }}
             id="defaultFormControlHelp"
             class="form-text mb-2"
           >
@@ -384,102 +345,33 @@ function EditFood(props) {
               ""
             )}
           </FormControl>
-
           <FormControl style={{ width: "80%", marginTop: "24px" }}>
-            <InputLabel id="label-province">Tỉnh</InputLabel>
+            <InputLabel id="address">
+              Chọn địa chỉ (Thêm địa chỉ mới ở Trang cá nhân/Địa chỉ)
+            </InputLabel>
             <Select
-              labelId="label-province"
-              id="province_id"
-              defaultValue={food?.food?.province_id}
-              label="Tỉnh"
-              error={Boolean(errors.province_id)}
-              {...donate("province_id")}
-              onChange={handleChangeProvince}
+              id="address_id"
+              defaultValue={food?.food?.address_id}
+              label="Chọn địa chỉ (Thêm địa chỉ mới ở Trang cá nhân/Địa chỉ)"
+              error={Boolean(errors.address_id)}
+              {...donate("address_id")}
+              onChange={handleChangeAddress}
             >
-              {provinceList.map((province) => (
-                <MenuItem key={province.id} value={province.id}>
-                  {province.name}
+              {addressList.map((address) => (
+                <MenuItem key={address.id} value={address.id}>
+                  {address.contact_information}, {address.location},{" "}
+                  {address.ward.name}, {address.district.name},{" "}
+                  {address.province.name}
                 </MenuItem>
               ))}
             </Select>
-            {errors.province_id?.message ? (
-              <p className="text-danger">{errors.province_id?.message}</p>
+            {errors.address_id?.message ? (
+              <p className="text-danger">{errors.address_id?.message}</p>
             ) : (
               ""
             )}
           </FormControl>
-          {province ? (
-            <FormControl style={{ width: "80%", marginTop: "24px" }}>
-              <InputLabel id="label-district">Huyện</InputLabel>
-              <Select
-                labelId="label-district"
-                id="district_id"
-                value={district}
-                label="Huyện"
-                {...donate("district_id")}
-                onChange={handleChangeDistrict}
-              >
-                {districtList.map((district) => (
-                  <MenuItem key={district.id} value={district.id}>
-                    {district.name}
-                  </MenuItem>
-                ))}
-              </Select>
-              {errors.district_id?.message ? (
-                <p className="text-danger">{errors.district_id?.message}</p>
-              ) : (
-                ""
-              )}
-            </FormControl>
-          ) : (
-            ""
-          )}
-          {district ? (
-            <FormControl style={{ width: "80%", marginTop: "24px" }}>
-              <InputLabel id="label-ward">Phường/Xã</InputLabel>
-              <Select
-                labelId="label-ward"
-                id="ward_id"
-                value={ward}
-                label="Huyện/Xã"
-                {...donate("ward_id")}
-                onChange={handleChangeWard}
-              >
-                {wardList.map((ward) => (
-                  <MenuItem key={ward.id} value={ward.id}>
-                    {ward.name}
-                  </MenuItem>
-                ))}
-              </Select>
-              {errors.ward_id?.message ? (
-                <p className="text-danger">{errors.ward_id?.message}</p>
-              ) : (
-                ""
-              )}
-            </FormControl>
-          ) : (
-            ""
-          )}
-          <TextField
-            error={Boolean(errors.location)}
-            style={{ width: "80%", marginTop: "24px" }}
-            id="location"
-            size="small"
-            label="Nhập địa chỉ cụ thể (số nhà, số đường)"
-            defaultValue={food?.food?.location}
-            helperText={errors.location?.message}
-            {...donate("location")}
-          />
-          <TextField
-            error={Boolean(errors.contact_information)}
-            style={{ width: "80%", marginTop: "24px" }}
-            id="contact_information"
-            size="small"
-            label="Thông tin liên hệ (SDT hoặc Link Mạng xã hội)"
-            defaultValue={food?.food?.contact_information}
-            helperText={errors.contact_information?.message}
-            {...donate("contact_information")}
-          />
+
           <Button
             component="label"
             color="warning"

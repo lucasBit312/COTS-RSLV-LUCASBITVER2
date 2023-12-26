@@ -119,7 +119,6 @@ const FoodReceived = (props) => {
     setSelectedItemFoodStatus(itemFoodStatus);
     setSelectedItemFoodDonorStatus(itemFoodDonorStatus);
     setSelectedItemFoodReceiverStatus(itemFoodReceiverStatus);
-    console.log(itemFoodStatus, itemFoodDonorStatus, itemFoodReceiverStatus);
   };
   const handleClose = () => {
     setAnchorEl2(null);
@@ -174,7 +173,6 @@ const FoodReceived = (props) => {
     try {
       const received_id = selectedItemId;
       const result = await cartApi.cancelReceived(received_id);
-      console.log(result);
       if (result.message) {
         enqueueSnackbar(result.message, { variant: "success" });
         setLoadData(true);
@@ -270,21 +268,31 @@ const FoodReceived = (props) => {
                 </TableCell>
                 <TableCell align="left">
                   {item.status === 0 && item.donor_status === 1 ? (
-                    <Alert className="text-nowrap" severity="warning">Người Tặng Đã Xác Nhận</Alert>
+                    <Alert className="text-nowrap" severity="warning">
+                      Người Tặng Đã Xác Nhận
+                    </Alert>
                   ) : item.status === 0 ? (
-                    <Alert className="text-nowrap" severity="warning">Đang Đợi Xác Nhận</Alert>
+                    <Alert className="text-nowrap" severity="warning">
+                      Đang Đợi Xác Nhận
+                    </Alert>
                   ) : item.status === 1 ? (
                     <Alert style={{ minWidth: "110px" }} severity="success">
                       Đã Lấy
                     </Alert>
                   ) : item.status === 2 && item.donor_status === 2 ? (
-                    <Alert className="text-nowrap" severity="error">Người Tặng Từ Chối</Alert>
+                    <Alert className="text-nowrap" severity="error">
+                      Người Tặng Từ Chối
+                    </Alert>
                   ) : item.status === 2 ? (
                     <Alert severity="error">Đã Hủy Nhận</Alert>
                   ) : item.status === 3 ? (
-                    <Alert className="text-nowrap" severity="error">Hết Thời Gian Nhận</Alert>
+                    <Alert className="text-nowrap" severity="error">
+                      Hết Thời Gian Nhận
+                    </Alert>
                   ) : item.status === 4 ? (
-                    <Alert className="text-nowrap" severity="error">Thực Phẩm Này Đã Bị Khóa</Alert>
+                    <Alert className="text-nowrap" severity="error">
+                      Thực Phẩm Này Đã Bị Khóa
+                    </Alert>
                   ) : null}
                 </TableCell>
                 <TableCell align="left">
@@ -314,24 +322,28 @@ const FoodReceived = (props) => {
             ))}
           </TableBody>
         </Table>
-        <div
-          style={{
-            display: "flex",
-            flexFlow: "row nowrap",
-            justifyContent: "center",
-            marginTop: "30px",
-            padding: "10px",
-          }}
-        >
-          <Pagination
-            container
-            justify="center"
-            color="warning"
-            count={totalPage}
-            page={queryParams._page}
-            onChange={handlePageChange}
-          />
-        </div>
+        {totalPage > 1 && list?.length > 0 ? (
+          <div
+            style={{
+              display: "flex",
+              flexFlow: "row nowrap",
+              justifyContent: "center",
+              marginTop: "30px",
+              padding: "10px",
+            }}
+          >
+            <Pagination
+              container
+              justify="center"
+              color="warning"
+              count={totalPage}
+              page={queryParams._page}
+              onChange={handlePageChange}
+            />
+          </div>
+        ) : (
+          ""
+        )}
       </TableContainer>
       <Menu
         id="basic-menu"

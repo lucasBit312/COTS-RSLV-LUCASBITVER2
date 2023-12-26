@@ -4,9 +4,7 @@ export const viewedNotice = createAsyncThunk(
     '/notifi-viewed',
     async (payload) => {
         try {
-            console.log(payload)
             const response = await transactionsApi.notifiViewed(payload);
-            console.log(response);
             return response;
         } catch (error) {
             throw error;
@@ -23,7 +21,6 @@ export const noticeSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(viewedNotice.fulfilled, (state, action) => {
-            console.log(action)
             state.noticeItems = state.noticeItems + 1;
         });
     },

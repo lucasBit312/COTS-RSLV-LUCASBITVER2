@@ -105,19 +105,17 @@ function Notice(props) {
     };
   }, [location.search]);
   const handleNotificationClick = async (notification) => {
-    try { 
+    try {
       setSelectedNotification(notification);
       const action = viewedNotice(notification.id);
       const resultAction = await dispath(action);
       const result = unwrapResult(resultAction);
-      console.log(result);
       handleClickOpen();
       setLoadData(true);
     } catch (error) {
       console.log(error);
     }
   };
-  console.log(totalPage, "totalpage");
   useEffect(() => {
     (async () => {
       try {
@@ -136,7 +134,6 @@ function Notice(props) {
     try {
       const transaction_id = selectedNotification.transaction_id;
       const result = await transactionsApi.notifiConfirm(transaction_id);
-      console.log(result);
       if (result.message) {
         enqueueSnackbar(result.message, { variant: "success" });
         setLoadData(true);
@@ -150,7 +147,6 @@ function Notice(props) {
     try {
       const transaction_id = selectedNotification.transaction_id;
       const result = await transactionsApi.notifiRefuse(transaction_id);
-      console.log(result);
       if (result.message) {
         enqueueSnackbar(result.message, { variant: "success" });
         setLoadData(true);
@@ -326,41 +322,45 @@ function Notice(props) {
             </div>
           </HoverPaper>
         ))}
-        <div
-          style={{
-            display: "flex",
-            flexFlow: "row nowrap",
-            justifyContent: "center",
-            marginTop: "30px",
-            padding: "10px",
-          }}
-        >
-          <Pagination
-            container
-            justify="center"
-            color="warning"
-            count={totalPage}
-            page={queryParams._page}
-            onChange={handlePageChange}
-          />
-        </div>
+        {totalPage > 1 && notifications?.length > 0 ? (
+          <div
+            style={{
+              display: "flex",
+              flexFlow: "row nowrap",
+              justifyContent: "center",
+              marginTop: "30px",
+              padding: "10px",
+            }}
+          >
+            <Pagination
+              container
+              justify="center"
+              color="warning"
+              count={totalPage}
+              page={queryParams._page}
+              onChange={handlePageChange}
+            />
+          </div>
+        ) : (
+          ""
+        )}
       </Paper>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Thông báo</DialogTitle>
         <DialogContent>
           <DialogContentText>
             <Typography className="fst-normal">
-              {selectedNotification?.type === 0 ? (
-                <Alert className="mb-2" severity="info">
-                  Chưa hoàn tất
+              {selectedNotification?.type == 2 ? (
+                <Alert className="mb-2" severity="warning">
+                  Đã từ chối
                 </Alert>
               ) : selectedNotification?.type === 1 ? (
                 <Alert className="mb-2" severity="success">
                   Đã đồng ý
                 </Alert>
-              ) : selectedNotification?.type === 2 ? (
-                <Alert className="mb-2" severity="warning">
-                  Đã từ chối
+              ) : selectedNotification?.type === 0 ? (
+                <Alert className="mb-2" severity="info">
+                  Chưa hoàn tất
                 </Alert>
               ) : null}
               <div className="row">

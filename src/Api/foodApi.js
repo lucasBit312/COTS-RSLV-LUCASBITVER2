@@ -6,8 +6,8 @@ const foodAip = {
         const url = '/api/foods';
         return axiosClient.get(url, { params });
     },
-    getDetail(foodId) {
-        const url = `/api/foods/${foodId}`;
+    getDetail(foodSlug) {
+        const url = `/api/foods/${foodSlug}`;
         return axiosClient.get(url);
     },
     donateFoodApi(data) {

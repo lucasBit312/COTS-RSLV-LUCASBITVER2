@@ -37,10 +37,8 @@ function Password(props) {
     resolver: yupResolver(schema),
   });
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       const result = await userApi.newPassword(data);
-      console.log(result);
       if (result.message) {
         enqueueSnackbar(result.message, { variant: "success" });
         reset();

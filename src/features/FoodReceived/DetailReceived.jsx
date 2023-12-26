@@ -31,7 +31,6 @@ function DetailReceived(props) {
         setFood(dataRes.food);
         setRatings(dataRes.ratings);
         setLoading(false);
-        console.log(dataRes);
       } catch (error) {
         console.error(error);
       } finally {

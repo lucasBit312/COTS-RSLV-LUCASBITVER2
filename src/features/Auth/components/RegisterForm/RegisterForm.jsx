@@ -27,7 +27,6 @@ export default function RegisterForm({ onSubmit }) {
     email: string()
       .required("Vui lòng nhập")
       .email("Địa chỉ email không hợp lệ"),
-
     password: string()
       .required("Vui lòng nhập")
       .min(6, "Mật khẩu phải dài hơn 6 kí tự")

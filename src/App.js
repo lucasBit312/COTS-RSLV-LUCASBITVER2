@@ -39,7 +39,7 @@ function App() {
         <Route path="/food-donation-locations/:locationId" component={DetailFoodLocation} />
         <Route path="/food-donation-locations" component={FoodLocations} />
         <PrivateRoute path={`/food-received/:foodId`} component={DetailReceived} />
-        <PrivateRoute path="/foodReceived" component={FoodReceived} />
+        <PrivateRoute path="/food-received" component={FoodReceived} />
         <PrivateRoute path="/donate-foods" component={DonateFood} />
         <PrivateRoute path="/notification" component={Notice} />
         <PrivateRoute path="/manager-food-donated/edit/:id" component={EditFood} />

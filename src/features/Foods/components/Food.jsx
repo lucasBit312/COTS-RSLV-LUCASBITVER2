@@ -26,7 +26,7 @@ FoodContainer.propTypes = {
 function Food({ food }) {
   const history = useHistory();
   const handleClick = () => {
-    history.push(`/foods/${food.id}`);
+    history.push(`/foods/${food?.slug}`);
   };
   return (
     <FoodContainer margin={1.5} onClick={handleClick}>

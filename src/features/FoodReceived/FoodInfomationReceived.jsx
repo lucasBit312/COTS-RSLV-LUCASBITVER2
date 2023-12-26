@@ -1,20 +1,11 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import { styled } from "@mui/material/styles";
+import AddLocationIcon from "@mui/icons-material/AddLocation";
+import { Avatar, Rating, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Unstable_Grid2";
-import { Avatar, Rating, Typography } from "@mui/material";
 import dayjs from "dayjs";
-import { useDispatch } from "react-redux";
-import AddLocationIcon from "@mui/icons-material/AddLocation";
-import { unwrapResult } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import IconButton from "@mui/material/IconButton";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import Stack from "@mui/material/Stack";
-import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
+import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import { baseURL } from "../../constants/env";
 FoodInfomationReceived.propTypes = {
   food: PropTypes.object,
@@ -162,10 +153,14 @@ function FoodInfomationReceived(props) {
           </Typography>
         </Grid>
         <Grid padding={1}>
+          <Typography>
+             Thông tin liên hệ: {food?.contact_information}
+          </Typography>
+        </Grid>
+        <Grid padding={1}>
           <Typography className="text-success">
             <AddLocationIcon />
-            {food?.location}, {food?.ward?.name}, {food?.district?.name},{" "}
-            {food?.province?.name}{" "}
+            {food?.location}, {food?.ward}, {food?.district}, {food?.province}{" "}
           </Typography>
         </Grid>
         <Grid padding={1}>

@@ -92,7 +92,6 @@ function ManageHistoryDonate(props) {
     try {
       const transaction_id = selectedItemId;
       const result = await transactionsApi.confirmReceived(transaction_id);
-      console.log(result);
       if (result.message) {
         enqueueSnackbar(result.message, { variant: "success" });
         setLoadData(true);
@@ -110,7 +109,6 @@ function ManageHistoryDonate(props) {
         setLoading(true);
         const dataRes = await transactionsApi.history_transactions(queryParams);
         const data = dataRes.data;
-        console.log(data);
         setList(data);
         setTotalPage(dataRes.last_page);
         setLoading(false);
@@ -176,112 +174,107 @@ function ManageHistoryDonate(props) {
           <TableBody>
             {list.map((transaction) => (
               <React.Fragment key={transaction.id}>
-                    <TableRow
-                      key={transaction.id}
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
-                      }}
+                <TableRow
+                  key={transaction.id}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                  }}
+                >
+                  <TableCell align="left">{transaction.id}</TableCell>
+                  <TableCell align="left">{transaction.food.title}</TableCell>
+                  <TableCell align="left">
+                    <Avatar
+                      alt={transaction.food.title}
+                      src={
+                        transaction?.food?.image_urls &&
+                        transaction?.food?.image_urls.length > 0
+                          ? `${baseURL}${transaction?.food?.image_urls[0]}`
+                          : ""
+                      }
+                    />
+                  </TableCell>
+                  <TableCell align="left">
+                    {transaction.receiver.full_name}
+                  </TableCell>
+                  <TableCell className="text-center" align="left">
+                    {transaction.quantity_received}
+                  </TableCell>
+                  <TableCell align="left">
+                    {dayjs(transaction.created_at).format("DD/MM/YYYY HH:mm")}
+                  </TableCell>
+                  <TableCell className="text-nowrap" align="left">
+                    {transaction.pickup_time ? (
+                      dayjs(transaction.pickup_time).format("DD/MM/YYYY HH:mm")
+                    ) : (
+                      <Typography className="text-warning">
+                        Chưa nhận
+                      </Typography>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {transaction.status === 0 ? (
+                      <Alert style={{ minWidth: "140px" }} severity="warning">
+                        Chưa lấy
+                      </Alert>
+                    ) : transaction.status === 1 ? (
+                      <Alert style={{ minWidth: "110px" }} severity="success">
+                        Đã Lấy
+                      </Alert>
+                    ) : transaction.status === 2 ? (
+                      <Alert style={{ minWidth: "150px" }} severity="error">
+                        Đã Hủy Nhận
+                      </Alert>
+                    ) : transaction.status === 3 ? (
+                      <Alert severity="error" style={{ minWidth: "250px" }}>
+                        Bị Hủy Do Hết Thời Gian Nhận
+                      </Alert>
+                    ) : null}
+                  </TableCell>
+                  <TableCell align="left">
+                    <IconButton
+                      id="basic-button"
+                      aria-controls={open ? "basic-menu" : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={open ? "true" : undefined}
+                      onClick={(e) =>
+                        handleClick(
+                          e,
+                          transaction.id,
+                          transaction.status,
+                          transaction.donor_status
+                        )
+                      }
                     >
-                      <TableCell align="left">{transaction.id}</TableCell>
-                      <TableCell align="left">{transaction.food.title}</TableCell>
-                      <TableCell align="left">
-                        <Avatar
-                          alt={transaction.food.title}
-                          src={
-                            transaction?.food?.image_urls && transaction?.food?.image_urls.length > 0
-                              ? `${baseURL}${transaction?.food?.image_urls[0]}`
-                              : ""
-                          }
-                        />
-                      </TableCell>
-                      <TableCell align="left">
-                        {transaction.receiver.full_name}
-                      </TableCell>
-                      <TableCell className="text-center" align="left">
-                        {transaction.quantity_received}
-                      </TableCell>
-                      <TableCell align="left">
-                        {dayjs(transaction.created_at).format(
-                          "DD/MM/YYYY HH:mm"
-                        )}
-                      </TableCell>
-                      <TableCell className="text-nowrap" align="left">
-                        {transaction.pickup_time ? (
-                          dayjs(transaction.pickup_time).format(
-                            "DD/MM/YYYY HH:mm"
-                          )
-                        ) : (
-                          <Typography className="text-warning">
-                            Chưa nhận
-                          </Typography>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {transaction.status === 0 ? (
-                          <Alert
-                            style={{ minWidth: "140px" }}
-                            severity="warning"
-                          >
-                            Chưa lấy
-                          </Alert>
-                        ) : transaction.status === 1 ? (
-                          <Alert
-                            style={{ minWidth: "110px" }}
-                            severity="success"
-                          >
-                            Đã Lấy
-                          </Alert>
-                        ) : transaction.status === 2 ? (
-                          <Alert style={{ minWidth: "150px" }} severity="error">
-                            Đã Hủy Nhận
-                          </Alert>
-                        ) : transaction.status === 3 ? (
-                          <Alert severity="error" style={{ minWidth: "250px" }}>
-                            Bị Hủy Do Hết Thời Gian Nhận
-                          </Alert>
-                        ) : null}
-                      </TableCell>
-                      <TableCell align="left">
-                        <IconButton
-                          id="basic-button"
-                          aria-controls={open ? "basic-menu" : undefined}
-                          aria-haspopup="true"
-                          aria-expanded={open ? "true" : undefined}
-                          onClick={(e) =>
-                            handleClick(
-                              e,
-                              transaction.id,
-                              transaction.status,
-                              transaction.donor_status
-                            )
-                          }
-                        >
-                          <EditNoteIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
+                      <EditNoteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
               </React.Fragment>
             ))}
           </TableBody>
         </Table>
-        <div
-          style={{
-            display: "flex",
-            flexFlow: "row nowrap",
-            justifyContent: "center",
-            marginTop: "30px",
-            padding: "10px",
-          }}
-        >
-          <Pagination
-            container
-            justify="center"
-            color="warning"
-            count={totalPage}
-            page={queryParams._page}
-            onChange={handlePageChange}
-          />
-        </div>
+        {totalPage > 1 && list?.length > 0 ? (
+          <div
+            style={{
+              display: "flex",
+              flexFlow: "row nowrap",
+              justifyContent: "center",
+              marginTop: "30px",
+              padding: "10px",
+            }}
+          >
+            <Pagination
+              container
+              justify="center"
+              color="warning"
+              count={totalPage}
+              page={queryParams._page}
+              onChange={handlePageChange}
+            />
+          </div>
+        ) : (
+          ""
+        )}
       </TableContainer>
       <Menu
         id="basic-menu"

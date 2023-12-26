@@ -24,7 +24,8 @@ import addressApi from "../../Api/address";
 import locationApi from "../../Api/location";
 import NewAddress from "./NewAddress";
 Address.propTypes = {
-  user: PropTypes.object,
+  reloadAddress: PropTypes.func,
+  closeDialogNewAddress: PropTypes.func,
 };
 
 function Address(props) {
@@ -41,6 +42,8 @@ function Address(props) {
   const [districtList, setDistrictList] = useState([]);
   const [wardList, setWardList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { reloadAddress } = props;
+  const { closeDialogNewAddress } = props;
 
   useEffect(() => {
     const fetchProvinceList = async () => {
@@ -88,7 +91,6 @@ function Address(props) {
   const handleClickOpenEdit = (address) => {
     setOpenEdit(true);
     setSelectedAddress(address);
-    console.log(selectedAddress);
   };
   const handleCloseEdit = () => {
     setOpenEdit(false);
@@ -98,7 +100,6 @@ function Address(props) {
     setLoading(true);
     setSelectedAddressRemove(address);
     setLoading(false);
-    console.log(selectedAddress);
   };
   const handleChangeProvince = async (event) => {
     const selectedProvince = event.target.value;
@@ -174,10 +175,8 @@ function Address(props) {
     }
   };
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       const result = await addressApi.addNewAddress(data);
-      console.log(result);
       if (result.message) {
         enqueueSnackbar(result.message, { variant: "success" });
         setLoaddata(true);
@@ -186,6 +185,7 @@ function Address(props) {
         setWard("");
         setDistrict("");
         reset();
+        reloadAddress();
       } else if (result.error) {
         enqueueSnackbar(result.error, { variant: "error" });
       } else if (result.errors) {
@@ -199,11 +199,11 @@ function Address(props) {
   const handleRemove = async (data) => {
     try {
       const result = await addressApi.removeAddress(selectedAddressRemove?.id);
-      console.log(result);
       if (result.message) {
         enqueueSnackbar(result.message, { variant: "success" });
         handleCloseRemove();
         fetchAddresses();
+        reloadAddress();  
         setLoaddata(true);
       } else if (result.errors) {
         enqueueSnackbar(result.errors[0], { variant: "error" });
@@ -226,7 +226,6 @@ function Address(props) {
         style={{ display: "flex", justifyContent: "center" }}
       >
         <hr style={{ marginTop: "3px" }} />
-        <Typography className="p-3">Thêm mới địa chỉ</Typography>
         <form onSubmit={submitNewAddress(onSubmit)}>
           <FormControl style={{ marginTop: "24px", width: "100%" }}>
             <InputLabel id="label-province">Tỉnh</InputLabel>
@@ -240,8 +239,8 @@ function Address(props) {
               onChange={handleChangeProvince}
             >
               {provinceList.map((province) => (
-                <MenuItem key={province.id} value={province.id}>
-                  {province.name}
+                <MenuItem key={province?.id} value={province?.id}>
+                  {province?.name}
                 </MenuItem>
               ))}
             </Select>
@@ -263,8 +262,8 @@ function Address(props) {
                 onChange={handleChangeDistrict}
               >
                 {districtList.map((district) => (
-                  <MenuItem key={district.id} value={district.id}>
-                    {district.name}
+                  <MenuItem key={district?.id} value={district?.id}>
+                    {district?.name}
                   </MenuItem>
                 ))}
               </Select>
@@ -289,8 +288,8 @@ function Address(props) {
                 onChange={handleChangeWard}
               >
                 {wardList.map((ward) => (
-                  <MenuItem key={ward.id} value={ward.id}>
-                    {ward.name}
+                  <MenuItem key={ward?.id} value={ward?.id}>
+                    {ward?.name}
                   </MenuItem>
                 ))}
               </Select>
@@ -351,15 +350,15 @@ function Address(props) {
           >
             {item?.note === 1 ? (
               <Typography className="p-2 text-success">
-                Địa chỉ số {key+1}: {item.contact_information},{" "}
-                {item.ward.name}, {item.district.name}, {item.province.name}
-                (Địa chỉ mặc định)
+                Địa chỉ số {key + 1}: {item?.contact_information},{" "}
+                {item?.location}, {item?.ward?.name}, {item?.district?.name},{" "}
+                {item?.province?.name} (Địa chỉ mặc định)
               </Typography>
             ) : (
               <Typography className="p-2">
-                Địa chỉ số {key+1}: {item.contact_information},{" "}
-                {item.location}, {item.ward.name}, {item.district.name},{" "}
-                {item.province.name}
+                Địa chỉ số {key + 1}: {item?.contact_information},{" "}
+                {item?.location}, {item?.ward?.name}, {item?.district?.name},{" "}
+                {item?.province?.name}
               </Typography>
             )}
             <div style={{ marginLeft: "auto" }} className="text-nowrap">
@@ -381,7 +380,11 @@ function Address(props) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">{"Cập nhật địa chỉ"}</DialogTitle>
-        <NewAddress fetchAddresses={fetchAddresses} onClose={handleCloseEdit} selectedAddress={selectedAddress}></NewAddress>
+        <NewAddress
+          fetchAddresses={fetchAddresses}
+          onClose={handleCloseEdit}
+          selectedAddress={selectedAddress}
+        ></NewAddress>
       </Dialog>
 
       <Dialog

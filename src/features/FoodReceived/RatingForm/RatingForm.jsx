@@ -38,7 +38,6 @@ function RatingForm(props) {
   const onSubmit = async (data) => {
     try {
       const result = await ReceivedApi.rating(data);
-      console.log(result);
       if (result.message) {
         enqueueSnackbar(result.message, { variant: "success" });
         setLoadDataRating();

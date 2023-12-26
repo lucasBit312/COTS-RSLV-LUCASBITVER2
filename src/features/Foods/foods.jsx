@@ -11,7 +11,7 @@ function Foods() {
         <Box>
             <Switch>
                 <Route path={path} exact component={listPage} />
-                <Route path={`${path}/:foodId`} component={detailPage} />
+                <Route path={`${path}/:foodSlug`} component={detailPage} />
             </Switch>
         </Box>
     );

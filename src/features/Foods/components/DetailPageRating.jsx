@@ -13,7 +13,6 @@ DetailPageRating.defaultProps = {
 };
 
 function DetailPageRating({ ratings }) {
-  console.log(ratings);
   return (
     <div>
       {ratings.length > 0 && (
@@ -34,28 +33,28 @@ function DetailPageRating({ ratings }) {
               >
                 <Grid marginRight={2}>
                   <Avatar
-                    alt={rating.user.fullname}
-                    src={`${baseURL}${rating.user.image}`}
+                    alt={rating?.user?.fullname}
+                    src={`${baseURL}${rating?.user?.image}`}
                   />
                 </Grid>
                 <Grid>
                   <Typography color="warning" className="fw-bolder">
-                    {rating.user.full_name
-                      ? rating.user.full_name
+                    {rating?.user?.full_name
+                      ? rating?.user?.full_name
                       : "Người ẩn danh"}
                   </Typography>
                   <Typography color="warning" className="text-muted">
-                    {dayjs(rating.rating.created_at).format("DD/MM/YYYY HH:mm")}
+                    {dayjs(rating?.rating?.created_at).format("DD/MM/YYYY HH:mm")}
                   </Typography>
                 </Grid>
               </Grid>
               <Rating
                 style={{ paddingLeft: "13px" }}
                 name="read-only-rating"
-                value={rating.rating.rating}
+                value={rating?.rating?.rating}
                 readOnly
               />
-              <Typography paddingLeft={2}>{rating.rating.review}</Typography>
+              <Typography paddingLeft={2}>{rating?.rating?.review}</Typography>
             </div>
           );
         }

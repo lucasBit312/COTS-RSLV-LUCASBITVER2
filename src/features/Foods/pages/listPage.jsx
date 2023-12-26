@@ -71,8 +71,6 @@ function ListPage(props) {
     const params = queryString.parse(location.search);
     return {
       ...params,
-      _page: Number.parseInt(params._page) || 1,
-      _sort_date: params._sort_date || "ASC",
     };
   }, [location.search]);
 
@@ -87,7 +85,7 @@ function ListPage(props) {
     });
   };
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleSearchClick();
     }
   };
@@ -116,7 +114,7 @@ function ListPage(props) {
       search: queryString.stringify(filters),
     });
   };
-  
+
   function removeEmptyStrings(obj) {
     const newObj = { ...obj };
     for (const key in newObj) {
@@ -148,7 +146,6 @@ function ListPage(props) {
   useEffect(() => {
     (async () => {
       try {
-        console.log(queryParams);
         const dataRes = await foodAip.getAll(queryParams);
         const data = dataRes.data;
         if (data.length > 0) {
@@ -251,24 +248,28 @@ function ListPage(props) {
                 Không tìm thấy thực phẩm
               </Typography>
             )}
-            <div
-              style={{
-                display: "flex",
-                flexFlow: "row nowrap",
-                justifyContent: "center",
-                marginTop: "30px",
-                padding: "10px",
-              }}
-            >
-              <Pagination
-                container
-                justify="center"
-                color="warning"
-                count={totalPage}
-                page={queryParams._page}
-                onChange={handlePageChange}
-              />
-            </div>
+            {totalPage > 1 && foods?.length > 0 ? (
+              <div
+                style={{
+                  display: "flex",
+                  flexFlow: "row nowrap",
+                  justifyContent: "center",
+                  marginTop: "30px",
+                  padding: "10px",
+                }}
+              >
+                <Pagination
+                  container
+                  justify="center"
+                  color="warning"
+                  count={totalPage}
+                  page={queryParams._page}
+                  onChange={handlePageChange}
+                />
+              </div>
+            ) : (
+              ""
+            )}
           </Paper>
         </Grid>
       </Container>

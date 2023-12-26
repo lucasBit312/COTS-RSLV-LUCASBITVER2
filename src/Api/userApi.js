@@ -24,6 +24,14 @@ const userApi = {
         const url = '/api/auth/login';
         return axiosClient.post(url, data);
     },
+    loginGoogle(data) {
+        const url = '/api/auth/loginGoogle';
+        return axiosClient.post(url, data);
+    },
+    loginFacebook(data) {
+        const url = '/api/auth/loginFacebook';
+        return axiosClient.post(url, data);
+    },
     editProfice(data) {
         const url = '/api/edit-profice';
         return axiosClient.post(url, data);

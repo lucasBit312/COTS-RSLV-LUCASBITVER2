@@ -5,7 +5,7 @@ import { enqueueSnackbar } from "notistack";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { login, verification } from "../../userSlide";
+import { login, loginFacebook, loginGoogle, verification } from "../../userSlide";
 import LoginForm from "../LoginForm/loginForm";
 import VerificationForm from "../VerificationForm.jsx/VerificationForm";
 
@@ -40,6 +40,31 @@ function Login(props) {
     });
   };
   const dispatch = useDispatch();
+  const handleLoginGoogle = async (formData) => {
+    try {
+      const action = loginGoogle(formData);
+      const resultAction = await dispatch(action);
+      const { closeDialog } = props;
+      if (closeDialog) {
+        closeDialog();
+      }
+    } catch (errors) {
+      console.error("Failed to login:", errors);
+    }
+  };
+  const handleLoginFacebook = async (formData) => {
+    try {
+      const action = loginFacebook(formData);
+      const resultAction = await dispatch(action);
+      const { closeDialog } = props;
+      if (closeDialog) {
+        closeDialog();
+      }
+    } catch (errors) {
+      console.error("Failed to login:", errors);
+    }
+  };
+
   const handleLogin = async (formData) => {
     try {
       const action = login(formData);
@@ -89,7 +114,7 @@ function Login(props) {
       {verificationForm ? (
         <VerificationForm onSubmit={handleVerification} />
       ) : (
-        <LoginForm onSubmit={handleLogin} />
+        <LoginForm onSubmit={handleLogin} handleLoginGoogle={handleLoginGoogle} handleLoginFacebook={handleLoginFacebook} />
       )}
       <Snackbar
         open={snackbar.open}

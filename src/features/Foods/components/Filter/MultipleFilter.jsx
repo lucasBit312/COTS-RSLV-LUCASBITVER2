@@ -114,7 +114,6 @@ const MultipleFilter = (props) => {
     if (props.onChange) {
       props.onChange({ collect_type: value });
     }
-    console.log("food:Dsad", value);
   };
 
   const handleClose = () => {

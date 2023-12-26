@@ -147,6 +147,13 @@ function FoodLocations(props) {
       default:
         break;
     }
+    if (key === "province") {
+      delete updatedParams.district_id;
+      delete updatedParams.ward_id;
+    }
+    if (key === "district") {
+      delete updatedParams.ward_id;
+    }
     const filters = {
       ...updatedParams,
       _page: 1,
@@ -179,7 +186,7 @@ function FoodLocations(props) {
   };
 
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleSearchClick();
     }
   };
@@ -237,7 +244,6 @@ function FoodLocations(props) {
   useEffect(() => {
     (async () => {
       try {
-        console.log(queryParams);
         const dataRes = await food_locations.getFoodLocations(queryParams);
         const data = dataRes.data;
         setFoodLocations(data);
@@ -289,32 +295,32 @@ function FoodLocations(props) {
               }}
             >
               <div className="col-lg-5 col-md-6 col-12 pt-2">
-              <Search>
-                    <Button onClick={handleSearchClick}>
-                      <SearchIcon />
+                <Search>
+                  <Button onClick={handleSearchClick}>
+                    <SearchIcon />
+                  </Button>
+                  <StyledInputBase
+                    id="search-input"
+                    placeholder="Tìm kiếm..."
+                    inputProps={{ "aria-label": "search" }}
+                    value={searchValue}
+                    onKeyDown={handleKeyPress}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                  />
+                  {searchValue && (
+                    <Button
+                      onClick={handleClearClick}
+                      sx={{
+                        position: "absolute",
+                        right: 0,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                      }}
+                    >
+                      <ClearIcon />
                     </Button>
-                    <StyledInputBase
-                      id="search-input"
-                      placeholder="Tìm kiếm..."
-                      inputProps={{ "aria-label": "search" }}
-                      value={searchValue}
-                      onKeyDown={handleKeyPress}
-                      onChange={(e) => setSearchValue(e.target.value)}
-                    />
-                    {searchValue && (
-                      <Button
-                        onClick={handleClearClick}
-                        sx={{
-                          position: "absolute",
-                          right: 0,
-                          top: "50%",
-                          transform: "translateY(-50%)",
-                        }}
-                      >
-                        <ClearIcon />
-                      </Button>
-                    )}
-                  </Search>
+                  )}
+                </Search>
               </div>
               <div
                 className="row col-lg-7 col-md-6 col-12"
@@ -410,24 +416,28 @@ function FoodLocations(props) {
                 Không tìm thấy địa điểm phát thực phẩm
               </Typography>
             )}
-            <div
-              style={{
-                display: "flex",
-                flexFlow: "row nowrap",
-                justifyContent: "center",
-                marginTop: "30px",
-                padding: "10px",
-              }}
-            >
-              <Pagination
-                container
-                justify="center"
-                color="warning"
-                count={totalPage}
-                page={queryParams._page}
-                onChange={handlePageChange}
-              />
-            </div>
+            {totalPage > 1 && foodLocations?.length > 0 ? (
+              <div
+                style={{
+                  display: "flex",
+                  flexFlow: "row nowrap",
+                  justifyContent: "center",
+                  marginTop: "30px",
+                  padding: "10px",
+                }}
+              >
+                <Pagination
+                  container
+                  justify="center"
+                  color="warning"
+                  count={totalPage}
+                  page={queryParams._page}
+                  onChange={handlePageChange}
+                />
+              </div>
+            ) : (
+              ""
+            )}
           </Paper>
         </Grid>
       </Container>

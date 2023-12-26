@@ -49,7 +49,6 @@ function ForgotPassword(props) {
     try {
       const action = forgotPassword(formData);
       const resultAction = await dispatch(action);
-      console.log(resultAction);
       if (resultAction.payload.message == "Vui lòng xác thực") {
         setVerificationForm(true);
         localStorage.setItem("registeredEmail", formData.email);

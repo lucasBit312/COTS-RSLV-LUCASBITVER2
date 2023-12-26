@@ -24,12 +24,8 @@ function EditDonateFood(props) {
         </Typography>
         <Skeleton variant="text" style={{ height: "80px", width: "80%" }} />
         <Skeleton variant="text" style={{ height: "80px", width: "80%" }} />
+        <Skeleton variant="text" style={{ height: "80px", width: "80%" }} />
         <Skeleton variant="text" style={{ height: "240px", width: "80%" }} />
-        <Skeleton variant="text" style={{ height: "80px", width: "80%" }} />
-        <Skeleton variant="text" style={{ height: "80px", width: "80%" }} />
-        <Skeleton variant="text" style={{ height: "80px", width: "80%" }} />
-        <Skeleton variant="text" style={{ height: "80px", width: "80%" }} />
-        <Skeleton variant="text" style={{ height: "80px", width: "80%" }} />
         <Skeleton variant="text" style={{ height: "80px", width: "80%" }} />
         <Skeleton variant="text" style={{ height: "80px", width: "80%" }} />
         <Skeleton variant="text" style={{ height: "80px", width: "80%" }} />

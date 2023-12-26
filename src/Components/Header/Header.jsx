@@ -66,7 +66,6 @@ function Header(props) {
     }
   }, [isLoggedIn]);
 
-  console.log(user);
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -103,7 +102,7 @@ function Header(props) {
     history.push("/foods");
   };
   const handleCartClick = () => {
-    history.push("/foodReceived");
+    history.push("/food-received");
   };
   const handleFoodsClick = () => {
     history.push("/foods");
@@ -127,7 +126,7 @@ function Header(props) {
   };
 
   const handleClickProfice = () => {
-    history.push("/profice");
+    history.push("/profice/account");
     setAnchorEl(null);
   };
   const handleNotice = () => {
@@ -153,7 +152,6 @@ function Header(props) {
         try {
           const dataRes = await userApi.getCountNotication();
           const data = dataRes.notificationCount;
-          console.log("data", data);
           setNoticeTotal(data);
         } catch (error) {
           console.log(error);

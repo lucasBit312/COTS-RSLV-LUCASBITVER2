@@ -52,8 +52,6 @@ function FoodInformation(food) {
 
   const dispath = useDispatch();
 
-
-
   const handleAddToCartSubmit = async (formData) => {
     try {
       const value = {
@@ -76,8 +74,6 @@ function FoodInformation(food) {
     }
   };
 
-
-  
   return (
     <Box style={{ marginTop: "24px" }}>
       <Paper elevation={2}>
@@ -144,10 +140,15 @@ function FoodInformation(food) {
           </Typography>
         </Grid>
         <Grid padding={1}>
+          <Typography>
+            Thông tin liên hệ: {food?.food?.food?.contact_information}
+          </Typography>
+        </Grid>
+        <Grid padding={1}>
           <Typography className="text-success">
             <AddLocationIcon />
-            {food?.food?.food?.location}, {food?.food?.food?.ward.name},{" "}
-            {food?.food?.food?.district.name}, {food?.food?.food?.province.name}{" "}
+            {food?.food?.food?.location}, {food?.food?.food?.ward},{" "}
+            {food?.food?.food?.district}, {food?.food?.food?.province}{" "}
           </Typography>
         </Grid>
         <Grid padding={1}>

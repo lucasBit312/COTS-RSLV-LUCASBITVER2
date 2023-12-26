@@ -4,9 +4,7 @@ export const addToCart = createAsyncThunk(
     '/addtoCart',
     async (payload) => {
         try {
-            console.log(payload)
             const response = await cartApi.addToCartAPI(payload);
-            console.log(response);
             return response;
         } catch (error) {
             throw error;
@@ -23,7 +21,6 @@ export const cartSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(addToCart.fulfilled, (state, action) => {
-            console.log(action)
             state.cartItems = action.payload.total;
         });
     },

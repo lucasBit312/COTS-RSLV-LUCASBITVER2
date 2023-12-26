@@ -49,9 +49,9 @@ function NewImageProfice(userdata) {
     try {
       const formData = new FormData();
       formData.append("image", data.image[0]);
-  
+
       const result = await userApi.newImage(formData);
-  
+
       if (result.message) {
         enqueueSnackbar(result.message, { variant: "success" });
         setSuccess(true);
@@ -64,9 +64,6 @@ function NewImageProfice(userdata) {
       console.error("Error:", error);
     }
   };
-  
-
-  console.log(userdata.data);
   return (
     <Grid
       container
@@ -75,7 +72,7 @@ function NewImageProfice(userdata) {
       style={{ marginTop: "10px" }}
     >
       <Grid marginRight={2} className="">
-        {(selectedImage || userdata?.data?.image) && (
+        {selectedImage || userdata?.data?.image ? (
           <img
             style={{
               width: "100px",
@@ -86,6 +83,18 @@ function NewImageProfice(userdata) {
             }}
             alt="user"
             src={selectedImage || `${baseURL}${userdata?.data?.image}`}
+          />
+        ) : (
+          <img
+            style={{
+              width: "100px",
+              height: "100px",
+              borderRadius: "1em",
+              marginBottom: "10px",
+              objectFit: "cover",
+            }}
+            alt="user"
+            src='http://127.0.0.1:8000/../../assets/img/avatars/1.png'
           />
         )}
       </Grid>
@@ -111,12 +120,12 @@ function NewImageProfice(userdata) {
             </Button>
           </div>
           <div className="pt-2">
-            {success!==true && selectedImage && (
+            {success !== true && selectedImage && (
               <Button
                 variant="contained"
                 color="warning"
                 type="submit"
-                style={{ padding: "5px", minWidth:"100px"}}
+                style={{ padding: "5px", minWidth: "100px" }}
               >
                 Cập Nhật
               </Button>

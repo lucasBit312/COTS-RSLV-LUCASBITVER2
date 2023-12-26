@@ -148,7 +148,6 @@ function NewAddress(props) {
   const onSubmitUpdateAddress = async (data) => {
     try {
       const result = await addressApi.updateAddress(data);
-      console.log(result);
       if (result.message) {
         enqueueSnackbar(result.message, { variant: "success" });
         Loaddata();
@@ -174,7 +173,7 @@ function NewAddress(props) {
     <form onSubmit={handleSubmitUpdateAddress(onSubmitUpdateAddress)}>
       <DialogContent>
         {/* Province Select */}
-        <FormControl style={{ marginTop: "24px", width: "100%" }}>
+        <FormControl style={{ marginTop: "10px", width: "100%" }}>
           <InputLabel id="label-province">Thành Phố/Tỉnh</InputLabel>
           <Select
             labelId="label-province"
@@ -256,7 +255,7 @@ function NewAddress(props) {
           style={{ width: "100%", marginTop: "24px" }}
           id="contact_information"
           size="small"
-          label="Thông tin liên hệ (SDT hoặc Link Mạng xã hội)"
+          label="Số điện thoại liên hệ"
           defaultValue={selectedAddress?.contact_information || ""}
           helperText={errorsAddress.contact_information?.message}
           {...updateAddress("contact_information")}

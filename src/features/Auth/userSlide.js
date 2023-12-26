@@ -72,13 +72,55 @@ export const verificationForgot = createAsyncThunk(
         }
     }
 );
+
+export const loginGoogle = createAsyncThunk(
+    'users/loginGoogle',
+    async (payload) => {
+        try {
+            const response = await userApi.loginGoogle(payload);
+            console.log(response)
+            if (response.unVerification) {
+                return response.unVerification;
+            }
+            if (response.errors) {
+                return response.errors;
+            } else {
+                localStorage.setItem(StorageKey.token, response.authorization.token);
+                localStorage.setItem(StorageKey.user, JSON.stringify(response.user));
+                return response.user;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+);
+export const loginFacebook = createAsyncThunk(
+    'users/loginFacebook',
+    async (payload) => {
+        try {
+            const response = await userApi.loginFacebook(payload);
+            console.log(response)
+            if (response.unVerification) {
+                return response.unVerification;
+            }
+            if (response.errors) {
+                return response.errors;
+            } else {
+                localStorage.setItem(StorageKey.token, response.authorization.token);
+                localStorage.setItem(StorageKey.user, JSON.stringify(response.user));
+                return response.user;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+);
 export const login = createAsyncThunk(
     'users/login',
     async (payload) => {
         try {
             const response = await userApi.login(payload);
-            console.log(response);
-            if(response.unVerification){
+            if (response.unVerification) {
                 return response.unVerification;
             }
             if (response.errors) {
@@ -111,6 +153,12 @@ const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(login.fulfilled, (state, action) => {
+            state.current = action.payload;
+        });
+        builder.addCase(loginGoogle.fulfilled, (state, action) => {
+            state.current = action.payload;
+        });
+        builder.addCase(loginFacebook.fulfilled, (state, action) => {
             state.current = action.payload;
         });
     },

@@ -9,7 +9,6 @@ LocationInfomation.propTypes = {
 };
 
 function LocationInfomation(location) {
-  console.log(location);
   return (
     <Box style={{ marginTop: "24px" }}>
       <Paper elevation={0}>
