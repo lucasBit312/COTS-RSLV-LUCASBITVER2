@@ -12,7 +12,7 @@ import LocationInformation from "../FoodLocations/LocationInfomation";
 import LocationThumbnail from "./LocationThumbnail";
 function DetailFoodLocation(props) {
   const {
-    params: { locationId },
+    params: { locationSlug },
     url,
   } = useRouteMatch();
   const [location, setLocation] = useState({}); // Corrected initialization
@@ -20,7 +20,7 @@ function DetailFoodLocation(props) {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const result = await food_locations.getDetailLocation(locationId);
+      const result = await food_locations.getDetailLocation(locationSlug);
       setLocation(result);
     } catch (error) {
       console.log("Failed to fetch Location", error);
@@ -30,7 +30,7 @@ function DetailFoodLocation(props) {
   };
   useEffect(() => {
     fetchData();
-  }, [locationId]);
+  }, [locationSlug]);
   const refreshData = () => {
     fetchData();
   };

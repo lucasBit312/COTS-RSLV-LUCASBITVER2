@@ -78,7 +78,6 @@ export const loginGoogle = createAsyncThunk(
     async (payload) => {
         try {
             const response = await userApi.loginGoogle(payload);
-            console.log(response)
             if (response.unVerification) {
                 return response.unVerification;
             }
@@ -99,7 +98,6 @@ export const loginFacebook = createAsyncThunk(
     async (payload) => {
         try {
             const response = await userApi.loginFacebook(payload);
-            console.log(response)
             if (response.unVerification) {
                 return response.unVerification;
             }

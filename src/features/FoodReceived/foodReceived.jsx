@@ -156,7 +156,6 @@ const FoodReceived = (props) => {
         if (data.length > 0) {
           setList(data);
           setTotalPage(dataRes.received_list.last_page);
-          console.log(data[3].ratings);
         } else {
           setList(null);
         }

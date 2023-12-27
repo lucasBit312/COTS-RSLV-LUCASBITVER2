@@ -12,10 +12,10 @@ import FoodInformation from "../components/FoodInformation";
 import FoodThumbnail from "../components/FoodThumbnail";
 import useFoodDetail from "../hooks/useFoodDetail";
 
-DetailPage.propTypes = {};
+DetailPageDonated.propTypes = {};
 
-function DetailPage(props) {
-  const { foodSlug } = useParams();
+function DetailPageDonated(props) {
+    const { foodSlug } = useParams();
   const { food, loading } = useFoodDetail(foodSlug);
   if (loading) {
     return (
@@ -57,4 +57,4 @@ function DetailPage(props) {
   );
 }
 
-export default DetailPage;
+export default DetailPageDonated;

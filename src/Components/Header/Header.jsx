@@ -99,13 +99,13 @@ function Header(props) {
   const handleLogoutClick = () => {
     const action = logout();
     dispatch(action);
-    history.push("/foods");
+    history.push("/foods/tat-ca-thuc-pham");
   };
   const handleCartClick = () => {
     history.push("/food-received");
   };
   const handleFoodsClick = () => {
-    history.push("/foods");
+    history.push("/foods/tat-ca-thuc-pham");
     setAnchorElNav(null);
   };
   const handleManageFoodsClick = () => {
@@ -175,7 +175,7 @@ function Header(props) {
             variant="h6"
             noWrap
             component="a"
-            href="/foods"
+            href="/foods/tat-ca-thuc-pham"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -238,7 +238,7 @@ function Header(props) {
             variant="h5"
             noWrap
             component="a"
-            href="/foods"
+            href="/foods/tat-ca-thuc-pham"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -257,7 +257,7 @@ function Header(props) {
               onClick={handleFoodsClick}
               sx={{
                 my: 2,
-                color: location.pathname === "/foods" ? "#5BE49B" : "white",
+                color: location.pathname === "/foods/tat-ca-thuc-pham" ? "#5BE49B" : "white",
                 display: "block",
               }}
             >

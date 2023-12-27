@@ -6,6 +6,9 @@ const categoriesApi = {
         const url = '/api/categories';
         return axiosClient.get(url, { params });
     },
- 
+    getFoodWithCategory(category, params) {
+        const url = `/api/getFoodWithCategory/${category}`;
+        return axiosClient.get(url, { params: params });
+    },
 }
 export default categoriesApi;

@@ -32,7 +32,6 @@ axiosClient.interceptors.response.use(
         };
         if (error.response) {
             const responseData = error.response.data;
-            console.log("ERROR RESPONSE: ", responseData);
             if (responseData.error == 'Authorization error') {
                 enqueueSnackbar("Vui Lòng Đăng Nhập", { variant: 'error' });
             }

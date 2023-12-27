@@ -145,9 +145,8 @@ function DonateFood(props) {
       .typeError("Vui lòng chọn Địa chỉ")
       .required("Vui lòng chọn Địa chỉ"),
     food_type: yup
-      .number("Vui lòng chọn trạng thái thực phẩm")
-      .integer("Vui lòng chọn trạng thái thực phẩm")
-      .typeError("Vui lòng chọn trạng thái thực phẩm")
+      .string("Vui lòng chọn trạng thái thực phẩm")
+      .typeError("Vui lòng chọn trạng thái thực phẩm hợp lệ")
       .required("Vui lòng chọn trạng thái thực phẩm"),
   });
 
@@ -256,8 +255,8 @@ function DonateFood(props) {
                 onChange={handleChange}
               >
                 {categoryList.map((category) => (
-                  <MenuItem key={category.id} value={category.id}>
-                    {category.name}
+                  <MenuItem key={category?.id} value={category?.id}>
+                    {category?.name}
                   </MenuItem>
                 ))}
               </Select>
@@ -285,8 +284,8 @@ function DonateFood(props) {
                 label="Trạng Thái Thực Phẩm"
                 onChange={handleChangeFoodType}
               >
-                <MenuItem value={1}>Đã Chế Biến</MenuItem>
-                <MenuItem value={2}>Chưa Chế Biến</MenuItem>
+                <MenuItem value={"da-che-bien"}>Đã Chế Biến</MenuItem>
+                <MenuItem value={"chua-che-bien"}>Chưa Chế Biến</MenuItem>
               </Select>
               {errors.food_type?.message ? (
                 <p className="text-danger">{errors.food_type?.message}</p>
@@ -400,10 +399,10 @@ function DonateFood(props) {
                   onChange={handleChangeAddress}
                 >
                   {addressList.map((address) => (
-                    <MenuItem key={address.id} value={address.id}>
-                      {address.contact_information}, {address.location},{" "}
-                      {address.ward.name}, {address.district.name},{" "}
-                      {address.province.name}
+                    <MenuItem key={address.id} value={address?.id}>
+                      {address.contact_information}, {address?.location},{" "}
+                      {address?.ward?.name}, {address?.district?.name},{" "}
+                      {address?.province?.name}
                     </MenuItem>
                   ))}
                 </Select>

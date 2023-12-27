@@ -6,8 +6,8 @@ const locationApi = {
         const url = '/api/locations';
         return axiosClient.get(url, { params });
     },
-    getDetailLocation(locationId) {
-        const url = `/api/getDetailLocation/${locationId}`;
+    getDetailLocation(locationSlug) {
+        const url = `/api/getDetailLocation/${locationSlug}`;
         return axiosClient.get(url);
     },
 }

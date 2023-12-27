@@ -148,7 +148,7 @@ function ManageFoodDonated(props) {
 
   const continuesDonate = () => {};
   const viewDetailFood = () => {
-    history.push(`/foods/${selectedFood?.slug}`);
+    history.push(`/manager-food-donated/view/${selectedFood?.slug}`);
   };
 
   const menuItems = [];
@@ -166,7 +166,7 @@ function ManageFoodDonated(props) {
     if (
       dayjs(selectedFood?.expiry_date, "DD/MM/YYYY HH:mm").isAfter(now) &&
       selectedFood?.quantity > 1 &&
-      selectedFood?.status !=="2"
+      selectedFood?.status !== "2"
     ) {
       menuItems.push(
         <MenuItem key="cancel" onClick={handleClickOpenDialog}>
@@ -182,20 +182,35 @@ function ManageFoodDonated(props) {
       marginBottom={4}
       style={{ display: "flex", justifyContent: "center" }}
     >
-      <TableContainer component={Paper} style={{ width: "80%", minHeight:700 }}>
+      <TableContainer
+        component={Paper}
+        style={{ width: "80%", minHeight: 700 }}
+      >
         <Typography variant="h4" className="p-3" style={{ color: "#ED6C02" }}>
           Danh Sách Thực Phẩm Đã Tặng
         </Typography>
-        <Table sx={{ minWidth: 650}} aria-label="simple table">
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>Id</TableCell>
-              <TableCell className="text-nowrap" align="left">Tên Thực Phẩm</TableCell>
-              <TableCell className="text-nowrap" align="left">Hình Ảnh</TableCell>
-              <TableCell className="text-nowrap" align="left">Số Lượng Còn</TableCell>
-              <TableCell className="text-nowrap" align="left">Trạng Thái</TableCell>
-              <TableCell className="text-nowrap" align="left">Thời Gian Tạo</TableCell>
-              <TableCell className="text-nowrap" align="left">Thao Tác</TableCell>
+              <TableCell className="text-nowrap" align="left">
+                Tên Thực Phẩm
+              </TableCell>
+              <TableCell className="text-nowrap" align="left">
+                Hình Ảnh
+              </TableCell>
+              <TableCell className="text-nowrap" align="left">
+                Số Lượng Còn
+              </TableCell>
+              <TableCell className="text-nowrap" align="left">
+                Trạng Thái
+              </TableCell>
+              <TableCell className="text-nowrap" align="left">
+                Thời Gian Tạo
+              </TableCell>
+              <TableCell className="text-nowrap" align="left">
+                Thao Tác
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -219,7 +234,9 @@ function ManageFoodDonated(props) {
                   {item.status == 0 ? (
                     <Alert severity="info">Đang Mở</Alert>
                   ) : item.status == 1 ? (
-                    <Alert style={{minWidth:"200px"}} severity="success">Đã Có Người Nhận</Alert>
+                    <Alert style={{ minWidth: "200px" }} severity="success">
+                      Đã Có Người Nhận
+                    </Alert>
                   ) : item.status == 2 ? (
                     <Alert severity="warning">Đã Dừng Tặng</Alert>
                   ) : item.status == 4 ? (

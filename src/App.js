@@ -14,6 +14,10 @@ import ManageHistoryDonate from './features/ManageHistoryDonated/ManageHistoryDo
 import Notice from './features/Notice/Notice';
 import FoodLocations from './features/FoodLocations/FoodLocations';
 import DetailFoodLocation from './features/FoodLocations/DetailFoodLocation';
+import CategoryComponent from './features/Foods/components/CategoryComponent';
+import CategoryFood from './features/Foods/categoryFood';
+import DetailPage from './features/Foods/pages/detailPage';
+import DetailPageDonated from './features/Foods/pages/detailPageDonated';
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const currentUser = useSelector((state) => state.user.current);
   return (
@@ -35,10 +39,12 @@ function App() {
     <BrowserRouter>
       <Header />
       <Switch>
-        <Route path="/foods" component={Foods} />
-        <Route path="/food-donation-locations/:locationId" component={DetailFoodLocation} />
+        <Route path="/foods/:category" component={CategoryFood} />
+        {/* <Route path="/" component={Foods} /> */}
+        <Route path="/food-donation-locations/:locationSlug" component={DetailFoodLocation} />
         <Route path="/food-donation-locations" component={FoodLocations} />
         <PrivateRoute path={`/food-received/:foodId`} component={DetailReceived} />
+        <PrivateRoute path={`/manager-food-donated/view/:foodSlug`} component={DetailPageDonated} />
         <PrivateRoute path="/food-received" component={FoodReceived} />
         <PrivateRoute path="/donate-foods" component={DonateFood} />
         <PrivateRoute path="/notification" component={Notice} />

@@ -6,6 +6,7 @@ import { baseURL } from "../../../constants/env";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import PlaceIcon from "@mui/icons-material/Place";
 import dayjs from "dayjs";
+import { useParams } from "react-router-dom/cjs/react-router-dom";
 const FoodContainer = styled(Box)({
   position: "relative",
   cursor: "pointer",
@@ -25,9 +26,11 @@ FoodContainer.propTypes = {
 
 function Food({ food }) {
   const history = useHistory();
+  const { category } = useParams();
   const handleClick = () => {
-    history.push(`/foods/${food?.slug}`);
+    history.push(`/foods/${category}/${food?.slug}`);
   };
+  console.log(food);
   return (
     <FoodContainer margin={1.5} onClick={handleClick}>
       <Box padding={1}>

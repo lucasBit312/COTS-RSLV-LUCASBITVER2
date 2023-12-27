@@ -20,7 +20,11 @@ import GoogleLoginButton from "../GoogleLoginButton";
 import FacebookLoginButton from "../FacebookLoginButton";
 const defaultTheme = createTheme();
 
-export default function LoginForm({ onSubmit, handleLoginGoogle, handleLoginFacebook }) {
+export default function LoginForm({
+  onSubmit,
+  handleLoginGoogle,
+  handleLoginFacebook,
+}) {
   const schema = object().shape({
     email: string()
       .required("Vui lòng nhập")
@@ -97,11 +101,18 @@ export default function LoginForm({ onSubmit, handleLoginGoogle, handleLoginFace
                   "Đăng Nhập"
                 )}
               </Button>
-              <GoogleLoginButton onSubmitGoogle={onSubmitGoogle} />
-              <FacebookLoginButton onSubmitFacebook={onSubmitFacebook} />
             </Box>
           </form>
+          
         </Box>
+        <div className="row">
+          <div className="col-md-6 col-lg-6 col-6 d-flex justify-content-end align-items-center">
+          <GoogleLoginButton onSubmitGoogle={onSubmitGoogle} />
+          </div>
+          <div className="col-md-6 col-lg-6 col-6 d-flex justify-content-start align-items-center">
+          <FacebookLoginButton onSubmitFacebook={onSubmitFacebook} />
+          </div>
+          </div>
       </Container>
     </ThemeProvider>
   );

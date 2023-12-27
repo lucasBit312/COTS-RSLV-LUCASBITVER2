@@ -17,6 +17,7 @@ import {
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import locationApi from "../../../../Api/location";
 import categoriesApi from "../../../../Api/categoriesApi";
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
 
 const MultipleFilter = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -27,7 +28,7 @@ const MultipleFilter = (props) => {
   const [districtList, setDistrictList] = useState([]);
   const [wardList, setWardList] = useState([]);
   const [collectType, setCollectType] = useState("0");
-
+  const history = useHistory();
   useEffect(() => {
     const fetchProvinceList = async () => {
       try {
@@ -149,11 +150,10 @@ const MultipleFilter = (props) => {
   }, []);
 
   const handleCategoryChange = (event) => {
-    const categoryId = event.target.value;
-    setSelectedCategory(categoryId);
-    if (props.onChange) {
-      props.onChange({ category_id: categoryId });
-    }
+    const combinedValue = event.target.value;
+    const [categoryId, categorySlug] = combinedValue.split("*");
+    setSelectedCategory(combinedValue);
+    history.push(`/foods/${categorySlug}`);
   };
 
   const [food_type, setFood_Type] = React.useState("");
@@ -270,14 +270,17 @@ const MultipleFilter = (props) => {
                   style={{ minWidth: "260px" }}
                   onChange={handleCategoryChange}
                 >
-                  <MenuItem style={{ color: "#ED6C02" }} value="">
+                  <MenuItem
+                    style={{ color: "#ED6C02" }}
+                    value="1*tat-ca-thuc-pham"
+                  >
                     Tất Cả
                   </MenuItem>
                   {categoryList.map((category) => (
                     <MenuItem
                       style={{ color: "#ED6C02" }}
                       key={category.id}
-                      value={category.id}
+                      value={`${category.id}*${category.slug}`}
                     >
                       {category.name}
                     </MenuItem>
@@ -304,10 +307,13 @@ const MultipleFilter = (props) => {
                   <MenuItem style={{ color: "#ED6C02" }} value="">
                     <em>Tất cả</em>
                   </MenuItem>
-                  <MenuItem style={{ color: "#ED6C02" }} value={1}>
+                  <MenuItem style={{ color: "#ED6C02" }} value={"da-che-bien"}>
                     Đã Chế Biến
                   </MenuItem>
-                  <MenuItem style={{ color: "#ED6C02" }} value={2}>
+                  <MenuItem
+                    style={{ color: "#ED6C02" }}
+                    value={"chua-che-bien"}
+                  >
                     Chưa Chế Biến
                   </MenuItem>
                 </Select>
