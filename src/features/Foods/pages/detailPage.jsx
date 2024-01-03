@@ -7,11 +7,11 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import DetailPageRating from "../components/DetailPageRating";
 import FoodInformation from "../components/FoodInformation";
 import FoodThumbnail from "../components/FoodThumbnail";
 import useFoodDetail from "../hooks/useFoodDetail";
-
+import RatingAndReceiver from "../components/RatingAndReceiver";
+import FacebookIcon from "@mui/icons-material/Facebook";
 DetailPage.propTypes = {};
 
 function DetailPage(props) {
@@ -35,10 +35,32 @@ function DetailPage(props) {
       </Container>
     );
   }
+  const shareOnFacebook = () => {
+    const currentURL = window.location.href;
+    if (window.FB) {
+      window.FB.ui(
+        {
+          method: "share",
+          href: "https://itdragons.com/",
+        },
+        (response) => {
+          console.log(response);
+        }
+      );
+    }
+  };
   return (
     <Container>
       <Box marginTop={12} style={{ minHeight: "700px" }}>
         <Typography variant="h4"> Chi tiết Thực Phẩm</Typography>
+        <button
+          className="btn text-white"
+          style={{ backgroundColor: "#ED6C02", marginTop: "10px" }}
+          onClick={shareOnFacebook}
+        >
+          <FacebookIcon />
+          Share
+        </button>
         <Grid container marginBottom={2} spacing={2}>
           <Grid item xs={12} md={6}>
             <FoodThumbnail food={food} />
@@ -49,7 +71,7 @@ function DetailPage(props) {
         </Grid>
         <Grid container marginBottom={4} spacing={2} alignItems="center">
           <Grid item xs={12} md={6}>
-            <DetailPageRating ratings={food.ratings} />
+            <RatingAndReceiver ratings={food.ratings} foodId={food?.food?.id} />
           </Grid>
         </Grid>
       </Box>

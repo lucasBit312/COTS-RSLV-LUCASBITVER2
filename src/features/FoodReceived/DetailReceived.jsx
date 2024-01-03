@@ -13,6 +13,7 @@ import FoodThumbnail from "../Foods/components/FoodThumbnail";
 import FoodInfomationReceived from "./FoodInfomationReceived";
 import DetailPageRating from "../Foods/components/DetailPageRating";
 import FoodThumbnailReceived from "./FoodThumbnailReceived";
+import RatingAndReceiver from "../Foods/components/RatingAndReceiver";
 DetailReceived.propTypes = {};
 
 function DetailReceived(props) {
@@ -22,6 +23,7 @@ function DetailReceived(props) {
   const [loading, setLoading] = useState(false);
   const [ratings, setRatings] = useState({});
   const [food, setFood] = useState({});
+  const [isSubscribed, setIsSubscribed] = useState({});
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,6 +32,7 @@ function DetailReceived(props) {
         setTransaction(dataRes.transaction);
         setFood(dataRes.food);
         setRatings(dataRes.ratings);
+        setIsSubscribed(dataRes.isSubscribed);
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -46,6 +49,16 @@ function DetailReceived(props) {
       </Box>
     );
   }
+  if (!food || Object.keys(food).length === 0) {
+    return (
+      <Container>
+        <Box marginTop={12} style={{ minHeight: "700px" }}>
+          <Typography variant="h4">Chi tiết Thực Phẩm</Typography>
+          <Typography color="error">Dữ liệu không tồn tại.</Typography>
+        </Box>
+      </Container>
+    );
+  }
   return (
     <Container>
       <Box marginTop={12} style={{ minHeight: "700px" }}>
@@ -55,12 +68,17 @@ function DetailReceived(props) {
             <FoodThumbnailReceived food={food} />
           </Grid>
           <Grid item xs={12} md={6}>
-            <FoodInfomationReceived food={food} ratings={ratings} transaction={transaction} />
+            <FoodInfomationReceived
+              food={food}
+              ratings={ratings}
+              transaction={transaction}
+              isSubscribed={isSubscribed}
+            />
           </Grid>
         </Grid>
         <Grid container marginBottom={4} spacing={2} alignItems="center">
           <Grid item xs={12} md={6}>
-            <DetailPageRating ratings={ratings} />
+            <RatingAndReceiver ratings={ratings} foodId={food?.id} />
           </Grid>
         </Grid>
       </Box>

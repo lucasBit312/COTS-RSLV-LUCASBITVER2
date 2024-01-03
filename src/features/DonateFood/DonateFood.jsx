@@ -3,6 +3,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -58,6 +59,7 @@ function DonateFood(props) {
   const [addressList, setAddressList] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
   const [newAddressDialogOpen, setNewAddressDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [currentDateTime, setCurrentDateTime] = useState(
     new Date().toISOString().slice(0, -8)
@@ -161,7 +163,9 @@ function DonateFood(props) {
 
   const onSubmit = async (data) => {
     try {
+      setLoading(true);
       const result = await foodApi.donateFoodApi(data);
+      setLoading(false);
       if (result.message) {
         enqueueSnackbar(result.message, { variant: "success" });
         reset();
@@ -406,13 +410,15 @@ function DonateFood(props) {
                     </MenuItem>
                   ))}
                 </Select>
-                <Button
-                  style={{ width: "160px", marginTop: "5px" }}
-                  variant="outlined"
-                  onClick={handleOpenNewAddressDialog}
-                >
-                  Thêm mới địa chỉ
-                </Button>
+                <div className="text-center">
+                  <Button
+                    style={{ width: "160px", marginTop: "5px" }}
+                    variant="outlined"
+                    onClick={handleOpenNewAddressDialog}
+                  >
+                    Thêm mới địa chỉ
+                  </Button>
+                </div>
                 {errors.address_id?.message ? (
                   <p className="text-danger">{errors.address_id?.message}</p>
                 ) : (
@@ -475,8 +481,13 @@ function DonateFood(props) {
               color="warning"
               type="submit"
               style={{ marginTop: "16px", marginBottom: "16px" }}
+              disabled={loading}
             >
-              Tặng Thực Phẩm
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Tặng Thực Phẩm"
+              )}
             </Button>
           </Paper>
         </Box>

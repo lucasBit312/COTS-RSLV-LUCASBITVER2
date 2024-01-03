@@ -1,5 +1,5 @@
 import AddLocationIcon from "@mui/icons-material/AddLocation";
-import { Avatar, Rating, Typography } from "@mui/material";
+import { Avatar, Button, Rating, Switch, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Unstable_Grid2";
@@ -7,9 +7,13 @@ import dayjs from "dayjs";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { baseURL } from "../../constants/env";
+import ReportFood from "./ReportFood";
+import { useSelector } from "react-redux";
+import userApi from "../../Api/userApi";
 FoodInfomationReceived.propTypes = {
   food: PropTypes.object,
   ratings: PropTypes.object,
+  isSubscribed: PropTypes.bool,
 };
 function formatTimeRemaining(timeRemaining) {
   const hours = Math.floor(timeRemaining / 3600);
@@ -25,10 +29,26 @@ function FoodInfomationReceived(props) {
   const food = props.food;
   const ratings = props.ratings;
   const transaction = props.transaction;
+  const isSubscribed = props.isSubscribed;
   const remaining_time_to_accept = food?.remaining_time_to_accept;
   const donor_confirm_time = transaction?.donor_confirm_time;
   const [dateEnd, setdateEnd] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining());
+  const label = { inputProps: { "aria-label": "sub notification" } };
+  const [switchValue, setSwitchValue] = useState(isSubscribed);
+  console.log(food);
+  const loggedInuser = useSelector((state) => state.user.current);
+  const isLoggedIn = !!loggedInuser.id;
+  const handleChangeSwitch = async (event) => {
+    const newValue = event.target.checked;
+    const foodId = food?.id;
+    setSwitchValue(newValue);
+    const data = {
+      food_id: foodId,
+      new_value: newValue,
+    };
+    const result = await userApi.notificationSubscribers(data);
+  };
   useEffect(() => {
     const interval = setInterval(() => {
       const newTimeRemaining = calculateTimeRemaining();
@@ -88,6 +108,18 @@ function FoodInfomationReceived(props) {
             </Typography>
             <Typography color="warning" className="text-muted">
               Thời Gian: {dayjs(food?.created_at).format("DD/MM/YYYY HH:mm")}
+            </Typography>
+            <Typography color="warning" className="text-muted">
+              {isLoggedIn && (
+                <>
+                  <Switch
+                    {...label}
+                    defaultChecked={switchValue}
+                    onChange={handleChangeSwitch}
+                  />
+                  Nhận thông báo
+                </>
+              )}
             </Typography>
           </Grid>
         </Grid>
@@ -154,7 +186,7 @@ function FoodInfomationReceived(props) {
         </Grid>
         <Grid padding={1}>
           <Typography>
-             Thông tin liên hệ: {food?.contact_information}
+            Thông tin liên hệ: {food?.contact_information}
           </Typography>
         </Grid>
         <Grid padding={1}>
@@ -168,6 +200,14 @@ function FoodInfomationReceived(props) {
             Số lượng nhận: {transaction?.quantity_received}{" "}
           </Typography>
         </Grid>
+        {transaction?.is_error_notification === 0 &&
+        transaction?.status === 1 ? (
+          <Grid padding={1}>
+            <ReportFood foodId={food?.id} transactionId={transaction?.id} />
+          </Grid>
+        ) : (
+          ""
+        )}
       </Paper>
     </Box>
   );

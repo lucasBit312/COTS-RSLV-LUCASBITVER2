@@ -54,6 +54,14 @@ const userApi = {
     getCountNotication(params) {
         const url = '/api/get-count-notication';
         return axiosClient.get(url, { params });
-    }
+    },
+    notificationSubscribers(data) {
+        const url = '/api/notificationSubscribers';
+        return axiosClient.post(url, data);
+    },
+    getNoticeDonatedFoods(params) {
+        const url = '/api/getNoticeDonatedFoods';
+        return axiosClient.get(url, { params });
+    },
 }
 export default userApi;

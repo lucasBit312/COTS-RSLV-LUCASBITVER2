@@ -15,10 +15,12 @@ DetailPageRating.defaultProps = {
 function DetailPageRating({ ratings }) {
   return (
     <div>
-      {ratings.length > 0 && (
-        <Typography variant="h5" marginBottom={2}>
-          Phản Hồi Của Người Nhận
+      {Object.keys(ratings).length === 0 ? (
+        <Typography variant="h6" marginLeft={2}>
+          Chưa có phản hồi
         </Typography>
+      ) : (
+        ""
       )}
       {Object.keys(ratings).map((key) => {
         const rating = ratings[key];
@@ -44,7 +46,9 @@ function DetailPageRating({ ratings }) {
                       : "Người ẩn danh"}
                   </Typography>
                   <Typography color="warning" className="text-muted">
-                    {dayjs(rating?.rating?.created_at).format("DD/MM/YYYY HH:mm")}
+                    {dayjs(rating?.rating?.created_at).format(
+                      "DD/MM/YYYY HH:mm"
+                    )}
                   </Typography>
                 </Grid>
               </Grid>

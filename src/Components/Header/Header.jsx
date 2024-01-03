@@ -1,9 +1,10 @@
-import { AccountCircleOutlined, Close } from "@mui/icons-material";
-import AdbIcon from "@mui/icons-material/Adb";
+import { Close } from "@mui/icons-material";
+import CakeIcon from "@mui/icons-material/Cake";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
 import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
+import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import { Avatar, Badge, Grid, Menu } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -11,31 +12,26 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import IconButton from "@mui/material/IconButton";
-import InputBase from "@mui/material/InputBase";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import { alpha, styled } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import cartApi from "../../Api/cartApi";
+import userApi from "../../Api/userApi";
+import { baseURL } from "../../constants/env";
+import ForgotPassword from "../../features/Auth/components/ForgotPassword/ForgotPassword";
 import Login from "../../features/Auth/components/Login/Login";
 import Register from "../../features/Auth/components/Register/Register";
 import { logout } from "../../features/Auth/userSlide";
-import { baseURL } from "../../constants/env";
-import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
-import CakeIcon from "@mui/icons-material/Cake";
-import userApi from "../../Api/userApi";
-import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import ForgotPassword from "../../features/Auth/components/ForgotPassword/ForgotPassword";
 const MODE = {
   LOGIN: "login",
   REGISTER: "register",
   FORGOT_PASSWORD: "forgot_password",
-};
+}; 
 function Header(props) {
   const [open, setOpen] = React.useState(false);
   const loggedInuser = useSelector((state) => state.user.current);
@@ -130,7 +126,7 @@ function Header(props) {
     setAnchorEl(null);
   };
   const handleNotice = () => {
-    history.push("/notification");
+    history.push("/notification/transactions");
   };
   const [mode, setMode] = useState(MODE.LOGIN);
 

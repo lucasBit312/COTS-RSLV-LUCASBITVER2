@@ -37,14 +37,13 @@ import {
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom/cjs/react-router-dom";
 import { enqueueSnackbar } from "notistack";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useForm, Controller } from "react-hook-form";
 ManageFoodDonated.propTypes = {};
 function ManageFoodDonated(props) {
   const [list, setList] = useState([]);
   const [menuAction, setMenuAction] = React.useState(null);
-  // const [foodId, setFoodId] = React.useState(null);
-  // const [foodStatus, setFoodStatus] = React.useState(null);
-  // const [foodQuantity, setFoodQuantity] = React.useState(null);
-  // const [foodExpiryDate, setFoodExpiryDate] = React.useState(null);
   const [loading, setLoading] = useState(true);
   const [totalPage, setTotalPage] = useState(0);
   const history = useHistory();
@@ -55,18 +54,37 @@ function ManageFoodDonated(props) {
   const now = dayjs();
   const location = useLocation();
 
-  const handleClickOpenDialog = () => {
-    setOpenDialog(true);
-  };
-
-  const handleNotificationClick = (event, food) => {
+  const handleFoodClick = (event, food) => {
     try {
       setSelectedFood(food);
+      console.log(selectedFood);
       setMenuAction(event.currentTarget);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const schema = yup.object({
+    message: yup
+      .string()
+      .required("Vui lòng nhập lí do dừng tặng")
+      .max(200, "Vui lòng nhập ít hơn 200 kí tự")
+      .min(10, "Vui lòng nhập nhiều hơn 10 kí tự"),
+  });
+
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setMenuAction(null);
@@ -117,23 +135,16 @@ function ManageFoodDonated(props) {
     );
   }
 
-  // const handleClick = (event, id, status, quantity, expiry_date) => {
-  //   setMenuAction(event.currentTarget);
-  //   setFoodId(id);
-  //   setFoodStatus(status);
-  //   setFoodQuantity(quantity);
-  //   setFoodExpiryDate(expiry_date);
-  // };
   const handleClose = () => {
     setMenuAction(null);
   };
   const EditFood = () => {
     history.push(`/manager-food-donated/edit/${selectedFood?.slug}`);
   };
-  const cancelDonate = async () => {
+
+  const onSubmit = async (data) => {
     try {
-      const food_id = selectedFood?.id;
-      const result = await foodApi.cancelDonate(food_id);
+      const result = await foodApi.cancelDonate(data);
       console.log(result);
       if (result.message) {
         enqueueSnackbar(result.message, { variant: "success" });
@@ -145,10 +156,8 @@ function ManageFoodDonated(props) {
       console.error("Error:", error);
     }
   };
-
-  const continuesDonate = () => {};
   const viewDetailFood = () => {
-    history.push(`/manager-food-donated/view/${selectedFood?.slug}`);
+    history.push(`/manager-food-donated/view/${selectedFood?.id}`);
   };
 
   const menuItems = [];
@@ -252,7 +261,7 @@ function ManageFoodDonated(props) {
                     aria-controls={open ? "basic-menu" : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? "true" : undefined}
-                    onClick={(e) => handleNotificationClick(e, item)}
+                    onClick={(e) => handleFoodClick(e, item)}
                   >
                     <EditNoteIcon />
                   </IconButton>
@@ -304,18 +313,45 @@ function ManageFoodDonated(props) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">Xác Nhận</DialogTitle>
-        <DialogContent>
+        <form
+          style={{ marginLeft: "20px", marginRight: "20px" }}
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <DialogContentText id="alert-dialog-description">
-            Bạn có thực sự muốn khóa tặng thực phẩm này?
+            Bạn có thực sự muốn dừng tặng thực phẩm này? Vui lòng đưa ra lí do
+            dừng tặng (Thực phẩm bị hỏng,.....).
             <br />
+            <Controller
+              name="food_id"
+              control={control}
+              defaultValue={selectedFood?.id || ""}
+              render={({ field }) => <input type="hidden" {...field} />}
+            />
+            <Controller
+              name="message"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <textarea
+                  className="form-control"
+                  id="message"
+                  name="message"
+                  style={{ marginTop: "10px" }}
+                  aria-label="With textarea"
+                  {...field}
+                  rows={5}
+                />
+              )}
+            />
+            {errors.message && (
+              <p className="text-danger">{errors.message.message}</p>
+            )}
           </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={cancelDonate}>Đồng Ý</Button>
-          <Button onClick={handleCloseDialog} autoFocus>
-            Hủy
-          </Button>
-        </DialogActions>
+          <div className="text-end">
+            <Button type="submit">Đồng Ý</Button>
+            <Button onClick={handleCloseDialog}>Hủy</Button>
+          </div>
+        </form>
       </Dialog>
     </Box>
   );

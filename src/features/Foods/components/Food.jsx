@@ -30,7 +30,6 @@ function Food({ food }) {
   const handleClick = () => {
     history.push(`/foods/${category}/${food?.slug}`);
   };
-  console.log(food);
   return (
     <FoodContainer margin={1.5} onClick={handleClick}>
       <Box padding={1}>

@@ -10,6 +10,10 @@ const foodAip = {
         const url = `/api/foods/${foodSlug}`;
         return axiosClient.get(url);
     },
+    getDetailDonated(foodId) {
+        const url = `/api/food-donated-detail/${foodId}`;
+        return axiosClient.get(url);
+    },
     donateFoodApi(data) {
         const url = '/api/donate-food';
         const headers = {

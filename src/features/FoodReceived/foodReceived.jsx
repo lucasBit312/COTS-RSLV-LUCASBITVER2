@@ -251,9 +251,9 @@ const FoodReceived = (props) => {
                 <TableCell component="th" scope="row">
                   {item.id}
                 </TableCell>
-                <TableCell align="left">{item.food.title}</TableCell>
-                <TableCell align="left">{item.food.user.full_name}</TableCell>
-                <TableCell align="left">{item.quantity_received}</TableCell>
+                <TableCell align="left">{item?.food?.title}</TableCell>
+                <TableCell align="left">{item?.food?.user?.full_name}</TableCell>
+                <TableCell align="left">{item?.quantity_received}</TableCell>
                 <TableCell align="left">
                   {item.ratings.length > 0 ? (
                     <div>
@@ -359,7 +359,7 @@ const FoodReceived = (props) => {
           ) : selectedItemFoodStatus === 1 &&
             selectedItemFoodDonorStatus === 1 &&
             selectedItemFoodReceiverStatus === 0 ? (
-            <MenuItem onClick={handleClickRating}>Đánh Giá</MenuItem>
+            <MenuItem onClick={handleClickRating}>Phản Hồi</MenuItem>
           ) : null
         ) : null}
         <MenuItem onClick={handleViewDetail}>Xem Chi Tiết Thực Phẩm</MenuItem>

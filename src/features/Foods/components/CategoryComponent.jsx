@@ -20,6 +20,7 @@ import FoodFilter from "../components/FoodFilter";
 import FilterViewer from "../components/Filter/FilterView";
 import Button from "@mui/material/Button";
 import SearchIcon from "@mui/icons-material/Search";
+import FacebookIcon from "@mui/icons-material/Facebook";
 import InputBase from "@mui/material/InputBase";
 import { ClearIcon } from "@mui/x-date-pickers";
 import { useParams } from "react-router-dom/cjs/react-router-dom";
@@ -76,6 +77,7 @@ function CategoryComponent(props) {
       _page: Number.parseInt(params._page) || 1,
     };
   }, [location.search]);
+
   const handlePageChange = (event, newPage) => {
     const filters = {
       ...queryParams,
@@ -86,11 +88,13 @@ function CategoryComponent(props) {
       search: queryString.stringify(filters),
     });
   };
+
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       handleSearchClick();
     }
   };
+
   const handleSearchClick = () => {
     const inputElement = document.getElementById("search-input");
     const content = inputElement.value;
@@ -105,6 +109,7 @@ function CategoryComponent(props) {
       });
     }
   };
+
   const handleClearClick = () => {
     setSearchValue("");
     const { searchContent, ...restFilters } = queryParams;
@@ -126,6 +131,7 @@ function CategoryComponent(props) {
     }
     return newObj;
   }
+
   const handleFiltersChange = (newFilters) => {
     const filters = removeEmptyStrings({
       ...queryParams,
@@ -166,7 +172,20 @@ function CategoryComponent(props) {
     })();
   }, [category, queryParams]);
 
-  console.log(foods);
+  const shareOnFacebook = () => {
+    const currentURL = window.location.href;
+    if (window.FB) {
+      window.FB.ui(
+        {
+          method: "share",
+          href: "https://itdragons.com/",
+        },
+        (response) => {
+          console.log(response);
+        }
+      );
+    }
+  };
   return (
     <RootBox marginTop={8} style={{ minWidth: "400px" }}>
       <Container>
@@ -237,6 +256,14 @@ function CategoryComponent(props) {
               </div>
             </div>
             <Grid item>
+              <button
+                className="btn text-white"
+                style={{ backgroundColor: "#ED6C02", marginLeft: "14px" }}
+                onClick={shareOnFacebook}
+              >
+                <FacebookIcon />
+                Share
+              </button>
               <FilterViewer filters={queryParams} onChange={setNewFilters} />
             </Grid>
             {foods ? (

@@ -27,10 +27,10 @@ export default function LoginForm({
 }) {
   const schema = object().shape({
     email: string()
-      .required("Vui lòng nhập")
+      .required("Vui lòng nhập Email")
       .email("Địa chỉ email không hợp lệ"),
     password: string()
-      .required("Vui lòng nhập")
+      .required("Vui lòng nhập Mật khẩu")
       .min(6, "Mật khẩu phải dài hơn 6 kí tự"),
   });
   const {
@@ -103,16 +103,15 @@ export default function LoginForm({
               </Button>
             </Box>
           </form>
-          
         </Box>
         <div className="row">
           <div className="col-md-6 col-lg-6 col-6 d-flex justify-content-end align-items-center">
-          <GoogleLoginButton onSubmitGoogle={onSubmitGoogle} />
+            <GoogleLoginButton onSubmitGoogle={onSubmitGoogle} />
           </div>
           <div className="col-md-6 col-lg-6 col-6 d-flex justify-content-start align-items-center">
-          <FacebookLoginButton onSubmitFacebook={onSubmitFacebook} />
+            <FacebookLoginButton onSubmitFacebook={onSubmitFacebook} />
           </div>
-          </div>
+        </div>
       </Container>
     </ThemeProvider>
   );

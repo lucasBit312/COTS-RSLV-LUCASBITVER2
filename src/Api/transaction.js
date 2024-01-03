@@ -22,8 +22,28 @@ const transactionsApi = {
     const url = `/api/notifi-viewed`;
     return axiosClient.post(url, notifi_id);
   },
+  viewedNoticeDonatedFood(notifi_id) {
+    const url = `/api/notifi-viewed-donatedfood`;
+    return axiosClient.post(url, notifi_id);
+  },
   detailTransaction(transaction_id) {
     const url = `/api/detail-transaction/${transaction_id}`;
+    return axiosClient.get(url);
+  },
+  getDetailPageReceiverList(foodId) {
+    const url = `/api/getDetailPageReceiverList/${foodId}`;
+    return axiosClient.get(url);
+  },
+  errorNotifications(data) {
+    const url = `/api/errorNotifications`;
+    return axiosClient.post(url, data);
+  },
+  getTotalNoticeTransaction() {
+    const url = '/api/get-total-notice-transaction';
+    return axiosClient.get(url);
+  },
+  getTotalNoticeSub() {
+    const url = '/api/get-total-notice-sub';
     return axiosClient.get(url);
   }
 };

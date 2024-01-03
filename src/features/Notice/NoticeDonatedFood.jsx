@@ -32,7 +32,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import transactionsApi from "../../Api/transaction";
 import { enqueueSnackbar } from "notistack";
 import { useDispatch } from "react-redux";
-import { viewedNotice } from "./NoticeSlide";
+import { viewedNotice, viewedNoticeDonatedFood } from "./NoticeSlide";
 import { unwrapResult } from "@reduxjs/toolkit";
 import queryString from "query-string";
 import SearchIcon from "@mui/icons-material/Search";
@@ -42,7 +42,7 @@ import {
   useLocation,
 } from "react-router-dom/cjs/react-router-dom.min";
 import { ClearIcon } from "@mui/x-date-pickers";
-Notice.propTypes = {};
+NoticeDonatedFood.propTypes = {};
 const HoverPaper = styled(Paper)({
   "&:hover": {
     backgroundColor: "#CBCBCB",
@@ -79,11 +79,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-
-Notice.propTypes = {
-  reloadTotalTrans: PropTypes.func,
+NoticeDonatedFood.propTypes = {
+  reloadTotalSub: PropTypes.func,
 };
-function Notice(props) {
+function NoticeDonatedFood(props) {
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = useState(false);
@@ -94,7 +93,7 @@ function Notice(props) {
   const history = useHistory();
   const location = useLocation();
   const [searchValue, setSearchValue] = useState("");
-  const reloadTotalTrans = props.reloadTotalTrans;
+  const reloadTotalSub = props.reloadTotalSub;
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -114,11 +113,11 @@ function Notice(props) {
   const handleNotificationClick = async (notification) => {
     try {
       setSelectedNotification(notification);
-      const action = viewedNotice(notification.id);
+      const action = viewedNoticeDonatedFood(notification.id);
       const resultAction = await dispath(action);
       const result = unwrapResult(resultAction);
       handleClickOpen();
-      reloadTotalTrans();
+      reloadTotalSub();
       setLoadData(true);
     } catch (error) {
       console.log(error);
@@ -128,7 +127,8 @@ function Notice(props) {
     (async () => {
       try {
         setLoading(true);
-        const dataRes = await userApi.getCountNotication(queryParams);
+        const dataRes = await userApi.getNoticeDonatedFoods(queryParams);
+        console.log(dataRes);
         const data = dataRes.notifications.data;
         setLoading(false);
         setNotifications(data);
@@ -139,33 +139,6 @@ function Notice(props) {
       }
     })();
   }, [queryParams, loadData]);
-
-  const handleConfirm = async () => {
-    try {
-      const transaction_id = selectedNotification.transaction_id;
-      const result = await transactionsApi.notifiConfirm(transaction_id);
-      if (result.message) {
-        enqueueSnackbar(result.message, { variant: "success" });
-        setLoadData(true);
-        setOpen(false);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-  const handleRefuse = async () => {
-    try {
-      const transaction_id = selectedNotification.transaction_id;
-      const result = await transactionsApi.notifiRefuse(transaction_id);
-      if (result.message) {
-        enqueueSnackbar(result.message, { variant: "success" });
-        setLoadData(true);
-        setOpen(false);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
 
   const handlePageChange = (event, newPage) => {
     const filters = {
@@ -311,49 +284,19 @@ function Notice(props) {
               src={`${baseURL}${notification?.user_image}`}
             />
           </div>
-          {notification?.type === 4044 ? (
-            <div className="col-lg-11 col-md-10 col-10">
-              <Typography
-                className="fst-normal"
-                style={{
-                  color:
-                    notification.is_read === 0
-                      ? notification.type === 4044
-                        ? "#FF0000"
-                        : "#ED6C02"
-                      : "inherit",
-                }}
-              >
-                {notification.message}
-                {notification.type === 404
-                  ? " (Thông báo thực phẩm hỏng từ người nhận)"
-                  : ""}
-              </Typography>
-              <Typography className="text-muted">
-                {dayjs(notification.created_at).format("DD/MM/YYYY HH:mm")}
-              </Typography>
-            </div>
-          ) : (
-            <div className="col-lg-11 col-md-10 col-10">
-              <Typography
-                className="fst-normal"
-                style={{
-                  color:
-                    notification.is_read === 0
-                      ? notification.type === 404
-                        ? "#FF0000"
-                        : "#ED6C02"
-                      : "inherit",
-                }}
-              >
-                {notification.message}
-                {notification.type === 404 ? " (Thực phẩm hỏng)" : ""}
-              </Typography>
-              <Typography className="text-muted">
-                {dayjs(notification.created_at).format("DD/MM/YYYY HH:mm")}
-              </Typography>
-            </div>
-          )}
+          <div className="col-lg-11 col-md-10 col-10">
+            <Typography
+              className="fst-normal"
+              style={{
+                color: notification.is_read === 0 ? "#ED6C02" : "inherit",
+              }}
+            >
+              {notification.message}
+            </Typography>
+            <Typography className="text-muted">
+              {dayjs(notification.created_at).format("DD/MM/YYYY HH:mm")}
+            </Typography>
+          </div>
         </HoverPaper>
       ))}
       {totalPage > 1 && notifications?.length > 0 ? (
@@ -383,25 +326,6 @@ function Notice(props) {
         <DialogContent>
           <DialogContentText>
             <Typography className="fst-normal">
-              {selectedNotification?.type == 2 ? (
-                <Alert className="mb-2" severity="warning">
-                  Đã từ chối
-                </Alert>
-              ) : selectedNotification?.type === 1 ? (
-                <Alert className="mb-2" severity="success">
-                  Đã đồng ý
-                </Alert>
-              ) : selectedNotification?.type === 0 ? (
-                <Alert className="mb-2" severity="info">
-                  Chưa hoàn tất
-                </Alert>
-              ) : selectedNotification?.type === 4044 ? (
-                <Alert className="mb-2" severity="warning">
-                  Hãy kiểm tra lại thực phẩm và tiến hành khóa nếu cần thiết bạn nhé!
-                </Alert>
-              ) : (
-                ""
-              )}
               <div className="row">
                 <div className="col-lg-1 col-md-2 col-2 mt-1">
                   <Avatar
@@ -412,31 +336,14 @@ function Notice(props) {
                 <div className="col-lg-11 col-md-10 col-10">
                   {selectedNotification?.message}
                 </div>
-                <div className="col-lg-11 col-md-10 col-10">
-                  {selectedNotification?.type === 404 ? (
-                    <Link
-                      href={`/food-received/${selectedNotification?.transaction_id}`}
-                      underline="none"
-                      style={{ marginLeft: "47px" }}
-                    >
-                      {"Chi tiết thực phẩm"}
-                    </Link>
-                  ) : (
-                    ""
-                  )}
-                  {selectedNotification?.type === 4044 ? (
-                    <Link
-                      href={`/manager-food-donated/view/${selectedNotification?.foodId}`}
-                      underline="none"
-                      style={{ marginLeft: "47px" }}
-                    >
-                      {"Chi tiết thực phẩm"}
-                    </Link>
-                  ) : (
-                    ""
-                  )}
-                </div>
               </div>
+              <Link
+                href={`/foods/tat-ca-thuc-pham/${selectedNotification?.food?.slug}`}
+                underline="none"
+                style={{ marginLeft: "47px" }}
+              >
+                {"Chi tiết thực phẩm"}
+              </Link>
             </Typography>
             <Typography className="fst-italic pt-3">
               {dayjs(selectedNotification?.created_at).format(
@@ -446,13 +353,6 @@ function Notice(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          {selectedNotification?.type === 0 &&
-            selectedNotification?.transaction?.status === 0 && (
-              <>
-                <Button onClick={handleConfirm}>Đồng ý</Button>
-                <Button onClick={handleRefuse}>Từ chối</Button>
-              </>
-            )}
           <Button onClick={handleClose}>Đóng</Button>
         </DialogActions>
       </Dialog>
@@ -460,4 +360,4 @@ function Notice(props) {
   );
 }
 
-export default Notice;
+export default NoticeDonatedFood;

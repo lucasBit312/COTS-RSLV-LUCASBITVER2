@@ -46,7 +46,7 @@ function TabPanel(props) {
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired, 
 };
 
 function Profice(props) {
@@ -172,7 +172,7 @@ function Profice(props) {
         <Tabs value={activeIndex} onChange={handleChange} aria-label="profice">
           <Tab style={{ color: "#ED6C02" }} label="Tài Khoản" />
           <Tab style={{ color: "#ED6C02" }} label="Địa Chỉ" />
-          {user?.type === "google" || user?.type === "facebook" ? (
+          {user?.type === "google" || user?.type === "facebook" ? ( 
             ""
           ) : (
             <Tab style={{ color: "#ED6C02" }} label="Mật Khẩu" />

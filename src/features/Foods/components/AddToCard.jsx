@@ -1,21 +1,29 @@
-import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { Button, IconButton } from '@mui/material';
-import QuantityField from '../../../Components/form-control/QuantityField/QuantityField';
-import RedeemIcon from '@mui/icons-material/Redeem';
+import React, { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { Button, IconButton, Switch, Typography } from "@mui/material";
+import QuantityField from "../../../Components/form-control/QuantityField/QuantityField";
+import RedeemIcon from "@mui/icons-material/Redeem";
+import { useSelector } from "react-redux";
 function AddToCartForm({ onSubmit = null }) {
+  const label = { inputProps: { "aria-label": "anonymous" } };
+  const loggedInuser = useSelector((state) => state.user.current);
+  const isLoggedIn = !!loggedInuser.id;
   const schema = yup.object().shape({
     Quantity: yup
       .number()
-      .typeError('Số lượng phải là một số')
-      .integer('Số lượng phải là số nguyên')
-      .min(1, 'Số lượng nhỏ nhất là 1')
-      .required('Vui lòng nhập số lượng'),
+      .typeError("Số lượng phải là một số")
+      .integer("Số lượng phải là số nguyên")
+      .min(1, "Số lượng nhỏ nhất là 1")
+      .required("Vui lòng nhập số lượng"),
   });
 
-  const { handleSubmit, control, formState: { errors } } = useForm({
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -27,6 +35,18 @@ function AddToCartForm({ onSubmit = null }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmitHandler)}>
+      <Typography color="warning" className="text-muted">
+        <Controller
+          name="anonymous"
+          control={control}
+          render={({ field }) => (
+            <>
+              <Switch {...field} />
+              Nhận ẩn danh
+            </>
+          )}
+        />
+      </Typography>
       <QuantityField
         name="Quantity"
         label="Quantity"
@@ -38,9 +58,12 @@ function AddToCartForm({ onSubmit = null }) {
         variant="contained"
         color="warning"
         size="large"
-        style={{margin:"16px"}}
+        style={{ margin: "16px" }}
       >
-        <span style={{ marginRight: "8px" }}><RedeemIcon /></span>Nhận Thực Phẩm
+        <span style={{ marginRight: "8px" }}>
+          <RedeemIcon />
+        </span>
+        Nhận Thực Phẩm
       </Button>
     </form>
   );

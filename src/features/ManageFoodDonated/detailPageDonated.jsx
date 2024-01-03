@@ -7,16 +7,16 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import DetailPageRating from "../components/DetailPageRating";
-import FoodInformation from "../components/FoodInformation";
-import FoodThumbnail from "../components/FoodThumbnail";
-import useFoodDetail from "../hooks/useFoodDetail";
+import FoodThumbnail from "../Foods/components/FoodThumbnail";
+import FoodInformation from "../Foods/components/FoodInformation";
+import RatingAndReceiver from "../Foods/components/RatingAndReceiver";
+import useFoodDetail from "./hooks/useFoodDetail";
 
 DetailPageDonated.propTypes = {};
 
 function DetailPageDonated(props) {
-    const { foodSlug } = useParams();
-  const { food, loading } = useFoodDetail(foodSlug);
+  const { foodId } = useParams();
+  const { food, loading } = useFoodDetail(foodId);
   if (loading) {
     return (
       <Box marginTop={9} sx={{ width: "100%" }}>
@@ -49,7 +49,7 @@ function DetailPageDonated(props) {
         </Grid>
         <Grid container marginBottom={4} spacing={2} alignItems="center">
           <Grid item xs={12} md={6}>
-            <DetailPageRating ratings={food.ratings} />
+            <RatingAndReceiver ratings={food.ratings} foodId={food?.food?.id} />
           </Grid>
         </Grid>
       </Box>

@@ -17,7 +17,7 @@ function RatingForm(props) {
   const { received_id } = props;
   const { setLoadDataRating } = props;
   const [rate, setRate] = useState(0);
-  const schema = yup.object({
+  const schema = yup.object({ 
     rate: yup
       .number()
       .positive("Vui lòng đánh giá sao")

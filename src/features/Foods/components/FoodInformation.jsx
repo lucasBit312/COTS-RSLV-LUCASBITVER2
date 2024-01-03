@@ -1,29 +1,25 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { styled } from "@mui/material/styles";
+import AddLocationIcon from "@mui/icons-material/AddLocation";
+import { Avatar, Rating, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Unstable_Grid2";
-import { Avatar, Rating, Typography } from "@mui/material";
-import { baseURL } from "../../../constants/env";
-import dayjs from "dayjs";
-import { useDispatch } from "react-redux";
-import AddLocationIcon from "@mui/icons-material/AddLocation";
-import AddToCartForm from "./AddToCard";
-import { addToCart } from "../../Cart/CartSlide";
 import { unwrapResult } from "@reduxjs/toolkit";
+import dayjs from "dayjs";
 import { enqueueSnackbar } from "notistack";
-import IconButton from "@mui/material/IconButton";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import Stack from "@mui/material/Stack";
-import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
+import PropTypes from "prop-types";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { baseURL } from "../../../constants/env";
+import { addToCart } from "../../Cart/CartSlide";
+import AddToCartForm from "./AddToCard";
+import Switch from "@mui/material/Switch";
+import userApi from "../../../Api/userApi";
+
 FoodInformation.propTypes = {
   food: PropTypes.object,
 };
 
 function FoodInformation(food) {
-  console.log(food);
   const remaining_time_to_accept = food?.food?.food?.remaining_time_to_accept;
   let timeAccept = "";
   if (remaining_time_to_accept) {
@@ -48,8 +44,6 @@ function FoodInformation(food) {
     { totalRating: 0, count: 0 }
   );
   const averageRating = count > 0 ? totalRating / count : 0;
-  console.log(averageRating);
-
   const dispath = useDispatch();
 
   const handleAddToCartSubmit = async (formData) => {
@@ -73,7 +67,6 @@ function FoodInformation(food) {
       console.error("Error:", errors);
     }
   };
-
   return (
     <Box style={{ marginTop: "24px" }}>
       <Paper elevation={2}>
@@ -92,7 +85,7 @@ function FoodInformation(food) {
           </Grid>
           <Grid>
             <Typography color="warning" className="fw-bolder">
-              Tên người Tặng: {food?.food?.food?.user?.full_name}
+              {food?.food?.food?.user?.full_name}
             </Typography>
             <Typography color="warning" className="text-muted">
               Thời Gian:{" "}
@@ -155,9 +148,6 @@ function FoodInformation(food) {
           <Typography className="fw-light">
             Số lượng còn: {food?.food?.food?.quantity}{" "}
           </Typography>
-        </Grid>
-        <Grid style={{ maxWidth: "300px" }}>
-          <AddToCartForm onSubmit={handleAddToCartSubmit} />
         </Grid>
       </Paper>
     </Box>
