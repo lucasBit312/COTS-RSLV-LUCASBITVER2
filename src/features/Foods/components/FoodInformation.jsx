@@ -17,10 +17,17 @@ import userApi from "../../../Api/userApi";
 
 FoodInformation.propTypes = {
   food: PropTypes.object,
+  isSubscribed: PropTypes.bool,
 };
 
-function FoodInformation(food) {
-  const remaining_time_to_accept = food?.food?.food?.remaining_time_to_accept;
+function FoodInformation(props) {
+  const food = props.food;
+  const remaining_time_to_accept = food?.food?.remaining_time_to_accept;
+  const loggedInuser = useSelector((state) => state.user.current);
+  const isSubscribed = props.isSubscribed;
+  const isLoggedIn = !!loggedInuser.id;
+  const label = { inputProps: { "aria-label": "sub notification" } };
+  const [switchValue, setSwitchValue] = useState(isSubscribed);
   let timeAccept = "";
   if (remaining_time_to_accept) {
     const hours = Math.floor(remaining_time_to_accept / 60);
@@ -67,6 +74,16 @@ function FoodInformation(food) {
       console.error("Error:", errors);
     }
   };
+  const handleChangeSwitch = async (event) => {
+    const newValue = event.target.checked;
+    const foodId = food?.food?.id;
+    setSwitchValue(newValue);
+    const data = {
+      food_id: foodId,
+      new_value: newValue,
+    };
+    const result = await userApi.notificationSubscribers(data);
+  };
   return (
     <Box style={{ marginTop: "24px" }}>
       <Paper elevation={2}>
@@ -80,16 +97,28 @@ function FoodInformation(food) {
             <Avatar
               sx={{ width: 56, height: 56 }}
               alt="Avatar"
-              src={`${baseURL}${food?.food?.food?.user?.image}`}
+              src={`${baseURL}${food?.food?.user?.image}`}
             />
           </Grid>
           <Grid>
             <Typography color="warning" className="fw-bolder">
-              {food?.food?.food?.user?.full_name}
+              {food?.food?.user?.full_name}
             </Typography>
             <Typography color="warning" className="text-muted">
               Thời Gian:{" "}
-              {dayjs(food?.food?.food?.created_at).format("DD/MM/YYYY HH:mm")}
+              {dayjs(food?.food?.created_at).format("DD/MM/YYYY HH:mm")}
+            </Typography>
+            <Typography color="warning" className="text-muted">
+              {isLoggedIn && (
+                <>
+                  <Switch
+                    {...label}
+                    defaultChecked={switchValue}
+                    onChange={handleChangeSwitch}
+                  />
+                  Nhận thông báo
+                </>
+              )}
             </Typography>
           </Grid>
         </Grid>
@@ -116,15 +145,15 @@ function FoodInformation(food) {
           <Grid></Grid>
         </Grid>
         <Grid padding={1}>
-          <Typography variant="h4">{food?.food?.food?.title}</Typography>
+          <Typography variant="h4">{food?.food?.title}</Typography>
         </Grid>
         <Grid padding={1}>
-          <Typography>Mô tả: {food?.food?.food?.description}</Typography>
+          <Typography>Mô tả: {food?.food?.description}</Typography>
         </Grid>
         <Grid padding={1}>
           <Typography marginBottom="0" className="text-muted">
             Thời gian hết hạn thực phẩm:{" "}
-            {dayjs(food?.food?.food?.expiry_date).format("DD/MM/YYYY HH:mm")}{" "}
+            {dayjs(food?.food?.expiry_date).format("DD/MM/YYYY HH:mm")}{" "}
           </Typography>
         </Grid>
         <Grid padding={1}>
@@ -134,20 +163,23 @@ function FoodInformation(food) {
         </Grid>
         <Grid padding={1}>
           <Typography>
-            Thông tin liên hệ: {food?.food?.food?.contact_information}
+            Thông tin liên hệ: {food?.food?.contact_information}
           </Typography>
         </Grid>
         <Grid padding={1}>
           <Typography className="text-success">
             <AddLocationIcon />
-            {food?.food?.food?.location}, {food?.food?.food?.ward},{" "}
-            {food?.food?.food?.district}, {food?.food?.food?.province}{" "}
+            {food?.food?.location}, {food?.food?.ward},{" "}
+            {food?.food?.district}, {food?.food?.province}{" "}
           </Typography>
         </Grid>
         <Grid padding={1}>
           <Typography className="fw-light">
-            Số lượng còn: {food?.food?.food?.quantity}{" "}
+            Số lượng còn: {food?.food?.quantity}{" "}
           </Typography>
+        </Grid>
+        <Grid padding={1}>
+          <AddToCartForm onSubmit={handleAddToCartSubmit}/>
         </Grid>
       </Paper>
     </Box>

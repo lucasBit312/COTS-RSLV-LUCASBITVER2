@@ -114,7 +114,7 @@ function FoodInfomationReceived(props) {
                 <>
                   <Switch
                     {...label}
-                    defaultChecked={switchValue}
+                    defaultChecked={switchValue} 
                     onChange={handleChangeSwitch}
                   />
                   Nhận thông báo

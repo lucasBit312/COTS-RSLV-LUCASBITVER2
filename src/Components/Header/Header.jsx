@@ -27,11 +27,12 @@ import ForgotPassword from "../../features/Auth/components/ForgotPassword/Forgot
 import Login from "../../features/Auth/components/Login/Login";
 import Register from "../../features/Auth/components/Register/Register";
 import { logout } from "../../features/Auth/userSlide";
+import Pusher from "pusher-js";
 const MODE = {
   LOGIN: "login",
   REGISTER: "register",
   FORGOT_PASSWORD: "forgot_password",
-}; 
+};
 function Header(props) {
   const [open, setOpen] = React.useState(false);
   const loggedInuser = useSelector((state) => state.user.current);
@@ -129,6 +130,25 @@ function Header(props) {
     history.push("/notification/transactions");
   };
   const [mode, setMode] = useState(MODE.LOGIN);
+
+  useEffect(() => {
+    if(isLoggedIn){
+      const pusher = new Pusher("edbe3c1ada201abc1182", {
+        cluster: "ap1",
+      });
+      Pusher.logToConsole = true;
+      const user = JSON.parse(localStorage.getItem("user"));
+      const channel = pusher.subscribe(`user.${user?.id}`);
+      channel.bind("App\\Events\\NewNotificationCollectFood", function (data) {
+        console.log("Received data from Pusher:", data);
+        alert(JSON.stringify(data));
+      });
+      return () => {
+        channel.unbind();
+        pusher.unsubscribe(`user.${user?.id}`);
+      };
+    }
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -253,7 +273,10 @@ function Header(props) {
               onClick={handleFoodsClick}
               sx={{
                 my: 2,
-                color: location.pathname === "/foods/tat-ca-thuc-pham" ? "#5BE49B" : "white",
+                color:
+                  location.pathname === "/foods/tat-ca-thuc-pham"
+                    ? "#5BE49B"
+                    : "white",
                 display: "block",
               }}
             >
@@ -399,7 +422,13 @@ function Header(props) {
           {mode === MODE.LOGIN && (
             <>
               <Login closeDialog={handleClose} />
-              <Box style={{ display: "flex", flexDirection: "row",justifyContent: 'center' }}>
+              <Box
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                }}
+              >
                 <Button onClick={() => setMode(MODE.FORGOT_PASSWORD)}>
                   Quên mật khẩu
                 </Button>
@@ -410,7 +439,13 @@ function Header(props) {
           {mode === MODE.FORGOT_PASSWORD && (
             <>
               <ForgotPassword closeDialog={handleClose} />
-              <Box style={{ display: "flex", flexDirection: "row",justifyContent: 'center' }}>
+              <Box
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                }}
+              >
                 <Button onClick={() => setMode(MODE.REGISTER)}>Đăng ký</Button>
               </Box>
             </>
