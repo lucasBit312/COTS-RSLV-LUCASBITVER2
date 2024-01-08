@@ -1,21 +1,19 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import SensorOccupiedIcon from "@mui/icons-material/SensorOccupied";
+import { CircularProgress } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { object, string } from "yup";
-import InputField from "../../../../Components/form-control/InputField/InputField";
-import { CircularProgress } from "@mui/material";
-import PasswordField from "../../../../Components/form-control/passwordField/PasswordField";
+import PasswordField from "../../../../Components/FormControl/PasswordField/PasswordField";
 const defaultTheme = createTheme();
 
 export default function NewPasswordForgot({ onSubmit }) {
@@ -26,6 +24,7 @@ export default function NewPasswordForgot({ onSubmit }) {
       setEmailTemp(storedEmail);
     }
   }, []);
+
   const schema = object().shape({
     password: string()
       .required("Vui lòng nhập mật khẩu")
@@ -38,6 +37,7 @@ export default function NewPasswordForgot({ onSubmit }) {
       .required("Vui lòng nhập mật khẩu")
       .oneOf([Yup.ref("password"), null], "Mật khẩu không khớp"),
   });
+  
   const {
     handleSubmit,
     control,

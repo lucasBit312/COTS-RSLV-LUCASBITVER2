@@ -1,7 +1,7 @@
 import React from "react";
 import FacebookLogin from "react-facebook-login";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import "../components/css/styleBtnFacebook.css";
+import "../../components/css/styleBtnFacebook.css";
 function FacebookLoginButton({ onSubmitFacebook }) {
   const responseFacebook = (response) => {
     try {

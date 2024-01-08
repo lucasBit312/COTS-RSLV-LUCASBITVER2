@@ -1,7 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Box, Typography } from "@mui/material";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
+import { Box, Typography } from "@mui/material";
+import React from "react";
 footer.propTypes = {};
 
 function footer(props) {
@@ -26,7 +25,7 @@ function footer(props) {
                 variant="h6"
                 noWrap
                 component="a"
-                href="/foods"
+                href="/foods/tat-ca-thuc-pham"
                 className="text-white"
                 sx={{
                   mr: 2,

@@ -9,7 +9,7 @@ import { enqueueSnackbar } from "notistack";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { baseURL } from "../../../constants/env";
+import { baseURL } from "../../../Constants/env";
 import { addToCart } from "../../Cart/CartSlide";
 import AddToCartForm from "./AddToCard";
 import Switch from "@mui/material/Switch";
@@ -57,7 +57,7 @@ function FoodInformation(props) {
     try {
       const value = {
         ...formData,
-        foodId: food.food.food.id,
+        foodId: food?.food?.id,
       };
       const action = addToCart(value);
       const resultAction = await dispath(action);
@@ -169,8 +169,8 @@ function FoodInformation(props) {
         <Grid padding={1}>
           <Typography className="text-success">
             <AddLocationIcon />
-            {food?.food?.location}, {food?.food?.ward},{" "}
-            {food?.food?.district}, {food?.food?.province}{" "}
+            {food?.food?.location}, {food?.food?.ward}, {food?.food?.district},{" "}
+            {food?.food?.province}{" "}
           </Typography>
         </Grid>
         <Grid padding={1}>
@@ -178,8 +178,8 @@ function FoodInformation(props) {
             Số lượng còn: {food?.food?.quantity}{" "}
           </Typography>
         </Grid>
-        <Grid padding={1}>
-          <AddToCartForm onSubmit={handleAddToCartSubmit}/>
+        <Grid style={{ maxWidth: "300px" }}>
+          <AddToCartForm onSubmit={handleAddToCartSubmit} />
         </Grid>
       </Paper>
     </Box>

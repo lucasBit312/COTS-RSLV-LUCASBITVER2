@@ -3,7 +3,7 @@ import axiosClient from "./axiosClient";
 
 const categoriesApi = {
     getCategories(params) {
-        const url = '/api/categories';
+        const url = '/api/get-categories';
         return axiosClient.get(url, { params });
     },
     getFoodWithCategory(category, params) {

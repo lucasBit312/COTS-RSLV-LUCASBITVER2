@@ -9,19 +9,23 @@ import {
   forgotPassword,
   verificationForgot,
 } from "../../userSlide";
-import ForgotPasswordForm from "../ForgotPasswordForm/ForgotPasswordForm";
-import NewPasswordForgot from "../NewPasswordForgot/NewPasswordForgot";
+import ForgotPasswordForm from "./ForgotPasswordForm";
+import NewPasswordForgot from "./NewPasswordForgot";
 import VerificationForm from "../VerificationForm.jsx/VerificationForm";
 
+ForgotPassword.propTypes = {
+  closeDialog: PropTypes.func,
+};
+
+
 function ForgotPassword(props) {
-  ForgotPassword.propTypes = {
-    closeDialog: PropTypes.func,
-  };
   const [verificationForm, setVerificationForm] = useState(false);
   const [newPasswordForm, setNewPasswordForm] = useState(false);
+  const dispatch = useDispatch();
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
+
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -35,6 +39,7 @@ function ForgotPassword(props) {
       severity: severity,
     });
   };
+
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -44,7 +49,7 @@ function ForgotPassword(props) {
       open: false,
     });
   };
-  const dispatch = useDispatch();
+
   const handleForgot = async (formData) => {
     try {
       const action = forgotPassword(formData);
@@ -62,6 +67,7 @@ function ForgotPassword(props) {
       console.error("Failed to Forgot:", errors);
     }
   };
+
   const handleVerification = async (formData) => {
     try {
       const action = verificationForgot(formData);
@@ -79,6 +85,7 @@ function ForgotPassword(props) {
       console.error("Failed to register:", errors);
     }
   };
+
   const handleNewPasswordForgot = async (formData) => {
     try {
       const action = NewPasswordForgotApi(formData);
@@ -98,6 +105,7 @@ function ForgotPassword(props) {
       console.error("Failed to new password:", errors);
     }
   };
+  
   return (
     <div>
       {verificationForm ? (

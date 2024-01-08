@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Avatar, Grid, Rating, Typography } from "@mui/material";
-import { baseURL } from "../../../constants/env";
+import { baseURL } from "../../../Constants/env";
 import dayjs from "dayjs";
 
 DetailPageRating.propTypes = {

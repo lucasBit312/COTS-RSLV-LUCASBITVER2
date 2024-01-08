@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { styled } from "@mui/material/styles";
 import { Grid, Paper } from "@mui/material";
-import { baseURL } from "../../constants/env";
+import { baseURL } from "../../Constants/env";
 LocationThumbnail.propTypes = {
   location: PropTypes.object,
 };

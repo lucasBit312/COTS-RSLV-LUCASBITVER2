@@ -7,7 +7,7 @@ import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { baseURL } from "../../constants/env";
+import { baseURL } from "../../Constants/env";
 
 FoodThumbnailReceived.propTypes = {
   food: PropTypes.object,

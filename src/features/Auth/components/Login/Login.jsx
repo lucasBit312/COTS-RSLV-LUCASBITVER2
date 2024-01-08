@@ -5,14 +5,18 @@ import { enqueueSnackbar } from "notistack";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { login, loginFacebook, loginGoogle, verification } from "../../userSlide";
-import LoginForm from "../LoginForm/loginForm";
+import {
+  login,
+  loginFacebook,
+  loginGoogle,
+  verification,
+} from "../../userSlide";
+import LoginForm from "./loginForm";
 import VerificationForm from "../VerificationForm.jsx/VerificationForm";
-
+Login.propTypes = {
+  closeDialog: PropTypes.func,
+};
 function Login(props) {
-  Login.propTypes = {
-    closeDialog: PropTypes.func,
-  };
   const [verificationForm, setVerificationForm] = useState(false);
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -22,6 +26,7 @@ function Login(props) {
     message: "",
     severity: "success",
   });
+  const dispatch = useDispatch();
 
   const handleClick = (message, severity) => {
     setSnackbar({
@@ -30,6 +35,7 @@ function Login(props) {
       severity: severity,
     });
   };
+
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -39,7 +45,7 @@ function Login(props) {
       open: false,
     });
   };
-  const dispatch = useDispatch();
+
   const handleLoginGoogle = async (formData) => {
     try {
       const action = loginGoogle(formData);
@@ -52,6 +58,7 @@ function Login(props) {
       console.error("Failed to login:", errors);
     }
   };
+
   const handleLoginFacebook = async (formData) => {
     try {
       const action = loginFacebook(formData);
@@ -90,6 +97,7 @@ function Login(props) {
       console.error("Failed to login:", errors);
     }
   };
+
   const handleVerification = async (formData) => {
     try {
       const action = verification(formData);
@@ -114,7 +122,11 @@ function Login(props) {
       {verificationForm ? (
         <VerificationForm onSubmit={handleVerification} />
       ) : (
-        <LoginForm onSubmit={handleLogin} handleLoginGoogle={handleLoginGoogle} handleLoginFacebook={handleLoginFacebook} />
+        <LoginForm
+          onSubmit={handleLogin}
+          handleLoginGoogle={handleLoginGoogle}
+          handleLoginFacebook={handleLoginFacebook}
+        />
       )}
       <Snackbar
         open={snackbar.open}

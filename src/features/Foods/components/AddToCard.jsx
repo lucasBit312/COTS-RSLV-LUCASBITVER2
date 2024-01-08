@@ -3,10 +3,16 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Button, IconButton, Switch, Typography } from "@mui/material";
-import QuantityField from "../../../Components/form-control/QuantityField/QuantityField";
+import QuantityField from "../../../Components/FormControl/QuantityField/QuantityField";
 import RedeemIcon from "@mui/icons-material/Redeem";
 import { useSelector } from "react-redux";
-function AddToCartForm({ onSubmit = null }) {
+import PropTypes from "prop-types";
+AddToCartForm.propTypes = {
+  onSubmit: PropTypes.func,
+};
+
+function AddToCartForm(props) {
+  const onSubmit = props.onSubmit;
   const label = { inputProps: { "aria-label": "anonymous" } };
   const loggedInuser = useSelector((state) => state.user.current);
   const isLoggedIn = !!loggedInuser.id;
@@ -28,6 +34,7 @@ function AddToCartForm({ onSubmit = null }) {
   });
 
   const onSubmitHandler = (data) => {
+    console.log(data)
     if (onSubmit) {
       onSubmit(data);
     }
@@ -45,7 +52,7 @@ function AddToCartForm({ onSubmit = null }) {
               Nhận ẩn danh
             </>
           )}
-        />
+        /> 
       </Typography>
       <QuantityField
         name="Quantity"

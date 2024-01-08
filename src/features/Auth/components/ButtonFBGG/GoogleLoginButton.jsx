@@ -1,7 +1,7 @@
 import React from "react";
 import { GoogleOAuthProvider, GoogleLogin } from "react-oauth-google";
 import axios from "axios";
-import userApi from "../../../Api/userApi";
+import userApi from "../../../../Api/userApi";
 
 function GoogleLoginButton({ onSubmitGoogle }) {
   const responseGoogle = async (response) => {

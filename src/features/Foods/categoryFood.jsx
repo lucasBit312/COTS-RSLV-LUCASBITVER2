@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Switch, Route, Link, useRouteMatch } from "react-router-dom";
-import listPage from "./pages/listPage";
-import detailPage from "./pages/detailPage";
+import listPage from "./pages/ListPage";
+import detailPage from "./pages/DetailPage";
 import { Box } from "@mui/material";
 import CategoryComponent from "./components/CategoryComponent";
 

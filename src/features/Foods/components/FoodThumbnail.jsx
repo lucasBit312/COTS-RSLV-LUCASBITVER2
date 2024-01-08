@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Box } from "@mui/system";
-import { baseURL } from "../../../constants/env";
+import { baseURL } from "../../../Constants/env";
 import { Grid } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
@@ -88,7 +88,10 @@ function FoodThumbnail(food) {
       <Grid item xs={12}>
         <Item>
           {showArrows && (
-            <NavigationButton style={{ left: 2, marginLeft: "8px" }} onClick={handleMoveLeft}>
+            <NavigationButton
+              style={{ left: 2, marginLeft: "8px" }}
+              onClick={handleMoveLeft}
+            >
               <ChevronLeftIcon />
             </NavigationButton>
           )}
@@ -98,11 +101,22 @@ function FoodThumbnail(food) {
             isSelected
           />
           {showArrows && (
-            <NavigationButton style={{ right: 2, marginRight: "8px" }} onClick={handleMoveRight}>
+            <NavigationButton
+              style={{ right: 2, marginRight: "8px" }}
+              onClick={handleMoveRight}
+            >
               <ChevronRightIcon />
             </NavigationButton>
           )}
-          <Grid item xs={12} style={{ justifyContent: 'center', alignItems: 'center', marginTop: "8px"}}>
+          <Grid
+            item
+            xs={12}
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "8px",
+            }}
+          >
             {food?.food?.food?.imageUrls.map((imageUrl, index) => (
               <ThumbnailImageDetail
                 key={index}

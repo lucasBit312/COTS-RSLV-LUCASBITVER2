@@ -6,7 +6,6 @@ import {
   Box,
   Button,
   FormControl,
-  Grid,
   InputBase,
   InputLabel,
   LinearProgress,
@@ -21,7 +20,7 @@ import {
 import { useState } from "react";
 import { useEffect } from "react";
 import userApi from "../../Api/userApi";
-import { baseURL } from "../../constants/env";
+import { baseURL } from "../../Constants/env";
 import dayjs from "dayjs";
 import Dialog from "@mui/material/Dialog";
 import { styled } from "@mui/material/styles";
@@ -43,12 +42,14 @@ import {
 } from "react-router-dom/cjs/react-router-dom.min";
 import { ClearIcon } from "@mui/x-date-pickers";
 Notice.propTypes = {};
+
 const HoverPaper = styled(Paper)({
   "&:hover": {
     backgroundColor: "#CBCBCB",
     cursor: "pointer",
   },
 });
+
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   display: "flex",
@@ -65,6 +66,7 @@ const Search = styled("div")(({ theme }) => ({
     width: "auto",
   },
 }));
+
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
@@ -397,7 +399,8 @@ function Notice(props) {
                 </Alert>
               ) : selectedNotification?.type === 4044 ? (
                 <Alert className="mb-2" severity="warning">
-                  Hãy kiểm tra lại thực phẩm và tiến hành khóa nếu cần thiết bạn nhé!
+                  Hãy kiểm tra lại thực phẩm và tiến hành khóa nếu cần thiết bạn
+                  nhé!
                 </Alert>
               ) : (
                 ""

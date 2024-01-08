@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Box, Typography } from "@mui/material";
-import { baseURL } from "../../../src/constants/env";
+import { baseURL } from "../../../src/Constants/env";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import PlaceIcon from "@mui/icons-material/Place";
 import dayjs from "dayjs";

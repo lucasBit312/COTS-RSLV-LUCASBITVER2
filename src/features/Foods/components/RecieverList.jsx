@@ -9,7 +9,7 @@ import {
   LinearProgress,
   Typography,
 } from "@mui/material";
-import { baseURL } from "../../../constants/env";
+import { baseURL } from "../../../Constants/env";
 import dayjs from "dayjs";
 
 RecieverList.propTypes = {

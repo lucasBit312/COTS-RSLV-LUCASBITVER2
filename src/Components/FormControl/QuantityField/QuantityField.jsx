@@ -1,18 +1,9 @@
-import React from "react";
-import {
-  TextField,
-  Grid,
-  Button,
-  InputAdornment,
-  IconButton,
-} from "@mui/material";
-import { useController } from "react-hook-form";
 import AddIcon from "@mui/icons-material/Add";
-import { Add } from "@mui/icons-material";
-import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { IconButton, TextField } from "@mui/material";
 import Stack from "@mui/material/Stack";
-import RedeemIcon from "@mui/icons-material/Redeem";
+import React from "react";
+import { useController } from "react-hook-form";
 function QuantityField({ name, control, label, error }) {
   const {
     field: { value, onChange },
@@ -21,14 +12,17 @@ function QuantityField({ name, control, label, error }) {
     control,
     defaultValue: 1,
   });
+
   const handleIncrement = () => {
     onChange(Number(value) + 1);
   };
+
   const handleDecrement = () => {
     if (value > 1) {
       onChange(Number(value) - 1);
     }
   };
+
   return (
     <Stack
       direction="row"

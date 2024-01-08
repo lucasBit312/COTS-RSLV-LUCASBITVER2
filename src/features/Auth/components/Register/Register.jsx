@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { register, verification } from "../../userSlide";
-import RegisterForm from "../RegisterForm/RegisterForm";
+import RegisterForm from "./RegisterForm";
 import VerificationForm from "../VerificationForm.jsx/VerificationForm";
 
 function Register(props) {

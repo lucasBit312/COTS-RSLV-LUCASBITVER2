@@ -8,13 +8,13 @@ import DetailFoodLocation from './features/FoodLocations/DetailFoodLocation';
 import FoodLocations from './features/FoodLocations/FoodLocations';
 import DetailReceived from './features/FoodReceived/DetailReceived';
 import FoodReceived from './features/FoodReceived/FoodReceived';
-import CategoryFood from './features/Foods/categoryFood';
+import CategoryFood from './features/Foods/CategoryFood';
 import EditFood from './features/ManageFoodDonated/EditFood/EditFood';
 import ManageFoodDonated from './features/ManageFoodDonated/ManageFoodDonated';
 import ManageHistoryDonate from './features/ManageHistoryDonated/ManageHistoryDonate';
 import NoticeMain from './features/Notice/NoticeMain';
 import Profice from './features/Profice/Profice';
-import DetailPageDonated from './features/ManageFoodDonated/detailPageDonated';
+import DetailPageDonated from './features/ManageFoodDonated/DetailPageDonated';
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const currentUser = useSelector((state) => state.user.current);
   return (
@@ -48,6 +48,7 @@ function App() {
         <PrivateRoute path="/manager-history-food-donated" component={ManageHistoryDonate} />
         <PrivateRoute path="/manager-food-donated" component={ManageFoodDonated} />
         <PrivateRoute path="/profice/:tab" component={Profice} />
+        <Route path="*" render={() => <Redirect to="/foods/tat-ca-thuc-pham" />} />
       </Switch>
       <Footer />
     </BrowserRouter>

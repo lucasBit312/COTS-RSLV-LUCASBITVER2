@@ -1,15 +1,12 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { Grid, Button } from "@mui/material";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import styled from "@emotion/styled";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { baseURL } from "../../constants/env";
-import userApi from "../../Api/userApi";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { Button, Grid } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
-import NewImage from "./NewImage"; // Make sure to import this component if needed
+import PropTypes from "prop-types";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import userApi from "../../Api/userApi";
+import { baseURL } from "../../Constants/env";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",

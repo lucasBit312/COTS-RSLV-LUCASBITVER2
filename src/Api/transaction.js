@@ -31,11 +31,11 @@ const transactionsApi = {
     return axiosClient.get(url);
   },
   getDetailPageReceiverList(foodId) {
-    const url = `/api/getDetailPageReceiverList/${foodId}`;
+    const url = `/api/get-detail-page-receiver-list/${foodId}`;
     return axiosClient.get(url);
   },
   errorNotifications(data) {
-    const url = `/api/errorNotifications`;
+    const url = `/api/error-notifications`;
     return axiosClient.post(url, data);
   },
   getTotalNoticeTransaction() {

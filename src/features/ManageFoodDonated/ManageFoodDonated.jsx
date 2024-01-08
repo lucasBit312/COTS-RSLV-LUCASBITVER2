@@ -25,7 +25,7 @@ import {
 } from "@mui/material";
 import foodApi from "../../Api/foodApi";
 import { useState } from "react";
-import { baseURL } from "../../constants/env";
+import { baseURL } from "../../Constants/env";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import queryString from "query-string";
 import dayjs from "dayjs";

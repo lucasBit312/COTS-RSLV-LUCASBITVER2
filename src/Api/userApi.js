@@ -9,15 +9,15 @@ const userApi = {
         return axiosClient.post(url, data);
     },
     forgotPassword(data) {
-        const url = '/api/auth/forgotPassword';
+        const url = '/api/auth/forgot-password';
         return axiosClient.post(url, data);
     },
     verificationForgot(data) {
-        const url = '/api/auth/verificationForgot';
+        const url = '/api/auth/verification-forgot';
         return axiosClient.post(url, data);
     },
     NewPasswordForgotApi(data) {
-        const url = '/api/auth/NewPasswordForgot';
+        const url = '/api/auth/new-password-forgot';
         return axiosClient.post(url, data);
     },
     login(data) {
@@ -25,11 +25,11 @@ const userApi = {
         return axiosClient.post(url, data);
     },
     loginGoogle(data) {
-        const url = '/api/auth/loginGoogle';
+        const url = '/api/auth/login-google';
         return axiosClient.post(url, data);
     },
     loginFacebook(data) {
-        const url = '/api/auth/loginFacebook';
+        const url = '/api/auth/login-facebook';
         return axiosClient.post(url, data);
     },
     editProfice(data) {

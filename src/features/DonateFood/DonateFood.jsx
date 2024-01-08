@@ -22,7 +22,7 @@ import { enqueueSnackbar } from "notistack";
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import addressApi from "../../Api/address";
+import addressApi from "../../Api/addressApi";
 import categoriesApi from "../../Api/categoriesApi";
 import foodApi from "../../Api/foodApi";
 import EditDonateFood from "../../Components/Skeleton/EditDonateFood";

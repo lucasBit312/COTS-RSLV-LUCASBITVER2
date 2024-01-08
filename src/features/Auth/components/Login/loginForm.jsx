@@ -6,18 +6,16 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useForm } from "react-hook-form";
-import * as Yup from "yup";
 import { object, string } from "yup";
-import InputField from "../../../../Components/form-control/InputField/InputField";
+import InputField from "../../../../Components/FormControl/InputField/InputField";
 import { CircularProgress } from "@mui/material";
-import PasswordField from "../../../../Components/form-control/passwordField/PasswordField";
-import GoogleLoginButton from "../GoogleLoginButton";
-import FacebookLoginButton from "../FacebookLoginButton";
+import PasswordField from "../../../../Components/FormControl/PasswordField/PasswordField";
+import GoogleLoginButton from "../ButtonFBGG/GoogleLoginButton";
+import FacebookLoginButton from "../ButtonFBGG/FacebookLoginButton";
 const defaultTheme = createTheme();
 
 export default function LoginForm({

@@ -22,17 +22,19 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import cartApi from "../../Api/cartApi";
 import userApi from "../../Api/userApi";
-import { baseURL } from "../../constants/env";
+import { baseURL } from "../../Constants/env";
 import ForgotPassword from "../../features/Auth/components/ForgotPassword/ForgotPassword";
 import Login from "../../features/Auth/components/Login/Login";
 import Register from "../../features/Auth/components/Register/Register";
 import { logout } from "../../features/Auth/userSlide";
 import Pusher from "pusher-js";
+
 const MODE = {
   LOGIN: "login",
   REGISTER: "register",
   FORGOT_PASSWORD: "forgot_password",
 };
+
 function Header(props) {
   const [open, setOpen] = React.useState(false);
   const loggedInuser = useSelector((state) => state.user.current);
@@ -49,6 +51,7 @@ function Header(props) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [user, setUser] = useState(null);
+  const [mode, setMode] = useState(MODE.LOGIN);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -66,16 +69,9 @@ function Header(props) {
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
   };
 
   const handleClickMenu = (event) => {
@@ -93,30 +89,37 @@ function Header(props) {
     setMode(MODE.LOGIN);
     setOpen(false);
   };
+
   const handleLogoutClick = () => {
     const action = logout();
     dispatch(action);
     history.push("/foods/tat-ca-thuc-pham");
   };
+
   const handleCartClick = () => {
     history.push("/food-received");
   };
+
   const handleFoodsClick = () => {
     history.push("/foods/tat-ca-thuc-pham");
     setAnchorElNav(null);
   };
+
   const handleManageFoodsClick = () => {
     history.push("/manager-food-donated");
     setAnchorEl(null);
   };
+
   const handleManageFoodsDonate = () => {
     history.push("/manager-history-food-donated");
     setAnchorEl(null);
   };
+
   const handleDonateFoodsClick = () => {
     history.push("/donate-foods");
     setAnchorElNav(null);
   };
+
   const handleLocationFoodsClick = () => {
     history.push("/food-donation-locations");
     setAnchorElNav(null);
@@ -126,13 +129,13 @@ function Header(props) {
     history.push("/profice/account");
     setAnchorEl(null);
   };
+
   const handleNotice = () => {
     history.push("/notification/transactions");
   };
-  const [mode, setMode] = useState(MODE.LOGIN);
 
   useEffect(() => {
-    if(isLoggedIn){
+    if (isLoggedIn) {
       const pusher = new Pusher("edbe3c1ada201abc1182", {
         cluster: "ap1",
       });
@@ -140,9 +143,10 @@ function Header(props) {
       const user = JSON.parse(localStorage.getItem("user"));
       const channel = pusher.subscribe(`user.${user?.id}`);
       channel.bind("App\\Events\\NewNotificationCollectFood", function (data) {
-        console.log("Received data from Pusher:", data);
-        alert(JSON.stringify(data));
+        loadNotificationCount();
+        alert(JSON.stringify(data.text));
       });
+
       return () => {
         channel.unbind();
         pusher.unsubscribe(`user.${user?.id}`);
@@ -162,18 +166,20 @@ function Header(props) {
     })();
   }, [totalCart, isLoggedIn]);
 
+  const loadNotificationCount = async () => {
+    try {
+      const dataRes = await userApi.getCountNotication();
+      const data = dataRes.notificationCount;
+      setNoticeTotal(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      if (isLoggedIn) {
-        try {
-          const dataRes = await userApi.getCountNotication();
-          const data = dataRes.notificationCount;
-          setNoticeTotal(data);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    })();
+    if (isLoggedIn) {
+      loadNotificationCount();
+    }
   }, [isLoggedIn, totalNotice]);
 
   return (

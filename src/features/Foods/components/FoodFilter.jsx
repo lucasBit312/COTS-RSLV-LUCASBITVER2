@@ -13,35 +13,6 @@ FoodFilter.propTypes = {
 };
 
 function FoodFilter({ filters, onChange }) {
-  const handleSortChange = (newSortValue) => {
-    const newFilters = {
-      ...filters,
-      _sort_date: newSortValue,
-    };
-    onChange(newFilters);
-  };
-
-  const handleCategoryChange = (newCategoryId) => {
-    if (!onChange) return;
-    const newFilters = {
-      ...filters,
-      category_id: newCategoryId,
-    };
-    onChange(newFilters);
-  };
-  const handleTypeChange = (newFoodType) => {
-    if (!onChange) return;
-    const newFilters = {
-      ...filters,
-      food_type: newFoodType,
-    };
-    onChange(newFilters);
-  };
-
-  const handleChange = (values) => {
-    if (!onChange) return;
-    onChange(values);
-  };
   const handleMultipleFilterChange = (values) => {
     if (!onChange) return;
     if (values.province_id) {

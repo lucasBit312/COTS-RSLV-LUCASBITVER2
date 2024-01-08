@@ -4,7 +4,7 @@ import locationApi from "../../Api/location";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import addressApi from "../../Api/address";
+import addressApi from "../../Api/addressApi";
 import { enqueueSnackbar } from "notistack";
 import {
   Button,

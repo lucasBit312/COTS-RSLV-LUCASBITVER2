@@ -7,7 +7,7 @@ const foodAip = {
         return axiosClient.get(url, { params });
     },
     getDetail(foodSlug) {
-        const url = `/api/foods/${foodSlug}`;
+        const url = `/api/get-detail-food/${foodSlug}`;
         return axiosClient.get(url);
     },
     getDetailDonated(foodId) {
@@ -22,11 +22,11 @@ const foodAip = {
         return axiosClient.post(url, data, { headers });
     },
     getDonateList(params) {
-        const url = '/api/showDonateList';
+        const url = '/api/get-donate-list';
         return axiosClient.get(url, { params });
     },
     cancelDonate(food_id) {
-        const url = `/api/cancelDonateFood`;
+        const url = `/api/cancel-donate-food`;
         return axiosClient.post(url, food_id);
     },
     editFoodApi(data) {

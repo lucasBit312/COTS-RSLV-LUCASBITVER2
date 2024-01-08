@@ -12,6 +12,7 @@ function PasswordField({ name, control, label, error }) {
     const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+  
   const {
     field: { value, onChange },
   } = useController({
@@ -19,6 +20,7 @@ function PasswordField({ name, control, label, error }) {
     control,
     defaultValue: '', 
   });
+  
   return (
         <TextField
           type={showPassword ? 'text' : 'password'}

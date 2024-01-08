@@ -2,27 +2,25 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Box,
   Button,
-  Checkbox,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogTitle,
   FormControl,
-  FormControlLabel,
   InputLabel,
   MenuItem,
   Select,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import addressApi from "../../Api/address";
+import addressApi from "../../Api/addressApi";
 import locationApi from "../../Api/location";
 import NewAddress from "./NewAddress";
+
 Address.propTypes = {
   reloadAddress: PropTypes.func,
   closeDialogNewAddress: PropTypes.func,
@@ -43,7 +41,6 @@ function Address(props) {
   const [wardList, setWardList] = useState([]);
   const [loading, setLoading] = useState(false);
   const { reloadAddress } = props;
-  const { closeDialogNewAddress } = props;
 
   useEffect(() => {
     const fetchProvinceList = async () => {
@@ -203,7 +200,7 @@ function Address(props) {
         enqueueSnackbar(result.message, { variant: "success" });
         handleCloseRemove();
         fetchAddresses();
-        reloadAddress();  
+        reloadAddress();
         setLoaddata(true);
       } else if (result.errors) {
         enqueueSnackbar(result.errors[0], { variant: "error" });
